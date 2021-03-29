@@ -1,5 +1,9 @@
 package Jogadores;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 public class Jogador {
     private int velocidade;
     private int resistencia;
@@ -108,5 +112,32 @@ public class Jogador {
                              && getJogoDeCabeca() == jogador.getJogoDeCabeca()
                              && getRemate() == jogador.getRemate()
                              && getCapacidadeDePasse() == jogador.getCapacidadeDePasse();
+    }
+
+    public double habMapToInt (Map<Double,Integer> habMap){
+        double habSize = habMap.size();
+        int sum = 0;
+        double mediaP;
+
+        for (Map.Entry<Double,Integer> entry : habMap.entrySet())
+            sum += entry.getKey()*entry.getValue();
+
+        mediaP = sum/(habSize);
+        return mediaP;
+    }
+
+    public Map<Double,Integer> getHabMap(int velocidade, int resistencia, int destreza, int impulsao,
+                         int jogoDeCabeca, int remate, int capacidadeDePasse){
+        Map<Double,Integer> habMap = new HashMap<>();
+        habMap.put(0.9, velocidade);
+        habMap.put(0.6, resistencia);
+        habMap.put(0.4, destreza);
+        habMap.put(0.5, impulsao);
+        habMap.put(0.3, jogoDeCabeca);
+        habMap.put(0.8, remate);
+        habMap.put(0.7, capacidadeDePasse);
+
+
+        return habMap;
     }
 }
