@@ -35,6 +35,7 @@ public class Jogador {
 
     public Jogador(int velocidade, int resistencia, int destreza, int impulsao,
                    int jogoDeCabeca, int remate, int capacidadeDePasse){
+
         setVelocidade(velocidade);
         setResistencia(resistencia);
         setDestreza(destreza);
@@ -128,6 +129,7 @@ public class Jogador {
 
     public Map<Double,Integer> getHabMap(int velocidade, int resistencia, int destreza, int impulsao,
                          int jogoDeCabeca, int remate, int capacidadeDePasse){
+
         Map<Double,Integer> habMap = new HashMap<>();
         habMap.put(0.9, velocidade);
         habMap.put(0.6, resistencia);
@@ -136,7 +138,6 @@ public class Jogador {
         habMap.put(0.3, jogoDeCabeca);
         habMap.put(0.8, remate);
         habMap.put(0.7, capacidadeDePasse);
-
 
         return habMap;
     }
