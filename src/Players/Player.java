@@ -116,6 +116,8 @@ public class Player {
     }
 
     public double skillMapToInt(Map<Double,Integer> skillMap){
+        if (skillMap == null) return -1;
+
         double skillSize = skillMap.size();
         int sum = 0;
         double PondAverage;
