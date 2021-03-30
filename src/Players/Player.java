@@ -3,8 +3,7 @@ package Players;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player {
-    //extends to Lateral,Medio,Defesa,Avancado,GuardaRedes
+public abstract class Player {
     private int speed;
     private int resistance;
     private int dexterity;
@@ -101,7 +100,21 @@ public class Player {
         this.passCapacity = passCapacity;
     }
 
-    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public String toString() {
+        return "Player characteristics:\n" +
+                "\t[Speed]" + this.speed + "\n" +
+                "\t[Resistance]" + this.resistance + "\n" +
+                "\t[Dexterity]" + this.dexterity + "\n" +
+                "\t[Impulsion]" + this.impulsion + "\n" +
+                "\t[Head Game]" + this.headGame + "\n" +
+                "\t[Kick]" + this.kick + "\n" +
+                "\t[Pass Capacity]" + this.passCapacity + "\n";
+    }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Player)) return false;
@@ -144,4 +157,6 @@ public class Player {
 
         return skillMap;
     }
+
+    public abstract int playerOverallValue();
 }
