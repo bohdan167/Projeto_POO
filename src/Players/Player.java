@@ -106,13 +106,13 @@ public abstract class Player {
 
     public String toString() {
         return "Player characteristics:\n" +
-                "\t[Speed]" + this.speed + "\n" +
-                "\t[Resistance]" + this.resistance + "\n" +
-                "\t[Dexterity]" + this.dexterity + "\n" +
-                "\t[Impulsion]" + this.impulsion + "\n" +
-                "\t[Head Game]" + this.headGame + "\n" +
-                "\t[Kick]" + this.kick + "\n" +
-                "\t[Pass Capacity]" + this.passCapacity + "\n";
+                "\t[Speed] " + this.speed + "\n" +
+                "\t[Resistance] " + this.resistance + "\n" +
+                "\t[Dexterity] " + this.dexterity + "\n" +
+                "\t[Impulsion] " + this.impulsion + "\n" +
+                "\t[Head Game] " + this.headGame + "\n" +
+                "\t[Kick] " + this.kick + "\n" +
+                "\t[Pass Capacity] " + this.passCapacity + "\n";
     }
 
     public boolean equals(Object o) {
