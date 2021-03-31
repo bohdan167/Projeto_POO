@@ -131,16 +131,12 @@ public abstract class Player {
     public double skillMapToInt(Map<Double,Integer> skillMap){
         if (skillMap == null) return -1;
 
-        double skillSize = skillMap.size();
         int sum = 0;
-        double PondAverage;
 
         for (Map.Entry<Double,Integer> entry : skillMap.entrySet())
             sum += entry.getKey()*entry.getValue();
 
-        PondAverage = sum/(skillSize);
-
-        return PondAverage;
+        return sum;
     }
 
     public abstract int playerOverallValue();
