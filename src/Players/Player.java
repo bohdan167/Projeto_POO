@@ -13,13 +13,13 @@ public abstract class Player {
     private int passCapacity;
 
     public Player(){
-        this.setSpeed(-1);
-        this.setResistance(-1);
-        this.setDexterity(-1);
-        this.setImpulsion(-1);
-        this.setHeadGame(-1);
-        this.setKick(-1);
-        this.setPassCapacity(-1);
+        this.setSpeed(0);
+        this.setResistance(0);
+        this.setDexterity(0);
+        this.setImpulsion(0);
+        this.setHeadGame(0);
+        this.setKick(0);
+        this.setPassCapacity(0);
     }
 
     public Player(Player player){
@@ -141,21 +141,6 @@ public abstract class Player {
         PondAverage = sum/(skillSize);
 
         return PondAverage;
-    }
-
-    public Map<Double,Integer> getSkillMap(int speed, int resistance, int dexterity, int impulsion,
-                                           int headGame, int kick, int passCapacity){
-
-        Map<Double,Integer> skillMap = new HashMap<>();
-        skillMap.put(0.9, speed);
-        skillMap.put(0.6, resistance);
-        skillMap.put(0.4, dexterity);
-        skillMap.put(0.5, impulsion);
-        skillMap.put(0.3, headGame);
-        skillMap.put(0.8, kick);
-        skillMap.put(0.7, passCapacity);
-
-        return skillMap;
     }
 
     public abstract int playerOverallValue();
