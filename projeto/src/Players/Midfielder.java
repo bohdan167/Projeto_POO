@@ -1,21 +1,22 @@
 package Players;
 
 public class Midfielder extends Player{
-    public Midfielder(){ super(0,0,0,0,0,0,0); }
+    public Midfielder(){ super(); }
 
     public Midfielder(int speed, int resistance, int dexterity, int discharge,
                       int headerShoot, int shoot, int pass) {
         super(speed,resistance,dexterity,discharge,headerShoot,shoot,pass);
     }
 
-    @Override
-    public int playerOverallValue() {
-        return (this.getSpeed() + this.getPass() + this.getDexterity() + this.getDischarge())/4;
+    public Midfielder(Midfielder mid) {
+        super(mid);
     }
 
-    public Midfielder(Midfielder mid) {
-        super(mid.speed, mid.resistance, mid.dexterity, mid.discharge, mid.headerShoot, mid.shoot, mid.pass);
+    @Override
+    public int playerOverallValue() {
+        return (int) (0.2*getSpeed() + 0.2*getResistance() + 0.1*getDexterity() + 0.1*getImpulsion() + 0.1*getHeadGame() + 0.1*getKick() + 0.2*getPassCapacity());
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -24,8 +25,9 @@ public class Midfielder extends Player{
 
     @Override
     public String toString() {
-        return "Midfielder{} " + super.toString();
+        return "Midfielder " + super.toString();
     }
+
     public Midfielder clone(){
         return new Midfielder(this);
     }

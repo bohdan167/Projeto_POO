@@ -1,19 +1,19 @@
 package Players;
 
 public class Sider extends Player{
-    public Sider(){ super(0,0,0,0,0,0,0); }
+    public Sider(){ super(); }
 
     public Sider(int speed, int resistance, int dexterity, int discharge,
                  int headerShoot, int shoot, int pass) {
         super(speed,resistance,dexterity,discharge,headerShoot,shoot,pass);
     }
 
+    public Sider(Sider s) { super(s); }
+
     @Override
     public int playerOverallValue() {
-        return (this.getSpeed() + this.getPass() + this.getResistance() + this.getDexterity())/4;
+        return (int) (0.2*getSpeed() + 0.2*getResistance() + 0.15*getDexterity() + 0.15*getImpulsion() + 0.05*getHeadGame() + 0.05*getKick() + 0.2*getPassCapacity());
     }
-
-    public Sider(Sider s) { super(s.speed,s.resistance,s.dexterity,s.discharge,s.headerShoot,s.shoot,s.pass); }
 
     @Override
     public boolean equals(Object obj) {
@@ -22,7 +22,7 @@ public class Sider extends Player{
 
     @Override
     public String toString() {
-        return "Sider{} " + super.toString();
+        return "Sider " + super.toString();
     }
 
     public Sider clone(){

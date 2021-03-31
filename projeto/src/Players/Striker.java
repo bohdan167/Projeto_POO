@@ -2,19 +2,19 @@ package Players;
 
 public class Striker extends Player{
 
-    public Striker() { super(0,0,0,0,0,0,0); }
+    public Striker() { super(); }
 
     public Striker(int speed, int resistance, int dexterity, int discharge,
                    int headerShoot, int shoot, int pass) {
         super(speed,resistance,dexterity,discharge,headerShoot,shoot,pass);
     }
 
+    public Striker(Striker s) { super(s); }
+
     @Override
     public int playerOverallValue() {
-        return (this.getShoot() + this.getHeaderShoot() + this.getSpeed() + this.getDischarge())/4;
+        return (int) (0.2*getSpeed() + 0.1*getResistance() + 0.1*getDexterity() + 0.1*getImpulsion() + 0.2*getHeadGame() + 0.2*getKick() + 0.1*getPassCapacity());
     }
-
-    public Striker(Striker s) { super(s.speed,s.resistance,s.dexterity,s.discharge,s.headerShoot,s.shoot,s.pass); }
 
 
     @Override
@@ -24,7 +24,7 @@ public class Striker extends Player{
 
     @Override
     public String toString() {
-        return "Striker{} " + super.toString();
+        return "Striker " + super.toString();
     }
 
     public Striker clone(){
