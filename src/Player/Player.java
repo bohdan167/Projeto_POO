@@ -1,6 +1,5 @@
-package Players;
+package Player;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Player {
