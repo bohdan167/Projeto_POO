@@ -42,7 +42,7 @@ public abstract class Player{
     }
 
     public abstract int playerOverallValue();
-    //public abstract Player gererateNewPlayer();
+    public abstract Player generateNewPlayer();
 
     //Getters e Setters
     public int getSpeed() {
