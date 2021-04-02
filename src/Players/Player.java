@@ -1,6 +1,13 @@
 package Players;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 public abstract class Player{
+    private String name;
+    private int number;
     private int speed;
     private int resistance;
     private int dexterity;
@@ -8,8 +15,11 @@ public abstract class Player{
     private int headGame;
     private int kick;
     private int passCapacity;
+    private List<String> history;
 
     public Player(){
+        this.setName("");
+        this.setNumber(0);
         this.setSpeed(0);
         this.setResistance(0);
         this.setDexterity(0);
@@ -17,11 +27,13 @@ public abstract class Player{
         this.setHeadGame(0);
         this.setKick(0);
         this.setPassCapacity(0);
+        this.setHistory(new ArrayList<>());
     }
 
-    public Player(int speed, int resistance, int dexterity, int impulsion,
-                  int headGame, int kick, int passCapacity){
-
+    public Player(String name, int number, int speed, int resistance, int dexterity, int impulsion,
+                  int headGame, int kick, int passCapacity, List<String> history){
+        setName(name);
+        setNumber(number);
         setSpeed(speed);
         setResistance(resistance);
         setDexterity(dexterity);
@@ -29,9 +41,12 @@ public abstract class Player{
         setHeadGame(headGame);
         setKick(kick);
         setPassCapacity(passCapacity);
+        setHistory(history);
     }
 
     public Player(Player player){
+        this.name = player.getName();
+        this.number = player.getNumber();
         this.speed = player.getSpeed();
         this.resistance = player.getResistance();
         this.dexterity = player.getDexterity();
@@ -39,12 +54,29 @@ public abstract class Player{
         this.headGame = player.getHeadGame();
         this.kick = player.getKick();
         this.passCapacity = player.getPassCapacity();
+        this.setHistory(player.getHistory());
     }
 
     public abstract int playerOverallValue();
     public abstract Player generateNewPlayer();
 
     //Getters e Setters
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getNumber() {
+        return this.number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
     public int getSpeed() {
         return speed;
     }
@@ -85,6 +117,14 @@ public abstract class Player{
 
     public void setPassCapacity(int passCapacity) { this.passCapacity = passCapacity; }
 
+    public List<String> getHistory() {
+        return Collections.unmodifiableList(this.history);
+    }
+
+    public void setHistory(List<String> history) {
+        this.history = new ArrayList<>(history);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -115,4 +155,5 @@ public abstract class Player{
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
 }
