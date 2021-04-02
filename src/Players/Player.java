@@ -1,9 +1,6 @@
 package Players;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public abstract class Player{
     private String name;
@@ -130,25 +127,36 @@ public abstract class Player{
         if (this == o) return true;
         if (!(o instanceof Player)) return false;
         Player player = (Player) o;
-        return getSpeed() == player.getSpeed()
+        return getNumber() == player.getNumber()
+                && getSpeed() == player.getSpeed()
                 && getResistance() == player.getResistance()
                 && getDexterity() == player.getDexterity()
                 && getImpulsion() == player.getImpulsion()
                 && getHeadGame() == player.getHeadGame()
                 && getKick() == player.getKick()
-                && getPassCapacity() == player.getPassCapacity();
+                && getPassCapacity() == player.getPassCapacity()
+                && Objects.equals(getName(), player.getName())
+                && Objects.equals(getHistory(), player.getHistory());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getNumber(), getSpeed(), getResistance(), getDexterity(), getImpulsion(), getHeadGame(), getKick(), getPassCapacity(), getHistory());
     }
 
     @Override
     public String toString() {
         return "Player characteristics:\n" +
+                "\t[Name]-----------" + this.name + "\n" +
+                "\t[Number]----------" + this.number + "\n" +
                 "\t[Speed]----------" + this.speed + "\n" +
                 "\t[Resistance]-----" + this.resistance + "\n" +
                 "\t[Dexterity]------" + this.dexterity + "\n" +
                 "\t[Impulsion]------" + this.impulsion + "\n" +
                 "\t[Head Game]------" + this.headGame + "\n" +
                 "\t[Kick]-----------" + this.kick + "\n" +
-                "\t[Pass Capacity]--" + this.passCapacity + "\n";
+                "\t[Pass Capacity]--" + this.passCapacity + "\n" +
+                "\t[Team's History]-" + this.history + "\n";
     }
 
     @Override
