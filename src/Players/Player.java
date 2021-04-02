@@ -110,4 +110,9 @@ public abstract class Player{
                 "\t[Kick]-----------" + this.kick + "\n" +
                 "\t[Pass Capacity]--" + this.passCapacity + "\n";
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
