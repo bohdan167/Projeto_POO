@@ -3,6 +3,7 @@ package Team;
 import Players.*;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Team {
     String nameTEAM;
@@ -50,203 +51,332 @@ public class Team {
         setStriker(t.getStriker());
     }
 
-    public String getNameTEAM() {
-        return nameTEAM;
-    }
+    public String getNameTEAM() { return nameTEAM; }
+    public void setNameTEAM(String nameTEAM) { this.nameTEAM = nameTEAM; }
 
-    public void setNameTEAM(String nameTEAM) {
-        this.nameTEAM = nameTEAM;
-    }
+    public Goalkepper[] getGoalKeeper() { return goalKeeper; }
+    public void setGoalKeeper(Goalkepper[] goalKeeper) { this.goalKeeper = goalKeeper; }
 
-    public Goalkepper[] getGoalKeeper() {
-        return goalKeeper;
-    }
+    public Defender[] getDefense() { return defense; }
+    public void setDefense(Defender[] defense) { this.defense = defense; }
 
-    public void setGoalKeeper(Goalkepper[] goalKeeper) {
-        this.goalKeeper = goalKeeper;
-    }
+    public Sider[] getSider() { return sider; }
+    public void setSider(Sider[] sider) { this.sider = sider; }
 
-    public Defender[] getDefense() {
-        return defense;
-    }
+    public Midfielder[] getMidfielder() { return midfielder; }
+    public void setMidfielder(Midfielder[] midfielder) { this.midfielder = midfielder; }
 
-    public void setDefense(Defender[] defense) {
-        this.defense = defense;
-    }
+    public Striker[] getStriker() { return striker; }
+    public void setStriker(Striker[] striker) { this.striker = striker; }
 
-    public Sider[] getSider() {
-        return sider;
-    }
-
-    public void setSider(Sider[] sider) {
-        this.sider = sider;
-    }
-
-    public Midfielder[] getMidfielder() {
-        return midfielder;
-    }
-
-    public void setMidfielder(Midfielder[] midfielder) {
-        this.midfielder = midfielder;
-    }
-
-    public Striker[] getStriker() {
-        return striker;
-    }
-
-    public void setStriker(Striker[] striker) {
-        this.striker = striker;
-    }
-
-
-    public void removeGOALKEEPER(String namePLAYER, int numberPLAYER) {
+    /*                          REMOVE
+    * -> Conjunto de funções que removem um jogador de uma equipa
+    * -> Ou encontram esse jogador, é removido e devolvem true
+    * -> ou devolvem false
+    * */
+    public void removeGOALKEEPER(Goalkepper g) {
         int length = getGoalKeeper().length;
-        Goalkepper[] g = new Goalkepper[length - 1];
+        Goalkepper[] gNEW = new Goalkepper[length - 1];
 
         int k = 0;
         for (int i = 0; i < length; i++) {
-            if (!(getGoalKeeper()[i].getName().equals(namePLAYER) && getGoalKeeper()[i].getNumber() == numberPLAYER))
-            g[k++] = getGoalKeeper()[i];
+            Goalkepper gk = getGoalKeeper()[i];
+            if (!(gk.equals(g)))
+                gNEW[k++] = gk;
         }
 
-        setGoalKeeper(g);
+        setGoalKeeper(gNEW);
     }
 
-    public void removeDEFENSE(String namePLAYER, int numberPLAYER) {
+    public void removeDEFENSE(Defender d) {
         int length = getDefense().length;
-        Defender[] d = new Defender[length - 1];
+        Defender[] dNEW = new Defender[length - 1];
 
         int k = 0;
         for (int i = 0; i < length; i++) {
-            if (!(getDefense()[i].getName().equals(namePLAYER) && getDefense()[i].getNumber() == numberPLAYER))
-                d[k++] = getDefense()[i];
+            Defender defender = getDefense()[i];
+            if (!(defender.equals(d)))
+                dNEW[k++] = defender;
         }
 
-        setDefense(d);
+        setDefense(dNEW);
     }
 
-    public void removeSIDER(String namePLAYER, int numberPLAYER) {
+    public void removeSIDER(Sider s) {
         int length = getSider().length;
-        Sider[] s = new Sider[length - 1];
+        Sider[] sNEW = new Sider[length - 1];
 
         int k = 0;
         for (int i = 0; i < length; i++) {
-            if (!(getSider()[i].getName().equals(namePLAYER) && getSider()[i].getNumber() == numberPLAYER))
-                s[k++] = getSider()[i];
+            Sider sider = getSider()[i];
+            if (!(sider.equals(s)))
+                sNEW[k++] = sider;
         }
 
-        setSider(s);
+        setSider(sNEW);
     }
 
-    public void removeMIDFIELDER(String namePLAYER, int numberPLAYER) {
+    public void removeMIDFIELDER(Midfielder m) {
         int length = getMidfielder().length;
-        Midfielder[] m = new Midfielder[length - 1];
+        Midfielder[] mNEW = new Midfielder[length - 1];
 
         int k = 0;
         for (int i = 0; i < length; i++) {
-            if (!(getMidfielder()[i].getName().equals(namePLAYER) && getMidfielder()[i].getNumber() == numberPLAYER))
-                m[k++] = getMidfielder()[i];
+            Midfielder midfielder = getMidfielder()[i];
+            if (!(midfielder.equals(m)))
+                mNEW[k++] = midfielder;
         }
 
-        setMidfielder(m);
+        setMidfielder(mNEW);
     }
 
-    public void removeSTRIKER(String namePLAYER, int numberPLAYER) {
+    public void removeSTRIKER(Striker s) {
         int length = getStriker().length;
-        Striker[] s = new Striker[length - 1];
+        Striker[] sNEW = new Striker[length - 1];
 
         int k = 0;
         for (int i = 0; i < length; i++) {
-            if (!(getStriker()[i].getName().equals(namePLAYER) && getStriker()[i].getNumber() == numberPLAYER))
-                s[k++] = getStriker()[i];
+            Striker striker = getStriker()[i];
+            if (!(striker.equals(s)))
+                sNEW[k++] = striker;
         }
 
-        setStriker(s);
+        setStriker(sNEW);
     }
 
     public boolean removePLAYER(String namePLAYER, int numberPLAYER) {
-        String ans = findPLAYER(namePLAYER,numberPLAYER);
-        if (ans.equals("GOALKEEPER")) {
-            removeGOALKEEPER(namePLAYER,numberPLAYER);
-            return true;
-        }
-        if (ans.equals("DEFENDER")){
-            removeDEFENSE(namePLAYER,numberPLAYER);
-            return true;
-        }
-        if (ans.equals("SIDER")){
-            removeSIDER(namePLAYER,numberPLAYER);
-            return true;
-        }
-        if (ans.equals("MIDFIELDER")){
-            removeMIDFIELDER(namePLAYER,numberPLAYER);
-            return true;
-        }
-        if (ans.equals("STRIKER")){
-            removeSTRIKER(namePLAYER,numberPLAYER);
-            return true;
-        }
-        return false;
+        Object ans = findPLAYER(namePLAYER,numberPLAYER);
+        if (ans == null) return false;
+
+        if (ans instanceof Goalkepper)
+            removeGOALKEEPER((Goalkepper) ans);
+
+        if (ans instanceof Defender)
+            removeDEFENSE((Defender) ans);
+
+        if (ans instanceof Sider)
+            removeSIDER((Sider) ans);
+
+        if (ans instanceof Midfielder)
+            removeMIDFIELDER((Midfielder) ans);
+
+        if (ans instanceof Striker)
+            removeSTRIKER((Striker) ans);
+
+        return true;
+
     }
 
-    public boolean findGOALKEEPER(String nameTEAM, int numberPLAYER){
-        for(Goalkepper gk : getGoalKeeper()){
+
+    /*                          FIND
+    * -> Conjunto de funções que devolvem o jogador que pretendem encontrar
+    * -> Caso não encontrem, devolvem null
+    */
+    public Goalkepper findGOALKEEPER(String nameTEAM, int numberPLAYER){
+        int length = getGoalKeeper().length;
+        for(int i = 0; i < length; i++){
+            Goalkepper gk = getGoalKeeper()[i];
             if (gk.getName().equals(nameTEAM) && gk.getNumber() == numberPLAYER)
-                return true;
+                return gk;
         }
-        return false;
+        return null;
     }
 
-    public boolean findDEFENDER(String nameTEAM, int numberPLAYER){
-        for(Defender d : getDefense()){
+    public Defender findDEFENDER(String nameTEAM, int numberPLAYER){
+        int length = getDefense().length;
+        for(int i = 0; i<length; i++){
+            Defender d = getDefense()[i];
             if (d.getName().equals(nameTEAM) && d.getNumber() == numberPLAYER)
-                return true;
+                return d;
         }
-        return false;
+        return null;
     }
 
-    public boolean findSIDER(String nameTEAM, int numberPLAYER){
-        for(Sider s : getSider()){
+    public Sider findSIDER(String nameTEAM, int numberPLAYER){
+        int length = getSider().length;
+        for(int i = 0; i<length; i++){
+            Sider s = getSider()[i];
             if (s.getName().equals(nameTEAM) && s.getNumber() == numberPLAYER)
-                return true;
+                return s;
         }
-        return false;
+        return null;
     }
 
-    public boolean findMIDFIELDER(String nameTEAM, int numberPLAYER){
-        for(Midfielder m : getMidfielder()){
+    public Midfielder findMIDFIELDER(String nameTEAM, int numberPLAYER){
+        int length = getMidfielder().length;
+        for(int i = 0; i<length; i++){
+            Midfielder m = getMidfielder()[i];
             if (m.getName().equals(nameTEAM) && m.getNumber() == numberPLAYER)
-                return true;
+                return m;
         }
-        return false;
+        return null;
     }
 
-    public boolean findSTRIKER(String nameTEAM, int numberPLAYER){
-        for(Striker s : getStriker()){
+    public Striker findSTRIKER(String nameTEAM, int numberPLAYER){
+        int length = getStriker().length;
+        for(int i = 0; i< length; i++){
+            Striker s = getStriker()[i];
             if (s.getName().equals(nameTEAM) && s.getNumber() == numberPLAYER)
-                return true;
+                return s;
+        }
+        return null;
+    }
+
+    public Object findPLAYER(String namePLAYER, int numberPLAYER){
+        Goalkepper gk = findGOALKEEPER(namePLAYER,numberPLAYER);
+        if (gk != null) return gk;
+
+        Defender defender = findDEFENDER(namePLAYER,numberPLAYER);
+        if (defender != null) return defender;
+
+        Sider sider = findSIDER(namePLAYER,numberPLAYER);
+        if (sider != null) return sider;
+
+        Midfielder midfielder = findMIDFIELDER(namePLAYER,numberPLAYER);
+        if (midfielder != null) return midfielder;
+
+        return findSTRIKER(namePLAYER, numberPLAYER);
+    }
+
+
+    /*                          ADD
+    * -> Conjunto de funções que adicionam um jogador a uma equipa e removem na outra equipa
+    * -> Tem em atenção se existe algum jogador com o mesmo número
+    * */
+    public boolean equalNUMBERS(int numberPLAYER) {
+        for (Goalkepper gk : getGoalKeeper()) {
+            if (gk.getNumber() == numberPLAYER) return true;
+        }
+
+        for (Defender defender : getDefense()) {
+            if (defender.getNumber() == numberPLAYER) return true;
+        }
+
+        for (Sider sider : getSider()) {
+            if (sider.getNumber() == numberPLAYER) return true;
+        }
+
+        for (Midfielder midfielder : getMidfielder()) {
+            if (midfielder.getNumber() == numberPLAYER) return true;
+        }
+
+        for (Striker striker : getStriker()) {
+            if (striker.getNumber() == numberPLAYER) return true;
         }
         return false;
     }
 
-    public String findPLAYER(String namePLAYER, int numberPLAYER){
-        if (findGOALKEEPER(namePLAYER,numberPLAYER)) return "GOALKEEPER";
-        if (findDEFENDER(namePLAYER,numberPLAYER)) return "DEFENDER";
-        if (findSIDER(namePLAYER,numberPLAYER)) return "SIDER";
-        if (findMIDFIELDER(namePLAYER,numberPLAYER)) return "MIDFIELDER";
-        if (findSTRIKER(namePLAYER,numberPLAYER)) return "STRIKER";
-        return "NULL";
-    }
-/*
-    public int overall{
-        return
-    }*/
+    public void addGOALKEEPER(Goalkepper gk){
+        int length = getGoalKeeper().length;
+        Goalkepper [] gNEW = new Goalkepper[length+1];
 
-/*
-    public void addPLAYER(String namePLAYER, int numberPLAYER,Team t){
-        t.
+        int i = 0;
+        for(;i<length;i++)
+            gNEW[i]= getGoalKeeper()[i];
+
+        Random rand = new Random();
+        while (equalNUMBERS(gk.getNumber()))
+            gk.setNumber((rand.nextInt(99))+1);
+
+        gNEW[i] = gk;
+        setGoalKeeper(gNEW);
     }
-*/
+
+    public void addDEFENDER(Defender d){
+        int length = getDefense().length;
+        Defender [] dNEW = new Defender[length+1];
+
+        int i = 0;
+        for(;i<length;i++)
+            dNEW[i] = getDefense()[i];
+
+        Random rand = new Random();
+        while(equalNUMBERS(d.getNumber()))
+            d.setNumber((rand.nextInt(99))+1);
+
+        dNEW[i] = d;
+        setDefense(dNEW);
+    }
+
+    public void addSIDER(Sider s){
+        int length = getSider().length;
+        Sider [] sNEW = new Sider[length+1];
+
+        int i = 0;
+        for(;i<length;i++)
+            sNEW[i] = getSider()[i];
+
+        Random rand = new Random();
+        while(equalNUMBERS(s.getNumber()))
+            s.setNumber((rand.nextInt(99))+1);
+
+        sNEW[i] = s;
+        setSider(sNEW);
+    }
+
+    public void addMIDFIELDER(Midfielder m){
+        int length = getSider().length;
+        Midfielder [] mNEW = new Midfielder[length+1];
+
+        int i = 0;
+        for(;i<length;i++)
+            mNEW[i] = getMidfielder()[i];
+
+        Random rand = new Random();
+        while(equalNUMBERS(m.getNumber()))
+            m.setNumber((rand.nextInt(99))+1);
+
+        mNEW[i] = m;
+        setMidfielder(mNEW);
+    }
+
+    public void addSTRIKER(Striker s){
+        int length = getStriker().length;
+        Striker [] sNEW = new Striker[length+1];
+
+        int i = 0;
+        for(;i<length;i++)
+            sNEW[i] = getStriker()[i];
+
+        Random rand = new Random();
+        while(equalNUMBERS(s.getNumber()))
+            s.setNumber((rand.nextInt(99))+1);
+
+        sNEW[i] = s;
+        setStriker(sNEW);
+    }
+
+    public boolean addPLAYER(String namePLAYER, int numberPLAYER, Team t){
+        Object player = t.findPLAYER(namePLAYER,numberPLAYER);
+        if (player == null) return false;
+
+        if (player instanceof Goalkepper){
+            addGOALKEEPER((Goalkepper) player);
+            t.removeGOALKEEPER((Goalkepper) player);
+        }
+
+        if (player instanceof Defender){
+            addDEFENDER((Defender) player);
+            t.removeDEFENSE((Defender) player);
+        }
+
+        if (player instanceof Sider){
+            addSIDER((Sider) player);
+            t.removeSIDER((Sider) player);
+        }
+
+        if (player instanceof Midfielder){
+            addMIDFIELDER((Midfielder) player);
+            t.removeMIDFIELDER((Midfielder) player);
+        }
+
+        if (player instanceof Striker){
+            addSTRIKER((Striker) player);
+            t.removeSTRIKER((Striker) player);
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         return "Team{" +
@@ -267,7 +397,6 @@ public class Team {
 
 
 /*
-* -> Adicionar o jogador e verificar se o número do jogador entra em conflito com outro jogador.
 * -> Gerar um onze inicial
 * -> Dúvida de criar um array ou uma classe
 * -> Média do overall da equipa (https://fifauteam.com/fifa-21-squad-rating-guide/)
