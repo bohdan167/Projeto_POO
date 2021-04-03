@@ -12,6 +12,7 @@ public abstract class Player{
     private int headGame;
     private int kick;
     private int passCapacity;
+    private int overall;
     private List<String> history;
 
     public Player(){
@@ -24,11 +25,12 @@ public abstract class Player{
         this.setHeadGame(0);
         this.setKick(0);
         this.setPassCapacity(0);
+        this.setOverall(0);
         this.setHistory(new ArrayList<>());
     }
 
     public Player(String name, int number, int speed, int resistance, int dexterity, int impulsion,
-                  int headGame, int kick, int passCapacity, List<String> history){
+                  int headGame, int kick, int passCapacity, int overall, List<String> history){
         setName(name);
         setNumber(number);
         setSpeed(speed);
@@ -38,6 +40,7 @@ public abstract class Player{
         setHeadGame(headGame);
         setKick(kick);
         setPassCapacity(passCapacity);
+        setOverall(overall);
         setHistory(history);
     }
 
@@ -51,6 +54,7 @@ public abstract class Player{
         this.headGame = player.getHeadGame();
         this.kick = player.getKick();
         this.passCapacity = player.getPassCapacity();
+        this.overall = player.getOverall();
         this.setHistory(player.getHistory());
     }
 
@@ -114,6 +118,10 @@ public abstract class Player{
 
     public void setPassCapacity(int passCapacity) { this.passCapacity = passCapacity; }
 
+    public int getOverall() { return overall; }
+
+    public void setOverall(int overall) { this.overall = overall; }
+
     public List<String> getHistory() {
         return Collections.unmodifiableList(this.history);
     }
@@ -135,28 +143,30 @@ public abstract class Player{
                 && getHeadGame() == player.getHeadGame()
                 && getKick() == player.getKick()
                 && getPassCapacity() == player.getPassCapacity()
+                && getOverall() == player.getOverall()
                 && Objects.equals(getName(), player.getName())
                 && Objects.equals(getHistory(), player.getHistory());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getNumber(), getSpeed(), getResistance(), getDexterity(), getImpulsion(), getHeadGame(), getKick(), getPassCapacity(), getHistory());
+        return Objects.hash(getName(), getNumber(), getSpeed(), getResistance(), getDexterity(), getImpulsion(), getHeadGame(), getKick(), getPassCapacity(), getOverall(),getHistory());
     }
 
     @Override
     public String toString() {
         return "Player characteristics:\n" +
                 "\t[Name]-----------" + this.name + "\n" +
-                "\t[Number]----------" + this.number + "\n" +
-                "\t[Speed]----------" + this.speed + "\n" +
-                "\t[Resistance]-----" + this.resistance + "\n" +
-                "\t[Dexterity]------" + this.dexterity + "\n" +
-                "\t[Impulsion]------" + this.impulsion + "\n" +
-                "\t[Head Game]------" + this.headGame + "\n" +
-                "\t[Kick]-----------" + this.kick + "\n" +
-                "\t[Pass Capacity]--" + this.passCapacity + "\n" +
-                "\t[Team's History]-" + this.history + "\n";
+                "\t[Number]---------" + this.number + "\n" +
+                "\t[Team's History]-" + this.history + "\n" +
+                "\t[OVERALL]--------" + this.getOverall() + "\n" +
+                "\t\t[Speed]----------" + this.speed + "\n" +
+                "\t\t[Resistance]-----" + this.resistance + "\n" +
+                "\t\t[Dexterity]------" + this.dexterity + "\n" +
+                "\t\t[Impulsion]------" + this.impulsion + "\n" +
+                "\t\t[Head Game]------" + this.headGame + "\n" +
+                "\t\t[Kick]-----------" + this.kick + "\n" +
+                "\t\t[Pass Capacity]--" + this.passCapacity + "\n";
     }
 
     @Override
@@ -164,4 +174,8 @@ public abstract class Player{
         return super.clone();
     }
 
+    protected String[] namesOfPlayers = {"Germano", "Jacinto", "Domiciano", "Gustio", "Kleiton",
+                                         "Muralhas", "Abilio", "Julio",      "Purp",   "Kleiton",
+                                         "Kaufman",  "Gerimbaldo", "Pinga",  "Travassos", "Dimas",
+                                         "Costinha", "Maniche",  "Figo",     "Deco",    "Pauleta"};
 }
