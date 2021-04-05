@@ -7,39 +7,62 @@ import java.util.Random;
 
 public class Team {
     String nameTEAM;
-    Striker[] striker;
-    Midfielder[] midfielder;
-    Sider[] sider;
-    Defender[] defense;
-    Goalkepper[] goalKeeper;
+    Striker[] striker = new Striker[8];
+    Midfielder[] midfielder = new Midfielder[9];
+    Sider[] sider = new Sider[5];
+    Defender[] defense = new Defender[7];
+    Goalkepper[] goalKeeper = new Goalkepper[3];
+  //  Player [] initial11;
+    int overall;
+    int [] formation = new int[3];
 
     public Team() {
         setNameTEAM("Unknown");
+        setFormation(new int[]{4, 3, 3});
+        setOverall(0);
 
-        this.goalKeeper = new Goalkepper[3];
-        for (int i = 0; i < 3; i++) this.goalKeeper[i].generateNewPlayer();
+        for (int i = 0; i < 3; i++) {
+            this.goalKeeper[i] = new Goalkepper();
+            this.goalKeeper[i] = this.goalKeeper[i].generateNewPlayer();
+        }
 
-        this.defense = new Defender[7];
-        for (int i = 0; i < 7; i++) this.defense[i].generateNewPlayer();
+        for (int i = 0; i < 7; i++) {
+            this.defense[i] = new Defender();
+            this.defense[i] = this.defense[i].generateNewPlayer();
+        }
 
-        this.sider = new Sider[5];
-        for (int i = 0; i < 5; i++) this.sider[i].generateNewPlayer();
+        for (int i = 0; i < 5; i++) {
+            this.sider[i] = new Sider();
+            this.sider[i] = this.sider[i].generateNewPlayer();
+        }
 
-        this.midfielder = new Midfielder[9];
-        for (int i = 0; i < 9; i++) this.midfielder[i].generateNewPlayer();
+        for (int i = 0; i < 9; i++) {
+            this.midfielder[i] = new Midfielder();
+            this.midfielder[i] = this.midfielder[i].generateNewPlayer();
+        }
 
-        this.striker = new Striker[8];
-        for (int i = 0; i < 8; i++) this.striker[i].generateNewPlayer();
+        for (int i = 0; i < 8; i++) {
+            this.striker[i] = new Striker();
+            this.striker[i] = this.striker[i].generateNewPlayer();
+        }
     }
-
+/*
+    public void setInitial11(Goalkepper gk, Defender def[]) {
+        this.initial11 = new Player[11];
+        this.initial11[0] = gk;
+    }
+*/
     public Team(String nameTEAM, Goalkepper[] goalKeeper, Defender[] defense, Sider[] sider,
-                Midfielder[] midfielder, Striker[] striker) {
+                Midfielder[] midfielder, Striker[] striker, int[] formation, int overall) {
         setNameTEAM(nameTEAM);
         setGoalKeeper(goalKeeper);
         setDefense(defense);
         setSider(sider);
         setMidfielder(midfielder);
         setStriker(striker);
+        setFormation(formation);
+        //int overall = calculateOVERALL();
+        setOverall(overall);
     }
 
     public Team(Team t) {
@@ -49,6 +72,8 @@ public class Team {
         setSider(t.getSider());
         setMidfielder(t.getMidfielder());
         setStriker(t.getStriker());
+        setFormation(t.getFormation());
+        setOverall(t.getOverall());
     }
 
     public String getNameTEAM() { return nameTEAM; }
@@ -68,6 +93,59 @@ public class Team {
 
     public Striker[] getStriker() { return striker; }
     public void setStriker(Striker[] striker) { this.striker = striker; }
+
+    public int getOverall() { return overall; }
+    public void setOverall(int overall) { this.overall = overall; }
+
+    public int[] getFormation() { return formation; }
+    public void setFormation(int[] formation) { this.formation = formation; }
+
+
+    /*                                  Number
+    * Funções relacionadas com os números dos jogadores
+    * São importantes na criação das equipas
+    * */
+    public boolean equalNUMBERS(int numberPLAYER) {
+        for (Goalkepper gk : getGoalKeeper())
+            if (gk.getNumber() == numberPLAYER) return true;
+
+        for (Defender defender : getDefense())
+            if (defender.getNumber() == numberPLAYER) return true;
+
+        for (Sider sider : getSider())
+            if (sider.getNumber() == numberPLAYER) return true;
+
+        for (Midfielder midfielder : getMidfielder())
+            if (midfielder.getNumber() == numberPLAYER) return true;
+
+        for (Striker striker : getStriker())
+            if (striker.getNumber() == numberPLAYER) return true;
+
+        return false;
+    }
+
+    public boolean changeNUMBER(String namePLAYER, int numberPLAYER, int numberCHANGE){
+        Object ans = findPLAYER(namePLAYER,numberPLAYER);
+        if (ans == null || !equalNUMBERS(numberCHANGE)) return false;
+
+        if (ans instanceof Goalkepper)
+            ((Goalkepper) ans).setNumber(numberCHANGE);
+
+        if (ans instanceof Defender)
+            ((Defender) ans).setNumber(numberCHANGE);
+
+        if (ans instanceof Sider)
+            ((Sider) ans).setNumber(numberCHANGE);
+
+        if (ans instanceof Midfielder)
+            ((Midfielder) ans).setNumber(numberCHANGE);
+
+        if (ans instanceof Striker)
+            ((Striker) ans).setNumber(numberCHANGE);
+
+        return true;
+    }
+
 
     /*                          REMOVE
     * -> Conjunto de funções que removem um jogador de uma equipa
@@ -243,28 +321,6 @@ public class Team {
     * -> Conjunto de funções que adicionam um jogador a uma equipa e removem na outra equipa
     * -> Tem em atenção se existe algum jogador com o mesmo número
     * */
-    public boolean equalNUMBERS(int numberPLAYER) {
-        for (Goalkepper gk : getGoalKeeper()) {
-            if (gk.getNumber() == numberPLAYER) return true;
-        }
-
-        for (Defender defender : getDefense()) {
-            if (defender.getNumber() == numberPLAYER) return true;
-        }
-
-        for (Sider sider : getSider()) {
-            if (sider.getNumber() == numberPLAYER) return true;
-        }
-
-        for (Midfielder midfielder : getMidfielder()) {
-            if (midfielder.getNumber() == numberPLAYER) return true;
-        }
-
-        for (Striker striker : getStriker()) {
-            if (striker.getNumber() == numberPLAYER) return true;
-        }
-        return false;
-    }
 
     public void addGOALKEEPER(Goalkepper gk){
         int length = getGoalKeeper().length;
@@ -377,6 +433,12 @@ public class Team {
         return true;
     }
 
+    public int calculateOVERALL(){
+        int result = 0;
+
+        return result;
+    }
+
     @Override
     public String toString() {
         return "Team{" +
@@ -386,19 +448,11 @@ public class Team {
                 ", sider=" + Arrays.toString(sider) +
                 ", defense=" + Arrays.toString(defense) +
                 ", goalKeeper=" + Arrays.toString(goalKeeper) +
+                ", overall=" + overall +
+                ", formation=" + Arrays.toString(formation) +
                 '}';
     }
 
 
 }
 
-//Gerar um número para o jogador (posiçoes)
-//Alterar o número de um jogador (equipa)
-
-
-/*
-* -> Gerar um onze inicial
-* -> Dúvida de criar um array ou uma classe
-* -> Média do overall da equipa (https://fifauteam.com/fifa-21-squad-rating-guide/)
-* -> Gerar um 11 inicial de acordo com os melhores na posição
-* */
