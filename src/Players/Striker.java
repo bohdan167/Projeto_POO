@@ -43,7 +43,7 @@ public class Striker extends Player{
 
     @Override
     public String toString() {
-        return "Striker " + super.toString();
+        return "Striker " + super.toString() + '\n';
     }
 
     public Striker clone(){

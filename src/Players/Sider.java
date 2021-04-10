@@ -41,7 +41,7 @@ public class Sider extends Player{
 
     @Override
     public String toString() {
-        return "Sider " + super.toString();
+        return "Sider " + super.toString() + '\n';
     }
 
     public Sider clone(){

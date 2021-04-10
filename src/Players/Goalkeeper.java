@@ -3,17 +3,17 @@ package Players;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Goalkepper extends Player{
-    private int elasticity; //elastecidade
+public class Goalkeeper extends Player{
+    private int elasticity; //elasticidade
 
-    public Goalkepper(){ super(); this.elasticity=0;}
+    public Goalkeeper(){ super(); this.elasticity=0;}
 
-    public Goalkepper(String name, int number,int speed, int resistance, int dexterity, int discharge,
+    public Goalkeeper(String name, int number,int speed, int resistance, int dexterity, int discharge,
                       int headerShoot, int shoot, int pass,int elasticity, int overall,List<String> history) {
         super(name,number,speed,resistance,dexterity,discharge,headerShoot,shoot,pass, overall,history);
         this.elasticity = elasticity;
     }
-    public Goalkepper(Goalkepper gk){
+    public Goalkeeper(Goalkeeper gk){
         super(gk);
         this.elasticity = gk.elasticity;
     }
@@ -33,8 +33,8 @@ public class Goalkepper extends Player{
     }
 
     @Override
-    public Goalkepper generateNewPlayer() {
-        Goalkepper novo = new Goalkepper();
+    public Goalkeeper generateNewPlayer() {
+        Goalkeeper novo = new Goalkeeper();
         novo.setName(novo.namesOfPlayers[ThreadLocalRandom.current().nextInt(0,19)]);
         novo.setNumber(ThreadLocalRandom.current().nextInt(1,99));
         novo.setSpeed(ThreadLocalRandom.current().nextInt(20,60));
@@ -56,12 +56,12 @@ public class Goalkepper extends Player{
 
     @Override
     public String toString() {
-        return  "Goalkepper " + super.toString() +
-                "\t\t[Elasticity]-----" + this.elasticity;
+        return  "Goalkeeper " + super.toString() +
+                "\t\t[Elasticity]-----\n" + this.elasticity;
     }
 
-    public Goalkepper clone(){
-        return new Goalkepper(this);
+    public Goalkeeper clone(){
+        return new Goalkeeper(this);
     }
 
 }
