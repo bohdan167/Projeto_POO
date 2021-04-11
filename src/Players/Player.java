@@ -123,7 +123,7 @@ public abstract class Player{
     public void setOverall(int overall) { this.overall = overall; }
 
     public List<String> getHistory() {
-        return Collections.unmodifiableList(this.history);
+        return this.history;
     }
 
     public void setHistory(List<String> history) {
@@ -153,20 +153,20 @@ public abstract class Player{
         return Objects.hash(getName(), getNumber(), getSpeed(), getResistance(), getDexterity(), getImpulsion(), getHeadGame(), getKick(), getPassCapacity(), getOverall(),getHistory());
     }
 
+    public String playerTOSTRING(){
+        String aux2 = "\t\t\t\t";
+        if (this instanceof Goalkeeper) aux2 = ((Goalkeeper) this).getElasticity() + aux2;
+        return "\n"+ getClass().getSimpleName() + " ".repeat(Math.max(0, 20 - getClass().getSimpleName().length()))
+                + getName() + " ".repeat(Math.max(0, 12 - getName().length())) + String.format("%02d",getNumber()) + "\t\t\t" + getSpeed()
+                + "\t\t\t" + getResistance() + "\t\t\t\t" + getDexterity() + "\t\t\t\t" + getImpulsion()
+                + "\t\t\t" + getHeadGame() + "\t\t\t" + getKick() + "\t\t" + getPassCapacity()
+                + "\t\t\t\t" + aux2 + getOverall() + "\n" + "\t\t\t\t\t\tHistory:" + getHistory();
+    }
+
     @Override
     public String toString() {
-        return "Player characteristics:\n" +
-                "\t[Name]-----------" + this.name + "\n" +
-                "\t[Number]---------" + this.number + "\n" +
-                "\t[Team's History]-" + this.history + "\n" +
-                "\t[OVERALL]--------" + this.getOverall() + "\n" +
-                "\t\t[Speed]----------" + this.speed + "\n" +
-                "\t\t[Resistance]-----" + this.resistance + "\n" +
-                "\t\t[Dexterity]------" + this.dexterity + "\n" +
-                "\t\t[Impulsion]------" + this.impulsion + "\n" +
-                "\t\t[Head Game]------" + this.headGame + "\n" +
-                "\t\t[Kick]-----------" + this.kick + "\n" +
-                "\t\t[Pass Capacity]--" + this.passCapacity + "\n";
+        return "Position\t\t\tName\t    Number\t\tSpeed\t\tResistance\t\tDexterity\t\tImpulsion\tHead Game\tKick\tPass Capacity\tElasticity\tOverall"
+                + playerTOSTRING() + "\n";
     }
 
     @Override
