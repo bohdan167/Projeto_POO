@@ -1,22 +1,20 @@
 package Team;
 import Players.*;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Team {
-    String nameTEAM;
-    Striker[] striker = new Striker[8];
-    Midfielder[] midfielder = new Midfielder[9];
-    Sider[] sider = new Sider[5];
-    Defender[] defense = new Defender[7];
-    Goalkeeper[] goalKeeper = new Goalkeeper[3];
-    initial11 initial11;
-    int overall;
-    int[] formation = new int[3];
+    private String nameTEAM;
+    private Striker[] striker = new Striker[8];
+    private Midfielder[] midfielder = new Midfielder[9];
+    private Sider[] sider = new Sider[5];
+    private Defender[] defense = new Defender[7];
+    private Goalkeeper[] goalKeeper = new Goalkeeper[3];
+    private initial11 initial11;
+    private int overall;
+    private int[] formation = new int[3];
 
     public Team() {
         for (int i = 0; i < 3; i++) {
@@ -43,9 +41,8 @@ public class Team {
             this.striker[i] = new Striker();
             this.striker[i] = this.striker[i].generateNewPlayer();
         }
-
-        setNameTEAM("Unknown");
-        setFormation(new int[]{4, 3, 3});
+        setNameTEAM(namesOfTeams[ThreadLocalRandom.current().nextInt(0,17)]);
+        setFormation(new int[]{4,3,3});
         setInitial11();
         setOverall(calculateOVERALL());
     }
@@ -61,7 +58,6 @@ public class Team {
         setFormation(formation);
         setOverall(overall);
         setInitial11(init11);
-
     }
 
     public Team(Team t) {
@@ -72,8 +68,8 @@ public class Team {
         setMidfielder(t.getMidfielder());
         setStriker(t.getStriker());
         setFormation(t.getFormation());
-        setOverall(t.getOverall());
         setInitial11(t.getInitial11());
+        setOverall(t.getOverall());
     }
 
 
@@ -108,7 +104,10 @@ public class Team {
     }
 
     public initial11 getInitial11() { return initial11; }
-    public void setInitial11(initial11 initial11) { this.initial11 = initial11; }
+    public void setInitial11(initial11 initial11) {
+        this.initial11 = initial11;
+        setOverall(calculateOVERALL());
+    }
     public boolean setInitial11(Player one,Player two){
         if (getInitial11().findPLAYER(one)) {
             if (one instanceof Goalkeeper)
@@ -121,6 +120,7 @@ public class Team {
                 getInitial11().setMidfielder((Midfielder) one, (Midfielder) two);
             else if (one instanceof Striker)
                 getInitial11().setStriker((Striker) one, (Striker) two);
+            setOverall(calculateOVERALL());
             return true;
         }
         return false;
@@ -132,13 +132,14 @@ public class Team {
         Midfielder[] mid = bestMID();
         Striker[] str = bestSTRK();
         setInitial11(new initial11(gk, def, s, mid, str));
+        setOverall(calculateOVERALL());
     }
 
 
     /*                                  Number
      * Funções relacionadas com os números dos jogadores, comparam os números
      * entre todos os jogadores e, se for necessário, altera-os.
-     * */
+     */
     public boolean equalNUMBERS(int numberPLAYER) {
         for (Goalkeeper gk : getGoalKeeper())
             if (gk.getNumber() == numberPLAYER) return true;
@@ -187,71 +188,51 @@ public class Team {
      * -> ou devolvem false
      * */
     public void removeGOALKEEPER(Goalkeeper g) {
-        int length = getGoalKeeper().length;
-        Goalkeeper[] gNEW = new Goalkeeper[length - 1];
+        Goalkeeper[] gNEW = new Goalkeeper[getGoalKeeper().length - 1];
 
         int k = 0;
-        for (int i = 0; i < length; i++) {
-            Goalkeeper gk = getGoalKeeper()[i];
-            if (!(gk.equals(g)))
-                gNEW[k++] = gk;
-        }
+        for (Goalkeeper gk : getGoalKeeper())
+            if (!gk.equals(g)) gNEW[k++] = gk;
 
         setGoalKeeper(gNEW);
     }
 
     public void removeDEFENSE(Defender d) {
-        int length = getDefense().length;
-        Defender[] dNEW = new Defender[length - 1];
+        Defender[] dNEW = new Defender[getDefense().length - 1];
 
         int k = 0;
-        for (int i = 0; i < length; i++) {
-            Defender defender = getDefense()[i];
-            if (!(defender.equals(d)))
-                dNEW[k++] = defender;
-        }
+        for (Defender defender : getDefense())
+            if (!defender.equals(d)) dNEW[k++] = defender;
 
         setDefense(dNEW);
     }
 
     public void removeSIDER(Sider s) {
-        int length = getSider().length;
-        Sider[] sNEW = new Sider[length - 1];
+        Sider[] sNEW = new Sider[getSider().length - 1];
 
         int k = 0;
-        for (int i = 0; i < length; i++) {
-            Sider sider = getSider()[i];
-            if (!(sider.equals(s)))
-                sNEW[k++] = sider;
-        }
+        for(Sider sider : getSider())
+            if (!sider.equals(s)) sNEW[k++] = sider;
 
         setSider(sNEW);
     }
 
     public void removeMIDFIELDER(Midfielder m) {
-        int length = getMidfielder().length;
-        Midfielder[] mNEW = new Midfielder[length - 1];
+        Midfielder[] mNEW = new Midfielder[getMidfielder().length - 1];
 
         int k = 0;
-        for (int i = 0; i < length; i++) {
-            Midfielder midfielder = getMidfielder()[i];
-            if (!(midfielder.equals(m)))
-                mNEW[k++] = midfielder;
-        }
+        for(Midfielder midfielder : getMidfielder())
+            if (!midfielder.equals(m)) mNEW[k++] = midfielder;
 
         setMidfielder(mNEW);
     }
 
     public void removeSTRIKER(Striker s) {
-        int length = getStriker().length;
-        Striker[] sNEW = new Striker[length - 1];
+        Striker[] sNEW = new Striker[getStriker().length - 1];
 
         int k = 0;
-        for (int i = 0; i < length; i++) {
-            Striker striker = getStriker()[i];
-            if (!(striker.equals(s)))
-                sNEW[k++] = striker;
-        }
+        for(Striker striker : getStriker())
+            if (!striker.equals(s)) sNEW[k++] = striker;
 
         setStriker(sNEW);
     }
@@ -261,20 +242,30 @@ public class Team {
 
         if (ans == null) return false;
 
-        if (ans instanceof Goalkeeper)
+        if (ans instanceof Goalkeeper) {
+            if (getGoalKeeper().length <= 2) return false;
             removeGOALKEEPER((Goalkeeper) ans);
+        }
 
-        if (ans instanceof Defender)
+        if (ans instanceof Defender) {
+            if (getDefense().length <= getFormation()[0] + 2) return false;
             removeDEFENSE((Defender) ans);
+        }
 
-        if (ans instanceof Sider)
+        if (ans instanceof Sider) {
+            if (getSider().length <= 4) return false;
             removeSIDER((Sider) ans);
+        }
 
-        if (ans instanceof Midfielder)
+        if (ans instanceof Midfielder) {
+            if (getMidfielder().length <= getFormation()[1] + 2) return false;
             removeMIDFIELDER((Midfielder) ans);
+        }
 
-        if (ans instanceof Striker)
+        if (ans instanceof Striker) {
+            if (getStriker().length <= getFormation()[2] + 2) return false;
             removeSTRIKER((Striker) ans);
+        }
 
         ans.getHistory().add(getNameTEAM());
 
@@ -355,21 +346,16 @@ public class Team {
     public boolean findPlayer(Player player){
         boolean ans = false;
 
-        if (player instanceof Goalkeeper) {
+        if (player instanceof Goalkeeper)
             for(int i = 0; i< getGoalKeeper().length && !(ans = getGoalKeeper()[i].equals(player));i++);
-        }
-        else if (player instanceof Defender){
+        else if (player instanceof Defender)
             for (int i = 0; i<getDefense().length && !(ans = getDefense()[i].equals(player)); i++);
-        }
-        else if (player instanceof Sider){
+        else if (player instanceof Sider)
             for (int i = 0; i<getSider().length && !(ans = getSider()[i].equals(player)); i++);
-        }
-        else if (player instanceof Midfielder){
+        else if (player instanceof Midfielder)
             for (int i = 0; i<getMidfielder().length && !(ans = getMidfielder()[i].equals(player)); i++);
-        }
-        else if (player instanceof Striker){
+        else if (player instanceof Striker)
             for (int i = 0; i<getStriker().length && !(ans = getStriker()[i].equals(player)); i++);
-        }
 
         return ans;
     }
@@ -462,6 +448,7 @@ public class Team {
     public boolean addPLAYER(String namePLAYER, int numberPLAYER, @NotNull Team t) {
         Player player = t.findPLAYER(namePLAYER, numberPLAYER);
         if (player == null) return false;
+        player.getHistory().add(t.getNameTEAM());
 
         if (player instanceof Goalkeeper) {
             addGOALKEEPER((Goalkeeper) player);
@@ -487,7 +474,6 @@ public class Team {
             addSTRIKER((Striker) player);
             t.removeSTRIKER((Striker) player);
         }
-        player.getHistory().add(t.getNameTEAM());
         return true;
     }
 
@@ -497,7 +483,7 @@ public class Team {
     }
 
     public Defender[] bestDEFENDER() {
-        int length = getFormation()[0] - 2;
+        int length = getFormation()[0]-2;
         Defender[] novo = new Defender[length];
         Arrays.sort(getDefense(), new overallComparator());
         for (int i = 0; i < length; i++)
@@ -531,6 +517,7 @@ public class Team {
             novo[i] = getStriker()[i];
         return novo;
     }
+
 
     public int sumOVERALL() {
         int result = 0;
@@ -576,7 +563,6 @@ public class Team {
     }
 
 
-
     @Override
     public String toString() {
         StringBuilder ans = new StringBuilder(nameTEAM + "\n");
@@ -595,13 +581,11 @@ public class Team {
 
         return ans.toString();
     }
+
+    protected String[] namesOfTeams = { "FC Porto", "SL Benfica", "Sporting CP", "SC Braga", "Vitória SC",
+                                        "FC Famalicão", "Boavista FC", "Rio Ave FC", "FC Paços de Ferreira",
+                                        "SC Farense", "CS Marítimo", "Portimonense", "CD Santa Clara",
+                                        "Moreirense FC", "Belenenses SAD", "CD Nacional", "Gil Vicente FC",
+                                        "CD Tondela"};
 }
-
-
-/*                          FALTAS
-* meter historial ao adicionar e remover um jogador.
-* Calcular o overall da equipa ao alterar um jogador
-* Adicionar funções que alteram cada música
-* Ao remover jogador, verificar se naquela posição tem pelo menos x jogadores de acordo com a formação
-* */
 
