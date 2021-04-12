@@ -589,3 +589,8 @@ public class Team {
                                         "CD Tondela"};
 }
 
+/*              FALTAS
+* suplentes
+* trocar o suplente para o 11 inicial e viceversa
+* fazer print dos suplentes
+* */
