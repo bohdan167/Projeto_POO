@@ -1,4 +1,4 @@
-package Main;
+package FM.Main;
 
 public class Interpreter {
     private boolean running;

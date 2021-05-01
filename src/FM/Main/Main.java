@@ -1,6 +1,4 @@
-package Main;
-import Players.*;
-import Team.*;
+package FM.Main;
 
 public class Main {
     public static void main(String[] args) {

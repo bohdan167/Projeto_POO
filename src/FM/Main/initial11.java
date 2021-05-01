@@ -1,7 +1,7 @@
-package Team;
+package FM.Main;
 
-import Players.*;
-import java.util.Arrays;
+import FM.Main.*;
+
 import java.util.Comparator;
 
 /**
@@ -16,10 +16,10 @@ class overallComparator implements Comparator<Player> {
 
 public class initial11 {
     private Goalkeeper gk;
-    private Defender [] defender;
-    private Sider [] sider;
-    private Midfielder [] midfielder;
-    private Striker [] striker;
+    private Defender[] defender;
+    private Sider[] sider;
+    private Midfielder[] midfielder;
+    private Striker[] striker;
 
     /**
     * Getter do elemento Goalkeeper do 11 inicial

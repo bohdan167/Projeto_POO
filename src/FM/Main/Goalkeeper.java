@@ -1,9 +1,9 @@
-package Players;
+package FM.Main;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Goalkeeper extends Player{
+public class Goalkeeper extends Player {
     private int elasticity;
 
     /**

@@ -1,9 +1,9 @@
-package Players;
+package FM.Main;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Sider extends Player{
+public class Sider extends Player {
     /**
      * Construtor Nulo
      */

@@ -1,9 +1,9 @@
-package Players;
+package FM.Main;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Defender extends Player{
+public class Defender extends Player {
 
     /**
      * Construtor Nulo

@@ -1,5 +1,5 @@
-package Team;
-import Players.*;
+package FM.Main;
+
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
