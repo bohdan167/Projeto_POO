@@ -1,6 +1,5 @@
 package Team;
 import Players.*;
-import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,6 +15,9 @@ public class Team {
     private int overall;
     private int[] formation = new int[3];
 
+    /**
+     * Construtor nulo
+     * */
     public Team() {
         for (int i = 0; i < 3; i++) {
             this.goalKeeper[i] = new Goalkeeper();
@@ -47,6 +49,18 @@ public class Team {
         setOverall(calculateOVERALL());
     }
 
+    /**
+     * Construtor parametrizado
+     * @param nameTEAM Nome da equipa
+     * @param goalKeeper Guarda redes
+     * @param defense Defesas
+     * @param sider Laterais
+     * @param midfielder Médios
+     * @param striker Avançados
+     * @param formation Formação tática
+     * @param overall Overall da equipa
+     * @param init11 11 inicial
+     * */
     public Team(String nameTEAM, Goalkeeper[] goalKeeper, Defender[] defense, Sider[] sider,
                 Midfielder[] midfielder, Striker[] striker, int[] formation, int overall, initial11 init11) {
         setNameTEAM(nameTEAM);
@@ -60,6 +74,10 @@ public class Team {
         setInitial11(init11);
     }
 
+    /**
+     * Construtor Parametrizado
+     * @param t Equipa
+     * */
     public Team(Team t) {
         setNameTEAM(t.getNameTEAM());
         setGoalKeeper(t.getGoalKeeper());
@@ -72,30 +90,60 @@ public class Team {
         setOverall(t.getOverall());
     }
 
-
-    /*                                  Getters e Setters
-     */
+    /**
+     * Getter do nome da equipa
+     * @return Nome da equipa
+     * */
     public String getNameTEAM() { return nameTEAM; }
+
     public void setNameTEAM(String nameTEAM) { this.nameTEAM = nameTEAM; }
 
+    /**
+     * Getter dos guarda redes
+     * @return Array de guarda redes
+     * */
     public Goalkeeper[] getGoalKeeper() { return goalKeeper; }
     public void setGoalKeeper(Goalkeeper[] goalKeeper) { this.goalKeeper = goalKeeper; }
 
+    /**
+     * Getter dos defesas
+     * @return Array de defesas
+     * */
     public Defender[] getDefense() { return defense; }
     public void setDefense(Defender[] defense) { this.defense = defense; }
 
+    /**
+     * Getter dos Laterais
+     * @return Array de laterais
+     * */
     public Sider[] getSider() { return sider; }
     public void setSider(Sider[] sider) { this.sider = sider; }
 
+    /**
+     * Getter dos médios
+     * @return Array de médios
+     * */
     public Midfielder[] getMidfielder() { return midfielder; }
     public void setMidfielder(Midfielder[] midfielder) { this.midfielder = midfielder; }
 
+    /**
+     * Getter dos avançados
+     * @return Array de avançados
+     * */
     public Striker[] getStriker() { return striker; }
     public void setStriker(Striker[] striker) { this.striker = striker; }
 
+    /**
+     * Getter do overall
+     * @return Overall da equipa
+     * */
     public int getOverall() { return overall; }
     public void setOverall(int overall) { this.overall = overall; }
 
+    /**
+     * Getter da formação tática
+     * @return Formação tática
+     * */
     public int[] getFormation() { return formation; }
     public void setFormation(int[] formation) {
         if (formation.length == 3 && formation[0] + formation[1] + formation[2] == 10 && formation[0] != 0
@@ -103,6 +151,10 @@ public class Team {
             this.formation = formation;
     }
 
+    /**
+     * Getter do 11 inicial
+     * @return 11 inicial
+     * */
     public initial11 getInitial11() { return initial11; }
     public void setInitial11(initial11 initial11) {
         this.initial11 = initial11;
@@ -445,7 +497,7 @@ public class Team {
         setStriker(sNEW);
     }
 
-    public boolean addPLAYER(String namePLAYER, int numberPLAYER, @NotNull Team t) {
+    public boolean addPLAYER(String namePLAYER, int numberPLAYER, Team t) {
         Player player = t.findPLAYER(namePLAYER, numberPLAYER);
         if (player == null) return false;
         player.getHistory().add(t.getNameTEAM());
