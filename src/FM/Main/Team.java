@@ -12,6 +12,9 @@ public class Team {
     private ArrayList<Player> team;
     private int[] formation;
     private int overall;
+    private int points;
+    private int goalsScored;
+    private int goalsSuffered;
 
 
     /**
@@ -21,26 +24,31 @@ public class Team {
         team = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             Goalkeeper gk = new Goalkeeper().generateNewPlayer();
+            for(; equalNUMBERS(gk.getNumber()); gk.setNumber(ThreadLocalRandom.current().nextInt(1,99)));
             team.add(gk);
         }
 
         for (int i = 0; i < 7; i++) {
             Defender defender = new Defender().generateNewPlayer();
+            for(; equalNUMBERS(defender.getNumber()); defender.setNumber(ThreadLocalRandom.current().nextInt(1,99)));
             team.add(defender);
         }
 
         for (int i = 0; i < 5; i++) {
             Sider sider = new Sider().generateNewPlayer();
+            for(; equalNUMBERS(sider.getNumber()); sider.setNumber(ThreadLocalRandom.current().nextInt(1,99)));
             team.add(sider);
         }
 
         for (int i = 0; i < 9; i++) {
             Midfielder midfielder = new Midfielder().generateNewPlayer();
+            for(; equalNUMBERS(midfielder.getNumber()); midfielder.setNumber(ThreadLocalRandom.current().nextInt(1,99)));
             team.add(midfielder);
         }
 
         for (int i = 0; i < 8; i++) {
             Striker striker = new Striker().generateNewPlayer();
+            for(; equalNUMBERS(striker.getNumber()); striker.setNumber(ThreadLocalRandom.current().nextInt(1,99)));
             team.add(striker);
         }
         setFormation(new int[]{4, 3, 3});
@@ -129,6 +137,17 @@ public class Team {
         this.team = team;
     }
 
+    public int getPoints() { return points; }
+
+    public void setPoints(int points) { this.points = points; }
+
+    public int getGoalsScored() { return goalsScored; }
+
+    public void setGoalsScored(int goalsScored) { this.goalsScored = goalsScored; }
+
+    public int getGoalsSuffered() { return goalsSuffered; }
+
+    public void setGoalsSuffered(int goalsSuffered) { this.goalsSuffered = goalsSuffered; }
 
     /**
      * Getter do overall
@@ -152,24 +171,16 @@ public class Team {
         return formation;
     }
 
-    public void setFormation(int[] formation) {
-        if (formation.length == 3 && formation[0] + formation[1] + formation[2] == 10 && formation[0] != 0
-                && formation[1] != 0 && formation[2] != 0)
-            this.formation = formation;
-    }
-
-
-    public boolean substitution(Player one, Player two) {
-        int i = 0;
-        int j = 0;
-        for (; !(initial11.get(i).equals(one)); i++) ;
-        for (; !substitutes.get(j).equals(two); i++) ;
-
-        if (initial11.get(i).equals(one) && substitutes.get(j).equals(two)) {
-            initial11.add(i, two);
-            initial11.add(j, one);
+    public boolean setFormation(int[] formation) {
+        long []ans = countPlayers(team);
+        if (formation.length == 3 && formation[0] + formation[1] + formation[2] == 10 && formation[0] != 0 &&
+                formation[0]<=ans[1] && formation[1]<=(ans[3]-2) && formation[1] != 0 && formation[2]<=(ans[4]-2) &&
+                formation[2] != 0) {
+            this.formation = formation.clone();
+            if(initial11 != null) rectifyINITIAL11();
             return true;
-        } else return false;
+        }
+        return false;
     }
 
     /*                                  Number
@@ -182,11 +193,9 @@ public class Team {
         return false;
     }
 
-    public boolean changeNUMBER(String namePLAYER, int numberPLAYER, int numberCHANGE) {
-        Player ans = findPLAYER(namePLAYER, numberPLAYER);
-        if (ans == null || !equalNUMBERS(numberCHANGE)) return false;
-        ans.setNumber(numberCHANGE);
-        return true;
+    public void changeNUMBER(Player ans) {
+        while (equalNUMBERS(ans.getNumber()))
+            ans.setNumber(ThreadLocalRandom.current().nextInt(1,99));
     }
 
 
@@ -195,35 +204,35 @@ public class Team {
      * -> Ou encontram esse jogador, é removido e devolvem true
      * -> ou devolvem false
      * */
-    public boolean removePLAYER(String namePLAYER, int numberPLAYER) {
+    public String removePLAYER(String namePLAYER, int numberPLAYER) {
         Player ans = findPLAYER(namePLAYER, numberPLAYER);
 
-        if (ans == null) return false;
+        if (ans == null) return "Jogador nao existe.";
 
         if (ans instanceof Goalkeeper) {
             if (team.stream().filter(player -> player instanceof Goalkeeper).count() == 2)
-                return false;
+                return "Numero de jogadores insuficiente.";
         } else if (ans instanceof Defender) {
             if (team.stream().filter(player -> player instanceof Defender).count() == getFormation()[0])
-                return false;
+                return "Numero de jogadores insuficiente.";
         } else if (ans instanceof Sider) {
             if (team.stream().filter(player -> player instanceof Sider).count() == 4)
-                return false;
+                return "Numero de jogadores insuficiente.";
         } else if (ans instanceof Midfielder) {
             if (team.stream().filter(player -> player instanceof Midfielder).count() == getFormation()[1] + 2)
-                return false;
+                return "Numero de jogadores insuficiente.";
         } else if (ans instanceof Striker) {
             if (team.stream().filter(player -> player instanceof Striker).count() == getFormation()[2] + 2)
-                return false;
+                return "Numero de jogadores insuficiente.";
         }
 
         ans.getHistory().add(getNameTEAM());
         team.remove(ans);
 
         team.sort(PlayerComparator);
-        fillINITIAL11();
+        rectifyINITIAL11();
 
-        return true;
+        return "Feito.";
     }
 
 
@@ -232,11 +241,7 @@ public class Team {
      * -> Caso não encontrem, devolvem null
      */
     public Player findPLAYER(String namePLAYER, int numberPLAYER) {
-        return team.stream().filter(player -> (player.getName().equals(namePLAYER) && player.getNumber() == numberPLAYER)).findFirst().get();
-    }
-
-    public boolean findPlayer(Player player) {
-        return team.stream().anyMatch(p -> (p.equals(player)));
+        return team.stream().filter(player -> (player.getName().equals(namePLAYER) && player.getNumber() == numberPLAYER)).findFirst().orElse(null);
     }
 
 
@@ -244,12 +249,33 @@ public class Team {
      * -> Conjunto de funções que adicionam um jogador a uma equipa e removem na outra equipa
      * -> Tem em atenção se existe algum jogador com o mesmo número
      * */
-    public boolean addPLAYER(String namePLAYER, int numberPLAYER, Team t) {
+    public String addPLAYER(String namePLAYER, int numberPLAYER, Team t) {
         Player player = t.findPLAYER(namePLAYER, numberPLAYER);
-        if (player == null) return false;
+        if (player == null) return "Jogador nao existe";
         player.getHistory().add(t.getNameTEAM());
         team.add(player);
         team.sort(PlayerComparator);
+        changeNUMBER(player);
+        return namePLAYER + " " + numberPLAYER + " adicionados a " + t.getNameTEAM() + "\n";
+    }
+
+
+    public Boolean tradePlayer(Player p1, Player p2, int option){
+        if (option == 0){
+            if (initial11.contains(p1) && substitutes.contains(p2) && p1.getClass().getSimpleName().equals(p2.getClass().getSimpleName())){
+                initial11.set(initial11.indexOf(p1),p2);
+                substitutes.set(substitutes.indexOf(p2),p1);
+            }
+            else return false;
+        }
+        else{
+            if (initial11.contains(p2) && substitutes.contains(p1)){
+                initial11.set(initial11.indexOf(p2),p1);
+                substitutes.set(substitutes.indexOf(p1),p2);
+            }
+            else return false;
+        }
+        setOverall(calculateOVERALL());
         return true;
     }
 
@@ -304,46 +330,90 @@ public class Team {
         initial11.addAll(bestSTRK(formation[2]));
     }
 
-    public void fillINITIAL11() {
-        if (initial11.size() != 11) {
-            int gk = 0;
-            int defender = 0;
-            int sider = 0;
-            int midfielder = 0;
-            int striker = 0;
-            for (Player player : initial11) {
-                if (player instanceof Goalkeeper) gk++;
-                else if (player instanceof Defender) defender++;
-                else if (player instanceof Sider) sider++;
-                else if (player instanceof Midfielder) midfielder++;
-                else if (player instanceof Striker) striker++;
+    public Player pickPLAYER(String simpleName){
+        Player p = null;
+        for(int i = 0; p == null && i<substitutes.size(); i++){
+            if (substitutes.get(i).getClass().getSimpleName().equals(simpleName)){
+                p = substitutes.get(i);
+                substitutes.remove(p);
             }
-            if (gk < 1) {
-                initial11.add(bestGOALKEEPER());
-                substitutes.remove(bestGOALKEEPER());
-            }
-            if (defender < formation[0] - 2) {
-                initial11.addAll(bestDEFENDER(formation[0] - 2 - defender));
-                substitutes.removeAll(bestDEFENDER(formation[0] - 2 - defender));
-            }
-            if (sider < 2) {
-                initial11.addAll(bestSIDER(2 - sider));
-                substitutes.removeAll(bestSIDER(2 - sider));
-            }
-            if (midfielder < formation[1]) {
-                initial11.addAll(bestMID(formation[1] - midfielder));
-                substitutes.removeAll(bestMID(formation[1] - midfielder));
-            }
-            if (striker < formation[2]) {
-                initial11.addAll(bestSTRK(formation[2] - striker));
-                substitutes.removeAll(bestSTRK(formation[2] - striker));
+        }
+        return p;
+    }
+
+    public void retirePLAYER(String simpleName){
+        for(int i = 0, j = 0; j == 0 && i<substitutes.size(); i++){
+            if (initial11.get(i).getClass().getSimpleName().equals(simpleName)){
+                initial11.remove(i);
+                j = 1;
             }
         }
     }
 
+    public long[] countPlayers(ArrayList<Player> arrayList){
+        long []ans = new long[5];
+        ans[0] = arrayList.stream().filter(player -> player.getClass().getSimpleName().equals("Goalkeeper")).count();
+        ans[1] = arrayList.stream().filter(player -> player.getClass().getSimpleName().equals("Defender")).count();
+        ans[2] = arrayList.stream().filter(player -> player.getClass().getSimpleName().equals("Sider")).count();
+        ans[3] = arrayList.stream().filter(player -> player.getClass().getSimpleName().equals("Midfielder")).count();
+        ans[4] = arrayList.stream().filter(player -> player.getClass().getSimpleName().equals("Striker")).count();
+        return ans;
+    }
+
+
+    public void rectifyINITIAL11() {
+
+        long[] ans = countPlayers(initial11);
+        if (ans[0] < 1) initial11.add(pickPLAYER("Goalkeeper"));
+
+        else {
+            while (ans[0] > 1) {
+                retirePLAYER("Goalkeeper");
+                ans[0]--;
+            }
+        }
+        while (ans[1] < formation[0] - 2) {
+            initial11.add(pickPLAYER("Defender"));
+            ans[1]++;
+        }
+        while (ans[1] > formation[0] - 2) {
+            retirePLAYER("Defender");
+            ans[1]--;
+        }
+
+        while (ans[2] < 2) {
+            initial11.add(pickPLAYER("Sider"));
+            ans[2]++;
+        }
+        while (ans[2] > 2) {
+            retirePLAYER("Sider");
+            ans[2]--;
+        }
+
+        while (ans[3] < formation[1]) {
+            initial11.add(pickPLAYER("Midfielder"));
+            ans[3]++;
+        }
+        while (ans[3] > formation[1]) {
+            retirePLAYER("Midfielder");
+            ans[3]--;
+        }
+
+        while (ans[4] < formation[2]) {
+            initial11.add(pickPLAYER("Striker"));
+            ans[4]++;
+        }
+        while (ans[4] > formation[2]) {
+            retirePLAYER("Striker");
+            ans[4]--;
+        }
+        setOverall(calculateOVERALL());
+    }
+
+
     public int sumOVERALL() {
         int result = 0;
-        for (int i = 0; i < 11; i++)
+        for(int i = 0; i<11; i++)
             result += initial11.get(i).getOverall();
         return result;
     }
@@ -364,47 +434,81 @@ public class Team {
 
 
     public String initial11toString() {
-        int max = formation[0]+2;
-        if (formation[1] > max) max = formation[1];
-        if (formation[2] > max) max = formation[2];
+        StringBuilder a = new StringBuilder();
+        int space11 = 124;
+        int spaceSup = 74;
+        a.append("|").append(" ".repeat(114 / 2)).append("11 Inicial").append(" ".repeat(114 / 2)).append("|")
+                .append(" ".repeat(66 / 2)).append("Suplentes").append(" ".repeat(66 / 2)).append("|\n");
 
-        StringBuilder tabdef = new StringBuilder();
-        StringBuilder tabmid = new StringBuilder();
-        StringBuilder tabstr = new StringBuilder();
-        for(int i = 0; i<max-2-formation[0]; i++) tabdef.append("\t");
-        for(int i = 0; i<max-formation[1]; i++) tabmid.append("\t");
-        for(int i = 0; i<max-formation[2]; i++) tabstr.append("\t");
+        int lengthLine = initial11.get(0).getName().length()+3;
+        a.append("|").append(" ".repeat(Math.max(0,(space11-lengthLine)/2))).append(initial11.get(0).getName()).append("-")
+                .append(String.format("%02d", initial11.get(0).getNumber())).append(" ".repeat(Math.max(0,(space11-lengthLine)/2 + (space11-lengthLine) % 2)));
 
-        StringBuilder defenders = new StringBuilder();
-        StringBuilder midfielders = new StringBuilder();
-        StringBuilder strikers = new StringBuilder();
+        lengthLine = substitutes.get(0).getName().length()+15;
+        a.append("|").append(" ".repeat(Math.max(0,(spaceSup-lengthLine)/2))).append("Goalkeeper").append("   ").append(substitutes.get(0).getName())
+                .append("-").append(String.format("%02d", substitutes.get(0).getNumber()))
+                .append(" ".repeat(Math.max(0,(spaceSup-lengthLine)/2 + (spaceSup-lengthLine) % 2))).append("|\n");
 
-        for(int i = 0; i< initial11.size(); i++){
-            if (initial11.get(i) instanceof Defender)
-                defenders.append(String.format("%02d",initial11.get(i).getNumber())).append("-").append(initial11.get(i).getName()).append(" ".repeat(Math.max(0, 15 - initial11.get(i).getName().length())));
-            else if (initial11.get(i) instanceof Midfielder)
-                midfielders.append(String.format("%02d",initial11.get(i).getNumber())).append("-").append(initial11.get(i).getName()).append(" ".repeat(Math.max(0, 15 - initial11.get(i).getName().length())));
-            else if (initial11.get(i) instanceof Striker)
-                strikers.append(String.format("%02d",initial11.get(i).getNumber())).append("-").append(initial11.get(i).getName()).append(" ".repeat(Math.max(0, 15 - initial11.get(i).getName().length())));
+        lengthLine = 0;
+        for(int i = 0; i < formation[0] ; i++)
+            lengthLine += initial11.get(i+1).getName().length()+8;
+        lengthLine -= 5;
+        a.append("|").append(" ".repeat(Math.max(0,(space11-lengthLine)/2))).append(initial11.get(formation[0]-1).getName()).append("-")
+                .append(String.format("%02d", initial11.get(formation[0]-1).getNumber())).append(" ".repeat(5));
+
+        for(int i = 0; i<formation[0]-2; i++){
+            a.append(initial11.get(i+1).getName()).append("-").append(String.format("%02d", initial11.get(formation[0]-1).getNumber())).append(" ".repeat(5));
+        }
+        a.append(initial11.get(formation[0]).getName()).append("-").append(String.format("%02d", initial11.get(formation[0]).getNumber()))
+                .append(" ".repeat(Math.max(0,(space11-lengthLine)/2)+(space11-lengthLine)%2));
+
+        lengthLine = substitutes.get(1).getName().length()+13;
+        a.append("|").append(" ".repeat(Math.max(0,(spaceSup-lengthLine)/2))).append("Defender").append("   ")
+                .append(substitutes.get(1).getName()).append("-").append(String.format("%02d", substitutes.get(1).getNumber()))
+                .append(" ".repeat(Math.max(0,(spaceSup-lengthLine)/2 + (spaceSup-lengthLine) % 2))).append("|\n");
+
+        lengthLine = 0;
+        for(int i = 0; i < formation[1] ; i++)
+            lengthLine += initial11.get(i+1+formation[0]).getName().length()+8;
+        lengthLine -= 5;
+        a.append("|").append(" ".repeat(Math.max(0,(space11 - lengthLine)/2)));
+        for(int i = 0; i < formation[1]-1 ; i++)
+            a.append(initial11.get(i+1+formation[0]).getName()).append("-").append(String.format("%02d",initial11.get(i+1+formation[0]).getNumber())).append(" ".repeat(5));
+        a.append(initial11.get(formation[1]+formation[0]).getName()).append("-").append(String.format("%02d",initial11.get(formation[1]+formation[0]).getNumber()))
+                .append(" ".repeat(Math.max(0,(space11 - lengthLine)/2 + (space11 - lengthLine)%2)));
+
+        lengthLine = substitutes.get(2).getName().length()+13;
+        a.append("|").append(" ".repeat(Math.max(0,(spaceSup-lengthLine)/2))).append("Defender").append("   ")
+                .append(substitutes.get(2).getName()).append("-").append(String.format("%02d", substitutes.get(2).getNumber()))
+                .append(" ".repeat(Math.max(0,(spaceSup-lengthLine)/2 + (spaceSup-lengthLine) % 2))).append("|\n");
+
+        lengthLine = 0;
+        for(int i = 0; i < formation[2] ; i++)
+            lengthLine += initial11.get(i+1+formation[0]+formation[1]).getName().length()+8;
+        lengthLine -= 5;
+        a.append("|").append(" ".repeat(Math.max(0,(space11 - lengthLine)/2)));
+        for(int i = 0; i < formation[2]-1 ; i++)
+            a.append(initial11.get(i+1+formation[0]+formation[1]).getName()).append("-")
+                    .append(String.format("%02d",initial11.get(i+1+formation[0]+formation[1]).getNumber())).append(" ".repeat(5));
+        a.append(initial11.get(formation[2]+formation[1]+formation[0]).getName()).append("-")
+                .append(String.format("%02d",initial11.get(formation[2]+formation[1]+formation[0]).getNumber()))
+                .append(" ".repeat(Math.max(0,(space11 - lengthLine)/2 + (space11 - lengthLine)%2)));
+
+        lengthLine = substitutes.get(3).getName().length()+5+substitutes.get(3).getClass().getSimpleName().length();
+        a.append("|").append(" ".repeat(Math.max(0,(spaceSup-lengthLine)/2))).append(substitutes.get(3).getClass().getSimpleName()).append("   ")
+                .append(substitutes.get(3).getName()).append("-").append(String.format("%02d", substitutes.get(3).getNumber()))
+                .append(" ".repeat(Math.max(0,(spaceSup-lengthLine)/2 + (spaceSup-lengthLine) % 2))).append("|\n");
+
+
+        for(int i = 4; i<substitutes.size(); i++){
+            lengthLine = substitutes.get(i).getName().length()+5+substitutes.get(i).getClass().getSimpleName().length();
+            a.append("|").append(" ".repeat(space11)).append("|").append(" ".repeat(Math.max(0,(spaceSup-lengthLine)/2))).append(substitutes.get(i).getClass().getSimpleName()).append("   ")
+                    .append(substitutes.get(i).getName()).append("-").append(String.format("%02d", substitutes.get(i).getNumber()))
+                    .append(" ".repeat(Math.max(0,(spaceSup-lengthLine)/2 + (spaceSup-lengthLine) % 2))).append("|\n");
         }
 
-        return "\t\t\t\t\t\t\t" + String.format("%02d",initial11.get(0).getNumber())+"-"+initial11.get(0).getName() + "\n"
-                + tabdef + String.format("%02d",initial11.get(formation[0]).getNumber())+"-"+initial11.get(formation[0]).getName()
-                + " ".repeat(Math.max(0, 15 - initial11.get(formation[0]).getName().length())) + "\t" + defenders
-                + String.format("%02d",initial11.get(formation[0]+1).getNumber())+"-"+initial11.get(formation[0]+1).getName()
-                + " ".repeat(Math.max(0, 15 - initial11.get(formation[0]+1).getName().length())) + "\n" + tabmid + midfielders
-                + "\n" + tabstr + strikers;
+        return a.toString();
     }
-
-    public String substitutesTOSTRING() {
-        StringBuilder ans = new StringBuilder();
-        ans.append("Position\t\t\tName\t\tNumber\n");
-        for (Player substitute : substitutes) {
-            ans.append(substitute.getClass().getSimpleName()).append(" ".repeat(Math.max(0, 20 - substitute.getClass().getSimpleName().length()))).append(substitute.getName()).append(" ".repeat(Math.max(0, 12 - substitute.getName().length()))).append(String.format("%02d", substitute.getNumber())).append("\n");
-        }
-        return ans.toString();
-    }
-
 
     public String goalkeepersTOSTRING() {
         int i = 0;
@@ -453,24 +557,29 @@ public class Team {
         StringBuilder ans = new StringBuilder("Position\t\t\tName\t    Number\tSprint\tSpeed\tStrength\tAgression\tResistance\tDexterity\tImpulsion\tHead Game\tKick\tPass Capacity\tPositioning\t\tBall Control\tOverall");
         for (; i < team.size() && (team.get(i) instanceof Striker); i++)
             ans.append(team.get(i).playerTOSTRING());
-        return ans + "\n\n";
+        return ans + "\n";
+    }
+
+    public String squadTOSTRING(){
+        return goalkeepersTOSTRING() + defendersTOSTRING() + sidersTOSTRING() + midfieldersTOSTRING() + strikersTOSTRING();
     }
 
     @Override
     public String toString() {
-        return nameTEAM + "\n" + goalkeepersTOSTRING() +
-                defendersTOSTRING() +
-                sidersTOSTRING() +
-                midfieldersTOSTRING() +
-                strikersTOSTRING() +
-                substitutesTOSTRING();
+        return nameTEAM + "\n" + squadTOSTRING() +  initial11toString();
     }
 
-    protected String[] namesOfTeams = {"FC Porto", "SL Benfica", "Sporting CP", "SC Braga", "Vitória SC",
-            "FC Famalicão", "Boavista FC", "Rio Ave FC", "FC Paços de Ferreira",
-            "SC Farense", "CS Marítimo", "Portimonense", "CD Santa Clara",
-            "Moreirense FC", "Belenenses SAD", "CD Nacional", "Gil Vicente FC",
-            "CD Tondela"};
+    public boolean equals(Team o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Team team1 = o;
+        return team.equals(o.getTeam());
+    }
+
+
+    protected String[] namesOfTeams = {"FC Porto", "SL Benfica", "Sporting CP", "SC Braga", "Vitória SC", "FC Famalicão",
+            "Boavista FC", "FC Paços de Ferreira", "FC Vizela", "FC Arouca", "Estoril Praia", "CS Marítimo", "Portimonense",
+            "CD Santa Clara", "Moreirense FC", "Belenenses SAD", "Gil Vicente FC", "CD Tondela"};
 
     public static Comparator<Player> PlayerComparator = (p1, p2) -> {
         if (p1.getClass().equals(p2.getClass()))

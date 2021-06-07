@@ -15,6 +15,8 @@ public abstract class Player{
     private int headGame;
     private int kick;
     private int passCapacity;
+    private int goalsScored;
+    private int stamina;
     private int overall;
     private List<String> history;
 
@@ -261,6 +263,14 @@ public abstract class Player{
      * @param history Histórico novo do Player
      * */
     public void setHistory(List<String> history) { this.history = new ArrayList<>(history); }
+
+    public int getGoalsScored() { return goalsScored; }
+
+    public void setGoalsScored(int goalsScored) { this.goalsScored = goalsScored; }
+
+    public int getStamina() { return stamina; }
+
+    public void setStamina(int stamina) { this.stamina = stamina; }
 
     /**
      * Metodo abstrato para calcular a habilidade do Player
