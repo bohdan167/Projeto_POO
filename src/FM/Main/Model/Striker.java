@@ -1,4 +1,4 @@
-package FM.Main;
+package FM.Main.Model;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,7 +10,11 @@ public class Striker extends Player {
     /**
      * Construtor Nulo
      */
-    public Striker() { super(); }
+    public Striker() {
+        super();
+        this.positioning = 0;
+        this.ballControl = 0;
+    }
 
     /**
      * Construtor Parametrizado
@@ -33,10 +37,40 @@ public class Striker extends Player {
      * */
     public Striker(String name, int number, int sprint, int speed, int strength, int agression,
                  int resistance, int dexterity, int impulsion, int headGame, int kick,
-                 int passCapacity, int positioning,int ballControl, int overall, List<String> history){
-        super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,overall,history);
+                 int passCapacity, int positioning,int ballControl, int goalsScored, int stamina ,int overall, List<String> history){
+        super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,goalsScored,stamina,overall,history);
         this.positioning = positioning;
         this.ballControl = ballControl;
+    }
+
+    public Striker(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity){
+        super(name,number,speed,resistance,dexterity,impulsion,headGame,kick, passCapacity);
+        this.setSprint(ThreadLocalRandom.current().nextInt(20,75));
+        this.setStrength(ThreadLocalRandom.current().nextInt(40,95));
+        this.setAgression(ThreadLocalRandom.current().nextInt(40,60));
+        this.setPositioning(ThreadLocalRandom.current().nextInt(75,100));
+        this.setBallControl(ThreadLocalRandom.current().nextInt(70,100));
+        this.setOverall(this.playerOverallValue());
+    }
+
+    public Striker(String input){
+        String[] campos = input.split(",");
+        this.setName(campos[0]);
+        this.setNumber(Integer.parseInt(campos[1]));
+        this.setSpeed(Integer.parseInt(campos[2]));
+        this.setResistance(Integer.parseInt(campos[3]));
+        this.setDexterity(Integer.parseInt(campos[4]));
+        this.setImpulsion(Integer.parseInt(campos[5]));
+        this.setHeadGame(Integer.parseInt(campos[6]));
+        this.setKick(Integer.parseInt(campos[7]));
+        this.setPassCapacity(Integer.parseInt(campos[8]));
+        this.setSprint(ThreadLocalRandom.current().nextInt(70,100));
+        this.setStrength(ThreadLocalRandom.current().nextInt(35,85));
+        this.setAgression(ThreadLocalRandom.current().nextInt(35,60));
+        this.setPositioning(ThreadLocalRandom.current().nextInt(75,100));
+        this.setBallControl(ThreadLocalRandom.current().nextInt(70,100));
+        this.setStamina(100);
+        this.setOverall(this.playerOverallValue());
     }
 
     /**
@@ -48,6 +82,7 @@ public class Striker extends Player {
         this.positioning = s.getPositioning();
         this.ballControl = s.getBallControl();
     }
+
 
     /**
      * Getter do atributo Positioning
@@ -123,10 +158,16 @@ public class Striker extends Player {
         return (str.getPositioning() == positioning && str.getBallControl() == ballControl);
     }
 
+    public String header() {
+        return super.header() + " ".repeat(2) + "Positioning" + " ".repeat(2) + "|" + " ".repeat(2) + "Ball Control" + " ".repeat(2) + "|" + " ".repeat(2)+ "Overall" + " ".repeat(2) + "|\n";
+    }
+
     public String playerTOSTRING(){
         return super.playerTOSTRING() + "\t\t\t\t" + getPositioning() + "\t\t\t\t" + getBallControl() + "\t\t\t\t" + getOverall()
-                + "\n" + "\t\t\t\t\t\tHistory:" + getHistory();
+                + "\n" + "\t\t\t\t\t\tHistory:" + getHistory() + "\n";
     }
+
+
 
     /**
      * Transforma a informação do Striker numa String
@@ -134,8 +175,7 @@ public class Striker extends Player {
      */
     @Override
     public String toString() {
-        return "Position\t\t\tName\t    Number\tSprint\tSpeed\tStrength\tAgression\tResistance\tDexterity\tImpulsion\tHead Game\tKick\tPass Capacity\tPositioning\t\tBall Control\tOverall"
-                + playerTOSTRING() + "\n";
+        return header() + playerTOSTRING();
     }
 
     /**

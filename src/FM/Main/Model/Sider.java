@@ -1,4 +1,4 @@
-package FM.Main;
+package FM.Main.Model;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -9,7 +9,11 @@ public class Sider extends Player {
     /**
      * Construtor Nulo
      */
-    public Sider(){ super(); }
+    public Sider(){
+        super();
+        this.crossing = 0;
+        this.vision = 0;
+    }
 
     /**
      * Construtor Parametrizado
@@ -32,10 +36,40 @@ public class Sider extends Player {
      * */
     public Sider(String name, int number, int sprint, int speed, int strength, int agression,
                       int resistance, int dexterity, int impulsion, int headGame, int kick,
-                      int passCapacity, int crossing,int vision, int overall, List<String> history){
-        super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,overall,history);
+                      int passCapacity, int crossing,int vision, int goalsScored, int stamina, int overall, List<String> history){
+        super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,goalsScored,stamina,overall,history);
         this.vision = vision;
         this.crossing = crossing;
+    }
+
+    public Sider(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity, int crossing){
+        super(name,number,speed,resistance,dexterity,impulsion,headGame,kick,passCapacity);
+        this.crossing = crossing;
+        this.setSprint(ThreadLocalRandom.current().nextInt(50,100));
+        this.setStrength(ThreadLocalRandom.current().nextInt(40,85));
+        this.setAgression(ThreadLocalRandom.current().nextInt(40,60));
+        this.setVision(ThreadLocalRandom.current().nextInt(65,100));
+        this.setOverall(this.playerOverallValue());
+    }
+
+    public Sider (String input){
+        String[] campos = input.split(",");
+        this.setName(campos[0]);
+        this.setNumber(Integer.parseInt(campos[1]));
+        this.setSpeed(Integer.parseInt(campos[2]));
+        this.setResistance(Integer.parseInt(campos[3]));
+        this.setDexterity(Integer.parseInt(campos[4]));
+        this.setImpulsion(Integer.parseInt(campos[5]));
+        this.setHeadGame(Integer.parseInt(campos[6]));
+        this.setKick(Integer.parseInt(campos[7]));
+        this.setPassCapacity(Integer.parseInt(campos[8]));
+        this.setSprint(ThreadLocalRandom.current().nextInt(50,100));
+        this.setStrength(ThreadLocalRandom.current().nextInt(40,85));
+        this.setAgression(ThreadLocalRandom.current().nextInt(40,60));
+        this.setCrossing(ThreadLocalRandom.current().nextInt(70,100));
+        this.setVision(ThreadLocalRandom.current().nextInt(65,100));
+        this.setStamina(100);
+        this.setOverall(this.playerOverallValue());
     }
 
     /**
@@ -127,16 +161,19 @@ public class Sider extends Player {
      * */
     public String playerTOSTRING(){
         return super.playerTOSTRING() + "\t\t\t\t" + getCrossing() + "\t\t\t" + getVision()
-                + "\t\t" + getOverall() + "\n" + "\t\t\t\t\t\tHistory:" + getHistory();
+                + "\t\t" + getOverall() + "\n" + "\t\t\t\t\t\tHistory:" + getHistory() + "\n";
     }
 
+    @Override
+    public String header() {
+        return super.header() + " ".repeat(2) + "Crossing" + " ".repeat(2) + "|" + " ".repeat(2) + "Vision" + " ".repeat(2) + "|" + " ".repeat(2)+ "Overall" + " ".repeat(2) + "|\n";
+    }
     /**
      * Transforma a informação do Sider numa String
      * @return String com a informação do Sider
      */
     public String toString() {
-        return "Position\t\t\tName\t    Number\tSprint\tSpeed\tStrength\tAgression\tResistance\tDexterity\tImpulsion\tHead Game\tKick\tPass Capacity\tCrossing\tVision\tOverall"
-                + playerTOSTRING() + "\n";
+        return header() + playerTOSTRING();
     }
 
     /**

@@ -1,4 +1,4 @@
-package FM.Main;
+package FM.Main.Model;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -8,6 +8,7 @@ public class Goalkeeper extends Player {
     private int handling;
     private int reflexes;
     private int diving;
+    private int goalsSuffered;
 
     /**
      * Construtor Nulo
@@ -18,6 +19,7 @@ public class Goalkeeper extends Player {
         this.handling = 0;
         this.reflexes = 0;
         this.diving = 0;
+        this.goalsSuffered = 0;
     }
 
     /**
@@ -44,12 +46,47 @@ public class Goalkeeper extends Player {
     public Goalkeeper(String name, int number, int sprint, int speed, int strength, int agression,
                       int resistance, int dexterity, int impulsion, int headGame, int kick,
                       int passCapacity, int elasticity, int handling, int reflexes, int diving,
-                      int overall, List<String> history) {
-        super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,overall,history);
+                      int goalsSuffered, int goalsScored, int stamina, int overall, List<String> history) {
+        super(name, number, sprint, speed, strength, agression, resistance, dexterity, impulsion, headGame, kick, passCapacity, goalsScored, stamina, overall, history);
         this.elasticity = elasticity;
         this.handling = handling;
         this.reflexes = reflexes;
         this.diving = diving;
+        this.goalsSuffered = goalsSuffered;
+    }
+    public Goalkeeper(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity, int elasticity) {
+        super(name, number, speed, resistance, dexterity, impulsion, headGame, kick, passCapacity);
+        this.setElasticity(elasticity);
+        this.setSprint(ThreadLocalRandom.current().nextInt(20,60));
+        this.setStrength(ThreadLocalRandom.current().nextInt(20,95));
+        this.setAgression(ThreadLocalRandom.current().nextInt(20,60));
+        this.setHandling(ThreadLocalRandom.current().nextInt(70,100));
+        this.setReflexes(ThreadLocalRandom.current().nextInt(65,100));
+        this.setDiving(ThreadLocalRandom.current().nextInt(65,100));
+        this.setStamina(100);
+        this.setOverall(this.playerOverallValue());
+    }
+
+    public Goalkeeper (String input){
+        String[] campos = input.split(",");
+        this.setName(campos[0]);
+        this.setNumber(Integer.parseInt(campos[1]));
+        this.setSpeed(Integer.parseInt(campos[2]));
+        this.setResistance(Integer.parseInt(campos[3]));
+        this.setDexterity(Integer.parseInt(campos[4]));
+        this.setImpulsion(Integer.parseInt(campos[5]));
+        this.setHeadGame(Integer.parseInt(campos[6]));
+        this.setKick(Integer.parseInt(campos[7]));
+        this.setPassCapacity(Integer.parseInt(campos[8]));
+        this.setElasticity(Integer.parseInt(campos[9]));
+        this.setSprint(ThreadLocalRandom.current().nextInt(20,60));
+        this.setStrength(ThreadLocalRandom.current().nextInt(20,95));
+        this.setAgression(ThreadLocalRandom.current().nextInt(20,60));
+        this.setHandling(ThreadLocalRandom.current().nextInt(70,100));
+        this.setReflexes(ThreadLocalRandom.current().nextInt(65,100));
+        this.setDiving(ThreadLocalRandom.current().nextInt(65,100));
+        this.setStamina(100);
+        this.setOverall(this.playerOverallValue());
     }
 
     /**
@@ -62,6 +99,7 @@ public class Goalkeeper extends Player {
         this.handling = gk.getHandling();
         this.reflexes = gk.getReflexes();
         this.diving = gk.getDiving();
+        this.goalsSuffered = gk.getGoalsSuffered();
     }
 
     /**
@@ -116,6 +154,10 @@ public class Goalkeeper extends Player {
      * */
     public void setDiving(int diving) { this.diving = diving; }
 
+    public int getGoalsSuffered() { return goalsSuffered; }
+
+    public void setGoalsSuffered(int goalsSuffered) { this.goalsSuffered = goalsSuffered; }
+
     /**
      * Método que calcula a habiledade geral do Goalkeeper,
      * valorizando mais os atributos mais necessários na sua posição
@@ -162,13 +204,14 @@ public class Goalkeeper extends Player {
      * @return Um booleano se o objeto é equivalente ao Goalkeeper
      */
     @Override
-    public boolean equals(Object obj) {
-        boolean player = super.equals(obj);
-        if (!player) return false;
-        Goalkeeper goalkeeper = (Goalkeeper) obj;
-        return ((elasticity == goalkeeper.getElasticity() && handling == goalkeeper.getHandling() &&
-                reflexes == goalkeeper.getReflexes() && diving == goalkeeper.getDiving()));
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Goalkeeper that = (Goalkeeper) o;
+        return elasticity == that.elasticity && handling == that.handling && reflexes == that.reflexes && diving == that.diving && goalsSuffered == that.goalsSuffered;
     }
+
 
     /**
      * Coloca todas os atributos de um Goalkeeper numa String
@@ -177,7 +220,14 @@ public class Goalkeeper extends Player {
     public String playerTOSTRING() {
         return super.playerTOSTRING() + "\t\t\t\t" + getElasticity() + "\t\t\t" + getHandling()
                 + "\t\t\t" + getReflexes() + "\t\t\t" + getDiving() + "\t\t" + getOverall() + "\n"
-                + "\t\t\t\t\t\tHistory:" + getHistory();
+                + "\t\t\t\t\t\tHistory:" + getHistory() + "\n";
+    }
+
+    @Override
+    public String header() {
+        return super.header() + " ".repeat(2) + "Elasticity" + " ".repeat(2) + "|" + " ".repeat(2) + "Handling" + " ".repeat(2) + "|"
+                + " ".repeat(2) + "Reflexes" + " ".repeat(2) + "|" + " ".repeat(2) + "Diving" + " ".repeat(2) + " ".repeat(2)
+                + "|" + " ".repeat(2) + "Goals Suffered" + " ".repeat(2) + " ".repeat(2)+ "Overall" + " ".repeat(2) + "|\n";
     }
 
     /**
@@ -185,8 +235,7 @@ public class Goalkeeper extends Player {
      * @return String com a informação do Goalkeeper
      */
     public String toString() {
-        return "Position\t\t\tName\t    Number\tSprint\tSpeed\tStrength\tAgression\tResistance\tDexterity\tImpulsion\tHead Game\tKick\tPass Capacity\tElasticity\tHandling\tReflexes\tDiving\tOverall"
-                + playerTOSTRING() + "\n";
+        return header() + playerTOSTRING();
     }
 
     /**

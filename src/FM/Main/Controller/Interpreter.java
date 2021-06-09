@@ -1,6 +1,18 @@
-package FM.Main;
+package FM.Main.Controller;
 
+import FM.Main.Model.League;
+import FM.Main.Model.LinhaIncorretaException;
+import FM.Main.Model.Team;
+import FM.Main.Model.Player;
+import FM.Main.View.Menu;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Interpreter {
@@ -14,8 +26,9 @@ public class Interpreter {
             integer = in.nextInt();
             if (integer < min || integer > max){
                 m.line("Por favor, insira um numero entre " + min + " e " + max + ": ");
-                in.nextLine();
+                if(in.hasNext()) in.nextLine();
                 integer = readOnlyIntegers(in,min,max);
+                return integer;
             }
         }
         catch(Exception e) {
@@ -125,23 +138,21 @@ public class Interpreter {
     }
 
 
-    public void initialInterpreter(Scanner scan){
+    public void initialInterpreter(Scanner scan) throws LinhaIncorretaException {
         int ans;
 
         m.line("Deseja carregar algum ficheiro? 1 - Sim  0 - Nao : ");
-        ans = readOnlyIntegers(scan,0,1);
+        ans = readOnlyIntegers(scan, 0, 1);
 
-        if (ans == 1){
+        if (ans == 1) {
             m.line("Localizacao do ficheiro: ");
             String where = scan.nextLine();
-            l = new League(where);
-        }
-        else l = new League();
-
+            l = new League(lerFicheiro(where));
+        } else l.generateLeague();
         m.genericMENU(l.standingsTOSTRING());
         m.line("Escolha uma equipa, digitando o numero correspondente: ");
-        ans = readOnlyIntegers(scan,1,l.getTeams().size());
-        myTeam = l.getTeams().get(ans-1);
+        ans = readOnlyIntegers(scan, 1, l.getTeams().size());
+        myTeam = l.getTeams().get(ans - 1);
         m.setTeamName(myTeam.getNameTEAM());
     }
 
@@ -202,8 +213,8 @@ public class Interpreter {
 
                 try {
                     int n1 = Integer.parseInt(p1[1]);
-                    int n2 = Integer.parseInt(p2[2]);
-                    m.line(myTeam.addPLAYER(p1[0],n1,team) + "\n");
+                    int n2 = Integer.parseInt(p2[1]);
+                    m.line(myTeam.addPLAYER(p1[0],n1,team));
                     m.line(team.addPLAYER(p2[0],n2,myTeam) + "\n");
                 } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
                     m.line("Introduza um jogador (exemplo: Ronaldo 7).\n");
@@ -228,10 +239,9 @@ public class Interpreter {
         }
         else {
             m.line("Qual jornada?");
-
-
-            //int ans = readOnlyIntegers(scan,0,l.getJornadas().length());
-        }
+           /* int ans = readOnlyIntegers(scan,0,l.getJornadas().length());
+            m.genericMENU();
+        */}
         return true;
     }
 
@@ -247,13 +257,22 @@ public class Interpreter {
         return true;
     }
 
-    public Interpreter(){
+    public Interpreter() throws IOException, LinhaIncorretaException {
         Scanner scan = new Scanner(System.in);
         m = new Menu();
+        l = new League();
+        myTeam = new Team();
 
         initialInterpreter(scan);
         while(mainInterpreter(scan));
 
         scan.close();
+    }
+
+    public List<String> lerFicheiro(String nomeFich) {
+        List<String> lines;
+        try { lines = Files.readAllLines(Paths.get(nomeFich), StandardCharsets.UTF_8); }
+        catch(IOException exc) { lines = new ArrayList<>(); }
+        return lines;
     }
 }

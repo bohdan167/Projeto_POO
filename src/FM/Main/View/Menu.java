@@ -1,4 +1,4 @@
-package FM.Main;
+package FM.Main.View;
 
 
 public class Menu {

@@ -1,4 +1,4 @@
-package FM.Main;
+package FM.Main.Model;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -14,6 +14,8 @@ public class Defender extends Player {
     public Defender(){
         super();
         this.tackle = 0;
+        this.marking = 0;
+        this.interception = 0;
     }
 
     /**
@@ -36,14 +38,48 @@ public class Defender extends Player {
      * @param overall Habilidade geral do Defender
      * @param history Histórico do Defender, ou seja, lista de clubes por onde passou
      * */
-    public Defender(String name, int number, int sprint, int speed, int strength, int agression,
-                    int resistance, int dexterity, int impulsion, int headGame, int kick,
-                    int passCapacity, int tackle, int marking, int interception, int overall, List<String> history){
-        super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,overall,history);
+    public Defender(String name, int number, int sprint, int speed, int strength, int agression, int resistance,
+                    int dexterity, int impulsion, int headGame, int kick, int passCapacity, int tackle, int marking,
+                    int interception, int goalsScored, int stamina, int overall, List<String> history){
+        super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,
+                passCapacity,goalsScored,stamina,overall,history);
         this.tackle = tackle;
         this.marking = marking;
         this.interception = interception;
     }
+
+    public Defender(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity){
+        super(name,number,speed,resistance,dexterity,impulsion,headGame,kick, passCapacity);
+        this.setSprint(ThreadLocalRandom.current().nextInt(20,75));
+        this.setStrength(ThreadLocalRandom.current().nextInt(40,95));
+        this.setAgression(ThreadLocalRandom.current().nextInt(40,60));
+        this.setTackle(ThreadLocalRandom.current().nextInt(60,100));
+        this.setMarking(ThreadLocalRandom.current().nextInt(60,100));
+        this.setInterception(ThreadLocalRandom.current().nextInt(60,100));
+        this.setOverall(this.playerOverallValue());
+    }
+
+    public Defender (String input){
+        String[] campos = input.split(",");
+        this.setName(campos[0]);
+        this.setNumber(Integer.parseInt(campos[1]));
+        this.setSpeed(Integer.parseInt(campos[2]));
+        this.setResistance(Integer.parseInt(campos[3]));
+        this.setDexterity(Integer.parseInt(campos[4]));
+        this.setImpulsion(Integer.parseInt(campos[5]));
+        this.setHeadGame(Integer.parseInt(campos[6]));
+        this.setKick(Integer.parseInt(campos[7]));
+        this.setPassCapacity(Integer.parseInt(campos[8]));
+        this.setSprint(ThreadLocalRandom.current().nextInt(20,75));
+        this.setStrength(ThreadLocalRandom.current().nextInt(40,95));
+        this.setAgression(ThreadLocalRandom.current().nextInt(40,60));
+        this.setTackle(ThreadLocalRandom.current().nextInt(60,100));
+        this.setMarking(ThreadLocalRandom.current().nextInt(60,100));
+        this.setInterception(ThreadLocalRandom.current().nextInt(60,100));
+        this.setStamina(100);
+        this.setOverall(this.playerOverallValue());
+    }
+
 
     /**
      * Construtor de Clone
@@ -132,15 +168,16 @@ public class Defender extends Player {
 
     /**
      * Compara um objeto com um Defender
-     * @param obj Objeto para comparar
+     * @param o Objeto para comparar
      * @return Um booleano se o objeto é equivalente ao Defender
      */
     @Override
-    public boolean equals(Object obj) {
-        boolean player = super.equals(obj);
-        if (!player) return false;
-        Defender d = (Defender) obj;
-        return this.marking == d.getMarking() && this.tackle == d.getTackle() && this.interception == d.getInterception();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Defender defender = (Defender) o;
+        return tackle == defender.tackle && marking == defender.marking && interception == defender.interception;
     }
 
     /**
@@ -149,7 +186,12 @@ public class Defender extends Player {
      * */
     public String playerTOSTRING(){
         return super.playerTOSTRING() + "\t\t\t\t" + getTackle() + "\t\t" + getMarking()
-                + "\t\t\t" + getInterception() + "\t\t\t\t" + getOverall() + "\n" + "\t\t\t\t\t\tHistory:" + getHistory();
+                + "\t\t\t" + getInterception() + "\t\t\t\t" + getOverall() + "\n" + "\t\t\t\t\t\tHistory:" + getHistory() + "\n";
+    }
+
+    @Override
+    public String header() {
+        return super.header() + " ".repeat(2) + "Tackle" + " ".repeat(2) + "|" + " ".repeat(2) + "Marking" + " ".repeat(2) + "|" + " ".repeat(2) + "Interception" + " ".repeat(2) + "|" + " ".repeat(2) + "Overall" + " ".repeat(2) + "|\n";
     }
 
     /**
@@ -158,12 +200,11 @@ public class Defender extends Player {
      */
     @Override
     public String toString() {
-        return "Position\t\t\tName\t    Number\tSprint\tSpeed\tStrength\tAgression\tResistance\tDexterity\tImpulsion\tHead Game\tKick\tPass Capacity\tTackle\tMarking\t\tInterception\tOverall"
-                + playerTOSTRING() + "\n";
+        return header() + playerTOSTRING();
     }
 
     /**
-     * Clona um Defemder
+     * Clona um Defender
      * @return Cópia do Defender
      */
     public Defender clone(){

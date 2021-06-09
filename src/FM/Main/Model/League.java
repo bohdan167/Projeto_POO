@@ -1,17 +1,16 @@
-package FM.Main;
+package FM.Main.Model;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class League {
     private ArrayList<Team> teams;
     private ArrayList<Player> top10Scorers;
-   // private ArrayList<ArrayList<Game>> round;
+    private ArrayList<ArrayList<Game>> round;
 
     public int manyDIGITS(int ii){
         int stand = 0;
@@ -24,28 +23,90 @@ public class League {
 
     public League(){
         teams = new ArrayList<>();
+        top10Scorers = new ArrayList<>();
+        round = new ArrayList<>();
+    }
+
+    public void addTeam(Team t){
+        teams.add(t);
+        teams.sort(TeamComparator);
+    }
+
+    public void generateLeague(){
         for(int i = 0; i<18 ; i++) {
             Team t = new Team();
+            t.generateTeam();
             t.setNameTEAM(t.namesOfTeams[i]);
             teams.add(t);
         }
         teams.sort(TeamComparator);
-        top10Scorers = new ArrayList<>();
-        //round = new ArrayList<>();
+        round = new ArrayList<>();
     }
 
-    public League(String filename){
-        try {
-            File myObj = new File(filename);
-            Scanner scan = new Scanner(myObj);
-            while (scan.hasNextLine()) {
-                String data = scan.nextLine();
-                System.out.println(data);
+    public League(List<String> lines) throws LinhaIncorretaException {
+        teams = new ArrayList<>();
+        top10Scorers = new ArrayList<>();
+        round = new ArrayList<>();
+        Team ultima = null;
+        Player j = null;
+        String[] linhaPartida;
+        for (String linha : lines) {
+            linhaPartida = linha.split(":", 2);
+            switch (linhaPartida[0]) {
+                case "Equipa":
+                    if(ultima != null){
+                        ultima.randomFormation();
+                        if(!Arrays.equals(ultima.getFormation(), new int[]{0, 0, 0})){
+                            ultima.bestINITIAL11();
+                            ultima.setSubstitutes();
+                            ultima.setOverall();
+                            teams.add(ultima);}
+                        }
+                    ultima = new Team(linhaPartida[1]);
+                    break;
+                case "Guarda-Redes":
+                    j = new Goalkeeper(linhaPartida[1]);
+                    if (ultima == null) throw new LinhaIncorretaException();
+                    ultima.addPLAYER(j.clone());
+                    break;
+                case "Defesa":
+                    j = new Defender(linhaPartida[1]);
+                    if (ultima == null) throw new LinhaIncorretaException();
+                    ultima.addPLAYER(j.clone());
+                    break;
+                case "Medio":
+                    j = new Midfielder(linhaPartida[1]);
+                    if (ultima == null) throw new LinhaIncorretaException();
+                    ultima.addPLAYER(j.clone());
+                    break;
+                case "Lateral":
+                    j = new Sider(linhaPartida[1]);
+                    if (ultima == null) throw new LinhaIncorretaException();
+                    ultima.addPLAYER(j.clone());
+                    break;
+                case "Avancado":
+                    j = new Striker(linhaPartida[1]);
+                    if (ultima == null) throw new LinhaIncorretaException();
+                    ultima.addPLAYER(j.clone());
+                    break;
+                case "Jogo":
+                    if(ultima != null){
+                        ultima.randomFormation();
+                        if(!Arrays.equals(ultima.getFormation(), new int[]{0, 0, 0})){
+                            ultima.bestINITIAL11();
+                            ultima.setSubstitutes();
+                            ultima.setOverall();
+                            teams.add(ultima);}
+                        ultima = null;
+                    }
+                    //    Jogo jo = Jogo.parse(linhaPartida[1]);
+                    //    jogos.add(jo);
+                    break;
+                default:
+                    throw new LinhaIncorretaException();
+
             }
-            scan.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Ocorreu um erro.");
-            e.printStackTrace();
+
         }
     }
 

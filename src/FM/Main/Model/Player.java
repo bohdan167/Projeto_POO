@@ -1,4 +1,4 @@
-package FM.Main;
+package FM.Main.Model;
 
 import java.util.*;
 
@@ -37,6 +37,8 @@ public abstract class Player{
         this.kick = 0;
         this.passCapacity = 0;
         this.overall = 0;
+        this.goalsScored = 0;
+        this.stamina = 100;
         this.history = new ArrayList<>();
     }
 
@@ -59,7 +61,7 @@ public abstract class Player{
      * */
     public Player(String name, int number, int sprint, int speed, int strength, int agression,
                   int resistance, int dexterity, int impulsion, int headGame, int kick,
-                  int passCapacity, int overall, List<String> history){
+                  int passCapacity, int goalsScored, int stamina,int overall, List<String> history){
         this.name = name;
         this.number = number;
         this.sprint = sprint;
@@ -72,8 +74,21 @@ public abstract class Player{
         this.headGame = headGame;
         this.kick = kick;
         this.passCapacity = passCapacity;
+        this.goalsScored = goalsScored;
+        this.stamina = stamina;
         this.overall = overall;
         this.history = history;
+    }
+    public Player(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity) {
+        this.setName(name);
+        this.setNumber(number);
+        this.setSpeed(speed);
+        this.setResistance(resistance);
+        this.setDexterity(dexterity);
+        this.setImpulsion(impulsion);
+        this.setHeadGame(headGame);
+        this.setKick(kick);
+        this.setPassCapacity(passCapacity);
     }
 
     /**
@@ -93,10 +108,11 @@ public abstract class Player{
         this.headGame = player.getHeadGame();
         this.kick = player.getKick();
         this.passCapacity = player.getPassCapacity();
+        this.goalsScored = player.getGoalsScored();
+        this.stamina = player.getStamina();
         this.overall = player.getOverall();
         this.setHistory(player.getHistory());
     }
-
 
     /**
      * Getter do atributo Name
@@ -256,7 +272,7 @@ public abstract class Player{
      * Getter do atributo History
      * @return Histórico do Player
      * */
-    public List<String> getHistory() { return history; }
+    public List<String> getHistory() { return new ArrayList<>(history); }
 
     /**
      * Setter do atributo History
@@ -291,23 +307,15 @@ public abstract class Player{
      * */
     @Override
     public boolean equals(Object o) {
-        if (o == null || !getClass().getSimpleName().equals(o.getClass().getSimpleName())) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return number == player.getNumber() && sprint == player.getSprint()
-                && speed == player.getSpeed() && resistance == player.getResistance()
-                && dexterity == player.getDexterity() && impulsion == player.getImpulsion() &&
-                headGame == player.getHeadGame() && kick == player.getKick() &&
-                passCapacity == player.getPassCapacity() && overall == player.getOverall()
-                && name.equals(player.getName()) && history.equals(player.getHistory());
-    }
-
-    /**
-     * Metodo hashCode do Player
-     * @return Key code
-     * */
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, number, sprint, speed, strength, agression, resistance, dexterity, impulsion, headGame, kick, passCapacity, overall, history);
+        return number == player.number && sprint == player.sprint && speed == player.speed && strength == player.strength
+                && agression == player.agression && resistance == player.resistance && dexterity == player.dexterity
+                && impulsion == player.impulsion && headGame == player.headGame && kick == player.kick
+                && passCapacity == player.passCapacity && goalsScored == player.goalsScored && stamina == player.stamina
+                && overall == player.overall && name.equals(player.name) && history.equals(player.history)
+                && Arrays.equals(namesOfPlayers, player.namesOfPlayers);
     }
 
     /**
@@ -315,11 +323,31 @@ public abstract class Player{
      * @return String com a informação do Player
      * */
     public String playerTOSTRING(){
-        return "\n"+ getClass().getSimpleName() + " ".repeat(Math.max(0, 20 - getClass().getSimpleName().length()))
-                + getName() + " ".repeat(Math.max(0, 12 - getName().length())) + String.format("%02d",getNumber()) + "\t\t"
-                + getSprint() + "\t\t" + getSpeed() + "\t\t" + getStrength() + "\t\t\t" + getAgression() + "\t\t\t"
-                + getResistance() + "\t\t\t" + getDexterity() + "\t\t\t" + getImpulsion() + "\t\t\t" + getHeadGame()
-                + "\t\t\t" + getKick() + "\t\t" + getPassCapacity();
+        int space = 12 - getClass().getSimpleName().length();
+        StringBuilder b = new StringBuilder();
+        b.append("|").append(" ".repeat(space / 2)).append(getClass().getSimpleName()).append(" ".repeat(space / 2 + space % 2)).append("|");
+        space = 20 - Math.min(15,getName().length());
+        b.append(" ".repeat(space / 2)).append(getName(),0,Math.min(15,getName().length())).append(" ".repeat(space / 2 + space % 2)).append("|");
+        b.append(" ".repeat(4)).append(String.format("%02d", this.getNumber())).append(" ".repeat(4)).append("|");
+        b.append(" ".repeat(4)).append(String.format("%02d", this.getSprint())).append(" ".repeat(4)).append("|");
+        b.append(" ".repeat(3)).append(String.format("%02d", this.getSpeed())).append(" ".repeat(4)).append("|");
+        b.append(" ".repeat(5)).append(String.format("%02d", this.getStrength())).append(" ".repeat(5)).append("|");
+        b.append(" ".repeat(5)).append(String.format("%02d", this.getAgression())).append(" ".repeat(6)).append("|");
+        b.append(" ".repeat(6)).append(String.format("%02d", this.getResistance())).append(" ".repeat(6)).append("|");
+        b.append(" ".repeat(5)).append(String.format("%02d", this.getDexterity())).append(" ".repeat(6)).append("|");
+        b.append(" ".repeat(5)).append(String.format("%02d", this.getImpulsion())).append(" ".repeat(6)).append("|");
+        b.append(" ".repeat(5)).append(String.format("%02d", this.getHeadGame())).append(" ".repeat(6)).append("|");
+        b.append(" ".repeat(3)).append(String.format("%02d", this.getKick())).append(" ".repeat(3)).append("|");
+        b.append(" ".repeat(7)).append(String.format("%02d", this.getPassCapacity())).append(" ".repeat(8)).append("|");
+        return b.toString();
+    }
+
+    public String header(){
+        return "\n|" + " ".repeat(2) + "Position" + " ".repeat(2) + "|" +" ".repeat(8) + "Name" + " ".repeat(8) + "|" + " ".repeat(2) + "Number" + " ".repeat(2) + "|" + " ".repeat(2) + "Sprint" + " ".repeat(2) + "|" +
+                " ".repeat(2) + "Speed" + " ".repeat(2) + "|" + " ".repeat(2) + "Strength" + " ".repeat(2) + "|"  + " ".repeat(2) + "Agression" + " ".repeat(2) + "|" +
+                " ".repeat(2) + "Resistance" + " ".repeat(2) + "|" + " ".repeat(2) + "Dexterity" + " ".repeat(2) + "|" + " ".repeat(2) + "Impulsion" + " ".repeat(2) + "|" +
+                " ".repeat(2) + "Head Game" + " ".repeat(2) + "|" + " ".repeat(2) + "Kick" + " ".repeat(2) + "|" + " ".repeat(2) + "Pass Capacity" + " ".repeat(2) + "|" +
+                " ".repeat(2) + "Ball Recovery" + " ".repeat(2) + "|";
     }
 
     public abstract String toString();

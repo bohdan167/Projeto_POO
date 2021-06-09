@@ -1,4 +1,4 @@
-package FM.Main;
+package FM.Main.Model;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,7 +10,11 @@ public class Midfielder extends Player {
     /**
      * Construtor Nulo
      */
-    public Midfielder(){ super(); }
+    public Midfielder(){
+        super();
+        this.vision = 0;
+        this.ballRecovery = 0;
+    }
 
     /**
      * Construtor Parametrizado
@@ -33,10 +37,43 @@ public class Midfielder extends Player {
      * */
     public Midfielder(String name, int number, int sprint, int speed, int strength, int agression,
                     int resistance, int dexterity, int impulsion, int headGame, int kick,
-                    int passCapacity, int vision, int ballRecovery,int overall, List<String> history){
-        super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,overall,history);
+                    int passCapacity, int vision, int ballRecovery,int goalsScored, int stamina, int overall, List<String> history){
+        super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,goalsScored,stamina,overall,history);
         this.vision = vision;
         this.ballRecovery = ballRecovery;
+    }
+
+    public Midfielder(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity, int ballRecovery){
+        super(name,number,speed,resistance,dexterity,impulsion,headGame,kick,passCapacity);
+        this.ballRecovery = ballRecovery;
+        this.setSprint(ThreadLocalRandom.current().nextInt(50,100));
+        this.setStrength(ThreadLocalRandom.current().nextInt(40,85));
+        this.setAgression(ThreadLocalRandom.current().nextInt(35,60));
+        this.setVision(ThreadLocalRandom.current().nextInt(65,100));
+        this.setOverall(this.playerOverallValue());
+    }
+
+    public Midfielder (String input){
+        String[] campos = input.split(",");
+        this.setName(campos[0]);
+        this.setNumber(Integer.parseInt(campos[1]));
+        this.setSpeed(Integer.parseInt(campos[2]));
+        this.setResistance(Integer.parseInt(campos[3]));
+        this.setDexterity(Integer.parseInt(campos[4]));
+        this.setImpulsion(Integer.parseInt(campos[5]));
+        this.setHeadGame(Integer.parseInt(campos[6]));
+        this.setKick(Integer.parseInt(campos[7]));
+        this.setPassCapacity(Integer.parseInt(campos[8]));
+        this.setSprint(ThreadLocalRandom.current().nextInt(20,60));
+        this.setStrength(ThreadLocalRandom.current().nextInt(20,95));
+        this.setAgression(ThreadLocalRandom.current().nextInt(20,60));
+        this.setSprint(ThreadLocalRandom.current().nextInt(50,100));
+        this.setStrength(ThreadLocalRandom.current().nextInt(40,85));
+        this.setAgression(ThreadLocalRandom.current().nextInt(35,60));
+        this.setVision(ThreadLocalRandom.current().nextInt(65,100));
+        this.setBallRecovery(ThreadLocalRandom.current().nextInt(60,100));
+        this.setStamina(100);
+        this.setOverall(this.playerOverallValue());
     }
 
     /**
@@ -46,6 +83,7 @@ public class Midfielder extends Player {
     public Midfielder(Midfielder mid) {
         super(mid);
         this.vision = mid.getVision();
+        this.ballRecovery = mid.getBallRecovery();
     }
 
     /**
@@ -127,7 +165,12 @@ public class Midfielder extends Player {
      * */
     public String playerTOSTRING(){
         return super.playerTOSTRING() + "\t\t\t\t" + getBallRecovery() + "\t\t\t\t" + getVision()
-                + "\t\t" + getOverall() + "\n" + "\t\t\t\t\t\tHistory:" + getHistory();
+                + "\t\t" + getOverall() + "\n" + "\t\t\t\t\t\tHistory:" + getHistory() + "\n";
+    }
+
+    @Override
+    public String header() {
+        return super.header() + " ".repeat(2) + "Vision" + " ".repeat(2) + "|" + " ".repeat(2) + "Overall" + " ".repeat(2) + "|\n";
     }
 
     /**
@@ -136,8 +179,7 @@ public class Midfielder extends Player {
      */
     @Override
     public String toString() {
-        return "Position\t\t\tName\t    Number\tSprint\tSpeed\tStrength\tAgression\tResistance\tDexterity\tImpulsion\tHead Game\tKick\tPass Capacity\tBall Recovery\tVision\tOverall"
-                + playerTOSTRING() + "\n";
+        return header() + playerTOSTRING();
     }
 
     /**
