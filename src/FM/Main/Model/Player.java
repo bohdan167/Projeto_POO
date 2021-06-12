@@ -1,8 +1,9 @@
 package FM.Main.Model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class Player{
+public abstract class Player implements Serializable {
     private String name;
     private int number;
     private int sprint;
@@ -306,12 +307,28 @@ public abstract class Player{
      * */
     public void setHistory(ArrayList<String> history) { this.history = history; }
 
+    /**
+     * Getter do atributo goalsScored
+     * @return Número de golos que o Jogador marcou
+     */
     public int getGoalsScored() { return goalsScored; }
 
+    /**
+     *Setter do atributo goalsScored
+     * @param goalsScored novo número de golos marcados
+     */
     public void setGoalsScored(int goalsScored) { this.goalsScored = goalsScored; }
 
+    /**
+     * Getter do atributo stamina
+     * @return número de energia do Jogador
+     */
     public int getStamina() { return stamina; }
 
+    /**
+     * Setter do atributo stamina
+     * @param stamina novo nível de energia do Jogador
+     */
     public void setStamina(int stamina) { this.stamina = stamina; }
 
     /**
@@ -364,6 +381,10 @@ public abstract class Player{
         return b.toString();
     }
 
+    /**
+     * Função que imprime o cabeçalho do Player
+     * @return String com o cabeçalho
+     */
     public String header(){
         return "\n|" + " ".repeat(2) + "Position" + " ".repeat(2) + "|" +" ".repeat(8) + "Name" + " ".repeat(8) + "|" + " ".repeat(2) + "Number" + " ".repeat(2) + "|" + " ".repeat(2) + "Sprint" + " ".repeat(2) + "|" +
                 " ".repeat(2) + "Speed" + " ".repeat(2) + "|" + " ".repeat(2) + "Strength" + " ".repeat(2) + "|"  + " ".repeat(2) + "Agression" + " ".repeat(2) + "|" +
@@ -372,6 +393,10 @@ public abstract class Player{
                 + "|" + " ".repeat(2) + "Goals Scored" + " ".repeat(2) + "|";
     }
 
+    /**
+     * Metodo toString que as subclasses desvem implementer
+     * @return String com a informação
+     */
     public abstract String toString();
 
     /**

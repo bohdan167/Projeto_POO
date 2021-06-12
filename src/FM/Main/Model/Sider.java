@@ -1,9 +1,10 @@
 package FM.Main.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Sider extends Player {
+public class Sider extends Player implements Serializable {
     private int crossing;
     private int vision;
     /**
@@ -54,6 +55,10 @@ public class Sider extends Player {
         this.crossing = crossing;
     }
 
+    /**
+     * Construtor Parametrizado
+     * @param input Lina do ficheiro que contém os paramentros, os que não existem são gerados aleatoriamente
+     */
     public Sider (String input){
         String[] campos = input.split(",");
         this.setName(campos[0]);
@@ -144,6 +149,10 @@ public class Sider extends Player {
         return super.playerTOSTRING() + b;
     }
 
+    /**
+     * Função que imprime o cabeçalho do Sider
+     * @return String com o cabeçalho
+     */
     @Override
     public String header() {
         return super.header() + " ".repeat(2) + "Vision" + " ".repeat(2) + "|" + " ".repeat(2) + "Crossing" + " ".repeat(2)  + "|" + " ".repeat(2)+ "Overall" + " ".repeat(2) + "|\n";

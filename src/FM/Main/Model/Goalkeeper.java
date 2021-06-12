@@ -1,9 +1,10 @@
 package FM.Main.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Goalkeeper extends Player {
+public class Goalkeeper extends Player implements Serializable {
     private int elasticity;
     private int handling;
     private int reflexes;

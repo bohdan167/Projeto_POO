@@ -3,7 +3,7 @@ package FM.Main.Controller;
 import FM.Main.Model.*;
 import FM.Main.View.Menu;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,6 +27,13 @@ public class Interpreter implements Serializable{
      */
     private Team myTeam;
 
+    /**
+     * Função que só lê inteiros
+     * @param in Scaner para ler o input
+     * @param min Valor min do intervalo
+     * @param max Valo max do intervalo
+     * @return O
+     */
     private int readOnlyIntegers(Scanner in, int min, int max) {
         String integer = in.nextLine();
         int i;
@@ -226,16 +233,24 @@ public class Interpreter implements Serializable{
     }
 
 
-    public boolean initialInterpreter(Scanner scan) throws LinhaIncorretaException {
+    public boolean initialInterpreter(Scanner scan) throws LinhaIncorretaException, IOException, ClassNotFoundException {
         int ans;
 
         m.line("Deseja carregar algum ficheiro? 1 - Sim  0 - Nao : ");
         ans = readOnlyIntegers(scan, 0, 1);
 
         if (ans == 1) {
-            m.line("Localizacao do ficheiro: ");
-            String where = scan.nextLine();
-            l = new League(lerFicheiro(where));
+            m.line("Deseja ler um estado em binario? 1 - Sim  0 - Nao : ");
+            ans = readOnlyIntegers(scan, 0, 1);
+            if(ans == 1){
+                m.line("Localizacao do ficheiro: ");
+                String where = scan.nextLine();
+                this.readObject(where);
+            }else {
+                m.line("Localizacao do ficheiro: ");
+                String where = scan.nextLine();
+                l = new League(lerFicheiro(where));
+            }
         } else l = new League(1);
         if(l.getTeams().size() != 0) {
             m.genericMENU(l.standingsTOSTRING());
@@ -275,7 +290,12 @@ public class Interpreter implements Serializable{
         return true;
     }
 
-    public Interpreter() throws IOException, LinhaIncorretaException {
+    /**
+     * Construtor Nulo que corre o programa
+     * @throws IOException
+     * @throws LinhaIncorretaException
+     */
+    public Interpreter() throws IOException, LinhaIncorretaException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         m = new Menu();
         l = new League(0);
@@ -293,5 +313,35 @@ public class Interpreter implements Serializable{
         try { lines = Files.readAllLines(Paths.get(nomeFich), StandardCharsets.UTF_8); }
         catch(IOException exc) { lines = new ArrayList<>(); }
         return lines;
+    }
+
+    public void setLeague(League l){
+        this.l = l.clone();
+    }
+
+    public void setMyTeam(Team t){
+        this.myTeam = t.clone();
+    }
+
+    public void setMenu(Menu m){
+        this.m = m.clone();
+    }
+
+    public void readObject(String fileName) throws IOException, ClassNotFoundException {
+        ObjectInputStream o = new ObjectInputStream((new FileInputStream(fileName)));
+        Interpreter t = (Interpreter) o.readObject();
+        o.close();
+        setLeague(t.l);
+        setMyTeam(t.myTeam);
+        setMenu(t.m);
+    }
+
+    public void saveObject(String fileName) throws IOException {
+        FileOutputStream fos = new FileOutputStream(fileName);
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+        ObjectOutputStream oos = new ObjectOutputStream(bos);
+        oos.writeObject(this);
+        oos.flush();
+        oos.close();
     }
 }

@@ -1,13 +1,15 @@
 package FM.Main.Model;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-public class Team {
+public class Team implements Serializable {
     private String nameTEAM;
     private ArrayList<Player> initial11;
     private ArrayList<Player> substitutes;

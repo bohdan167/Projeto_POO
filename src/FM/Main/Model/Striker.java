@@ -1,9 +1,10 @@
 package FM.Main.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Striker extends Player {
+public class Striker extends Player implements Serializable {
     private int positioning;
     private int ballControl;
 
@@ -55,6 +56,10 @@ public class Striker extends Player {
         this.ballControl = ballControl;
     }
 
+    /**
+     * Construtor Parametrizado
+     * @param input Lina do ficheiro que contém os paramentros, os que não existem são gerados aleatoriamente
+     */
     public Striker(String input){
         String[] campos = input.split(",");
         this.setName(campos[0]);
@@ -136,10 +141,18 @@ public class Striker extends Player {
         return (str.getPositioning() == positioning && str.getBallControl() == ballControl);
     }
 
+    /**
+     * Cabeçalho com os atributos do Striker
+     * @return Cabeçalho numa String
+     */
     public String header() {
         return super.header() + " ".repeat(2) + "Positioning" + " ".repeat(2) + "|" + " ".repeat(2) + "Ball Control" + " ".repeat(2) + "|" + " ".repeat(2)+ "Overall" + " ".repeat(2) + "|\n";
     }
 
+    /**
+     * Imprime os valores do Striker
+     * @return String com os valores dos parametros
+     */
     public String playerTOSTRING(){
         String b = " ".repeat(6) + String.format("%03d", getPositioning()) + " ".repeat(6) + "|" +
                 " ".repeat(6) + String.format("%03d", getBallControl()) + " ".repeat(7) + "|" +
@@ -147,8 +160,6 @@ public class Striker extends Player {
                 "\t\t\tHistory:" + getHistory() + "\n";
         return super.playerTOSTRING() + b;
     }
-
-
 
     /**
      * Transforma a informação do Striker numa String

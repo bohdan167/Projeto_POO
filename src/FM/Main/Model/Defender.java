@@ -1,9 +1,10 @@
 package FM.Main.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Defender extends Player {
+public class Defender extends Player implements Serializable {
     private int tackle;
     private int marking;
     private int interception;

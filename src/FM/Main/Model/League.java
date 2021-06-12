@@ -1,11 +1,12 @@
 package FM.Main.Model;
 
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class League {
+public class League implements Serializable {
     private ArrayList<Team> teams;
     private ArrayList<Player> top10Scorers;
     private ArrayList<Game> friendly;

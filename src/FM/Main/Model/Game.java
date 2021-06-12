@@ -1,15 +1,14 @@
 package FM.Main.Model;
 
 
-
-
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class Game {
+public class Game implements Serializable {
     private Team homeTEAM;
     private Team awayTEAM;
     private ArrayList<Player> homeGOALS;
