@@ -1,9 +1,6 @@
 package FM.Main.Controller;
 
-import FM.Main.Model.League;
-import FM.Main.Model.LinhaIncorretaException;
-import FM.Main.Model.Team;
-import FM.Main.Model.Player;
+import FM.Main.Model.*;
 import FM.Main.View.Menu;
 
 import java.io.IOException;
@@ -14,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Interpreter {
     private League l;
@@ -21,35 +19,174 @@ public class Interpreter {
     private Team myTeam;
 
     private int readOnlyIntegers(Scanner in, int min, int max) {
-        int integer;
+        String integer = in.nextLine();
+        int i;
         try {
-            integer = in.nextInt();
-            if (integer < min || integer > max){
+            i = Integer.parseInt(integer);
+            if (i < min || i > max){
                 m.line("Por favor, insira um numero entre " + min + " e " + max + ": ");
-                if(in.hasNext()) in.nextLine();
-                integer = readOnlyIntegers(in,min,max);
-                return integer;
+                i = readOnlyIntegers(in,min,max);
+                return i;
             }
         }
         catch(Exception e) {
             m.line("Por favor, insira um numero: ");
-            if(in.hasNext()) in.nextLine();
-            integer = readOnlyIntegers(in,min,max);
+            i = readOnlyIntegers(in,min,max);
         }
-        in.nextLine();
-        return integer;
+        return i;
     }
 
     public boolean genericInterpreter(Scanner scan) {
         return (readOnlyIntegers(scan,0,0)!= 0);
     }
 
+
+
+
+
+//////////////////transfers
+    public boolean transferInterpreter(Scanner scan) {
+        m.header("Transferencias");
+        m.optionsMENU(new String[]{"1 - Remover Jogador","2 - Adicionar Jogador", "3 - Trocar Jogador","0 - Sair"});
+        m.line("Pretende: ");
+        int ans = readOnlyIntegers(scan, 0, 3);
+        if (ans == 0) return false;
+        if (ans == 1) {
+            m.genericMENU(myTeam.squadTOSTRING());
+            m.line("Insira o número do jogador que pretende remover da sua equipa: ");
+
+            String[] p = scan.nextLine().split(" ", 2);
+
+            try {
+                int number = Integer.parseInt(p[1]);
+                m.line(myTeam.removePLAYER(number) + "\n");
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
+                m.line("Insira o número de um jogador.\n");
+            }
+        }
+        else if (ans == 2) {
+            m.genericMENU(l.standingsTOSTRING());
+
+            m.line("Equipa do jogador pretendido (inserir o lugar de classificacao da equipa): ");
+            int t = readOnlyIntegers(scan,1,l.getTeams().size());
+            Team team = l.getTeams().get(t-1);
+
+            if(team.equals(myTeam)) m.line("Equipa tem de ser diferente da tua equipa.\n");
+            else {
+                m.genericMENU(team.squadTOSTRING());
+                m.line("Insira o número do jogador que pretende adicionar à sua equipa: ");
+                String[] p = scan.nextLine().split(" ", 2);
+                try {
+                    int number = Integer.parseInt(p[1]);
+                    m.line(team.addPLAYER(number,team) + "\n");
+                } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
+                    m.line("Introduza o número de um jogador.\n");
+                }
+            }
+        }
+        else {
+            m.genericMENU(l.standingsTOSTRING());
+            m.line("Equipa do jogador pretendido (inserir o lugar de classificacao da equipa): ");
+            int t = readOnlyIntegers(scan,1,l.getTeams().size());
+            Team team = l.getTeams().get(t-1);
+
+            if(team.equals(myTeam)) m.line("Equipa tem de ser diferente da tua equipa.\n");
+            else {
+                m.genericMENU(team.squadTOSTRING());
+                m.line("Insira o número do jogador que pretende adicionar à sua equipa: ");
+                String[] p1 = scan.nextLine().split(" ", 2);
+                m.whiteline(1);
+                m.genericMENU(myTeam.squadTOSTRING());
+                m.line("Insira o número do jogador que pretende remover da sua equipa: ");
+                String[] p2 = scan.nextLine().split(" ", 2);
+
+                try {
+                    int n1 = Integer.parseInt(p1[1]);
+                    int n2 = Integer.parseInt(p2[1]);
+                    m.line(myTeam.addPLAYER(n1,team));
+                    m.line(team.addPLAYER(n2,myTeam) + "\n");
+                } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
+                    m.line("Introduza o número de um jogador.\n");
+                }
+            }
+
+        }
+        return true;
+    }
+
+
+
+
+    ///League stats
+    public boolean leagueStatsInterpreter(Scanner scan) {
+        m.leagueStatsMENU();
+        int ans = readOnlyIntegers(scan, 0, 3);
+        if (ans == 0) return false;
+        if (ans == 1 || ans == 2) {
+            if(ans == 1) m.genericMENU(l.standingsTOSTRING());
+            else m.genericMENU(l.top10ScorersTOSTRING());
+            m.optionsMENU(new String[]{"0 - Sair"});
+            m.line("Pretende: ");
+
+            while(genericInterpreter(scan));
+        }
+        else {
+            m.line("Qual jornada?");
+            ans = readOnlyIntegers(scan,0,l.getRounds().size());
+
+        }
+        return true;
+    }
+
+    public boolean myGamesInterpreter(Scanner scan){
+        m.myGamesMenu();
+        int ans = readOnlyIntegers(scan,0,2);
+        if(ans == 0) return false;
+        StringBuilder s = new StringBuilder();
+        if(ans == 1) {
+            for(ArrayList<Game> journey : l.getRounds()){
+                for(int i = 0; i < journey.size(); i++){
+                    s.append("\n|->").append(i + 1).append("\n").append(journey.get(i).header()).append("\n");
+                }
+            }
+            m.genericMENU(s.toString());
+            m.optionsMENU(new String[]{"0 - Sair"});
+            genericInterpreter(scan);
+            m.line("Pretende:");
+        }
+        else {
+            List<Game> myfriendly = l.getFriendly().stream().filter(g -> (g.getHomeTEAM().getNameTEAM().equals(myTeam.getNameTEAM()) || g.getAwayTEAM().getNameTEAM().equals(myTeam.getNameTEAM()))).collect(Collectors.toList());
+
+            for(int i = 0; i < myfriendly.size(); i++){
+                s.append("\n|->").append(i + 1).append("\n").append(myfriendly.get(i).header()).append("\n");
+            }
+            m.genericMENU(s.toString());
+            m.optionsMENU(new String[]{"1 - Ver Jogo Especifico","0 - Sair"});
+            ans = readOnlyIntegers(scan,0,1);
+            if(ans == 1) while(myFriendlyGameInterpreter(scan,myfriendly));
+            else return false;
+
+        }
+        return true;
+    }
+
+    public boolean myFriendlyGameInterpreter(Scanner scan, List<Game> myfriendly){
+        m.line("Qual Jogo? Insira 0 se quiser sair. ");
+        int ans = readOnlyIntegers(scan,0,myfriendly.size());
+        if (ans == 0) return false;
+        m.genericMENU(myfriendly.get(ans-1).toString());
+        m.optionsMENU(new String[]{"0 - Sair"});
+        m.line("Pretende: ");
+        genericInterpreter(scan);
+        return true;
+    }
+
     public boolean myTeamInterpreter(Scanner scan){
         m.myTeamMENU();
-        int ans = readOnlyIntegers(scan,0,3);
+        int ans = readOnlyIntegers(scan,0,4);
         if (ans == 0) return false;
         if  (ans == 1 || ans == 3) {
-            m.header("Estatisticas");
+            m.header("Minha Equipa");
             m.whiteline(1);
             if(ans == 1) m.genericMENU(myTeam.squadTOSTRING());
             else {
@@ -63,6 +200,9 @@ public class Interpreter {
         }
         else if (ans == 2) {
             while(initial11Interpreter(scan));
+        }
+        else{
+            while(myGamesInterpreter(scan));
         }
         return true;
     }
@@ -101,17 +241,16 @@ public class Interpreter {
             m.line("Feito.\n");
         }
         else {
-            m.line("Qual jogador do 11 inicial que quer trocar? Exemplo: Ronaldo 7: ");
-            String[] p = scan.nextLine().split(" ", 2);
+            m.line("Insira o número do jogador do 11 inicial que quer trocar: ");
+            String p = scan.nextLine();
             Player p1;
             Player p2;
             try {
-                int number = Integer.parseInt(p[1]);
-                p1 = myTeam.findPLAYER(p[0], number);
-                m.line("Qual jogador do substitutos que quer trocar? Exemplo: Ronaldo 7: ");
-                p = scan.nextLine().split(" ", 2);
-                number = Integer.parseInt(p[1]);
-                p2 = myTeam.findPLAYER(p[0], number);
+                int number = Integer.parseInt(p);
+                p1 = myTeam.findPLAYER(number,new Goalkeeper());
+                m.line("Insira o número do jogador dos suplentes que quer trocar: ");
+                number = Integer.parseInt(p);
+                p2 = myTeam.findPLAYER(number,new Goalkeeper());
                 if (p1 != null && p2 != null && myTeam.tradePlayer(p1, p2, 0))
                     m.line("Feito.\n");
                 else m.line("Impossivel.\n");
@@ -148,7 +287,7 @@ public class Interpreter {
             m.line("Localizacao do ficheiro: ");
             String where = scan.nextLine();
             l = new League(lerFicheiro(where));
-        } else l.generateLeague();
+        } else l = new League(1);
         m.genericMENU(l.standingsTOSTRING());
         m.line("Escolha uma equipa, digitando o numero correspondente: ");
         ans = readOnlyIntegers(scan, 1, l.getTeams().size());
@@ -156,94 +295,7 @@ public class Interpreter {
         m.setTeamName(myTeam.getNameTEAM());
     }
 
-    public boolean transferInterpreter(Scanner scan) {
-        m.header("Transferencias");
-        m.optionsMENU(new String[]{"1 - Remover Jogador","2 - Adicionar Jogador", "3 - Trocar Jogador","0 - Sair"});
-        m.line("Pretende: ");
-        int ans = readOnlyIntegers(scan, 0, 3);
-        if (ans == 0) return false;
-        if (ans == 1) {
-            m.genericMENU(myTeam.squadTOSTRING());
-            m.line("Que jogador pretende retirar (Exemplo: Ronaldo 7)? ");
 
-            String[] p = scan.nextLine().split(" ", 2);
-
-            try {
-                int number = Integer.parseInt(p[1]);
-                m.line(myTeam.removePLAYER(p[0],number) + "\n");
-            } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
-                m.line("Introduza um jogador (exemplo: Ronaldo 7).\n");
-            }
-        }
-        else if (ans == 2) {
-            m.genericMENU(l.standingsTOSTRING());
-
-            m.line("Equipa do jogador pretendido (inserir o lugar de classificacao da equipa): ");
-            int t = readOnlyIntegers(scan,1,l.getTeams().size());
-            Team team = l.getTeams().get(t-1);
-
-            if(team.equals(myTeam)) m.line("Equipa tem de ser diferente da tua equipa.\n");
-            else {
-                m.genericMENU(team.squadTOSTRING());
-                m.line("Que jogador pretende adicionar a sua equipa (exemplo: Ronaldo 7): ");
-                String[] p = scan.nextLine().split(" ", 2);
-                try {
-                    int number = Integer.parseInt(p[1]);
-                    m.line(team.addPLAYER(p[0],number,team) + "\n");
-                } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
-                    m.line("Introduza um jogador (exemplo: Ronaldo 7).\n");
-                }
-            }
-        }
-        else {
-            m.genericMENU(l.standingsTOSTRING());
-            m.line("Equipa do jogador pretendido (inserir o lugar de classificacao da equipa): ");
-            int t = readOnlyIntegers(scan,1,l.getTeams().size());
-            Team team = l.getTeams().get(t-1);
-
-            if(team.equals(myTeam)) m.line("Equipa tem de ser diferente da tua equipa.\n");
-            else {
-                m.genericMENU(team.squadTOSTRING());
-                m.line("Que jogador pretende adicionar a sua equipa (exemplo: Ronaldo 7): ");
-                String[] p1 = scan.nextLine().split(" ", 2);
-                m.whiteline(1);
-                m.genericMENU(myTeam.squadTOSTRING());
-                m.line("Que jogador pretende retirar (Exemplo: Ronaldo 7)? ");
-                String[] p2 = scan.nextLine().split(" ", 2);
-
-                try {
-                    int n1 = Integer.parseInt(p1[1]);
-                    int n2 = Integer.parseInt(p2[1]);
-                    m.line(myTeam.addPLAYER(p1[0],n1,team));
-                    m.line(team.addPLAYER(p2[0],n2,myTeam) + "\n");
-                } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
-                    m.line("Introduza um jogador (exemplo: Ronaldo 7).\n");
-                }
-            }
-
-        }
-        return true;
-    }
-
-    public boolean leagueStatsInterpreter(Scanner scan) {
-        m.leagueStatsMENU();
-        int ans = readOnlyIntegers(scan, 0, 3);
-        if (ans == 0) return false;
-        if (ans == 1 || ans == 2) {
-            if(ans == 1) m.genericMENU(l.standingsTOSTRING());
-            else m.genericMENU(l.top10ScorersTOSTRING());
-            m.optionsMENU(new String[]{"0 - Sair"});
-            m.line("Pretende: ");
-
-            while(genericInterpreter(scan));
-        }
-        else {
-            m.line("Qual jornada?");
-           /* int ans = readOnlyIntegers(scan,0,l.getJornadas().length());
-            m.genericMENU();
-        */}
-        return true;
-    }
 
     public boolean mainInterpreter(Scanner scan){
         int ans;
@@ -260,8 +312,8 @@ public class Interpreter {
     public Interpreter() throws IOException, LinhaIncorretaException {
         Scanner scan = new Scanner(System.in);
         m = new Menu();
-        l = new League();
-        myTeam = new Team();
+        l = new League(0);
+        myTeam = new Team(0);
 
         initialInterpreter(scan);
         while(mainInterpreter(scan));

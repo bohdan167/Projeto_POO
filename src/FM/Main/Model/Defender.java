@@ -1,6 +1,6 @@
 package FM.Main.Model;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Defender extends Player {
@@ -12,10 +12,22 @@ public class Defender extends Player {
      * Construtor Nulo
      */
     public Defender(){
-        super();
-        this.tackle = 0;
-        this.marking = 0;
-        this.interception = 0;
+        this.setName(this.namesOfPlayers[ThreadLocalRandom.current().nextInt(0,19)]);
+        this.setNumber(ThreadLocalRandom.current().nextInt(1,99));
+        this.setSprint(ThreadLocalRandom.current().nextInt(20,75));
+        this.setSpeed(ThreadLocalRandom.current().nextInt(20,70));
+        this.setStrength(ThreadLocalRandom.current().nextInt(40,95));
+        this.setAgression(ThreadLocalRandom.current().nextInt(40,60));
+        this.setResistance(ThreadLocalRandom.current().nextInt(55,90));
+        this.setDexterity(ThreadLocalRandom.current().nextInt(30,100));
+        this.setImpulsion(ThreadLocalRandom.current().nextInt(55,100));
+        this.setHeadGame(ThreadLocalRandom.current().nextInt(10,50));
+        this.setKick(ThreadLocalRandom.current().nextInt(40,80));
+        this.setPassCapacity(ThreadLocalRandom.current().nextInt(60,100));
+        this.setTackle(ThreadLocalRandom.current().nextInt(60,100));
+        this.setMarking(ThreadLocalRandom.current().nextInt(60,100));
+        this.setInterception(ThreadLocalRandom.current().nextInt(60,100));
+        this.setOverall(this.playerOverallValue());
     }
 
     /**
@@ -40,7 +52,7 @@ public class Defender extends Player {
      * */
     public Defender(String name, int number, int sprint, int speed, int strength, int agression, int resistance,
                     int dexterity, int impulsion, int headGame, int kick, int passCapacity, int tackle, int marking,
-                    int interception, int goalsScored, int stamina, int overall, List<String> history){
+                    int interception, int goalsScored, int stamina, int overall, ArrayList<String> history){
         super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,
                 passCapacity,goalsScored,stamina,overall,history);
         this.tackle = tackle;
@@ -48,16 +60,6 @@ public class Defender extends Player {
         this.interception = interception;
     }
 
-    public Defender(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity){
-        super(name,number,speed,resistance,dexterity,impulsion,headGame,kick, passCapacity);
-        this.setSprint(ThreadLocalRandom.current().nextInt(20,75));
-        this.setStrength(ThreadLocalRandom.current().nextInt(40,95));
-        this.setAgression(ThreadLocalRandom.current().nextInt(40,60));
-        this.setTackle(ThreadLocalRandom.current().nextInt(60,100));
-        this.setMarking(ThreadLocalRandom.current().nextInt(60,100));
-        this.setInterception(ThreadLocalRandom.current().nextInt(60,100));
-        this.setOverall(this.playerOverallValue());
-    }
 
     public Defender (String input){
         String[] campos = input.split(",");
@@ -140,31 +142,6 @@ public class Defender extends Player {
                 + 0.1*getTackle() + 0.1*getMarking() + 0.1*getInterception());
     }
 
-    /**
-     * Metodo que gera um Defender aleatoriamente
-     * @return Objeto da Classe Defender
-     */
-    @Override
-    public Defender generateNewPlayer() {
-        Defender novo = new Defender();
-        novo.setName(novo.namesOfPlayers[ThreadLocalRandom.current().nextInt(0,19)]);
-        novo.setNumber(ThreadLocalRandom.current().nextInt(1,99));
-        novo.setSprint(ThreadLocalRandom.current().nextInt(20,75));
-        novo.setSpeed(ThreadLocalRandom.current().nextInt(20,70));
-        novo.setStrength(ThreadLocalRandom.current().nextInt(40,95));
-        novo.setAgression(ThreadLocalRandom.current().nextInt(40,60));
-        novo.setResistance(ThreadLocalRandom.current().nextInt(55,90));
-        novo.setDexterity(ThreadLocalRandom.current().nextInt(30,100));
-        novo.setImpulsion(ThreadLocalRandom.current().nextInt(55,100));
-        novo.setHeadGame(ThreadLocalRandom.current().nextInt(10,50));
-        novo.setKick(ThreadLocalRandom.current().nextInt(40,80));
-        novo.setPassCapacity(ThreadLocalRandom.current().nextInt(60,100));
-        novo.setTackle(ThreadLocalRandom.current().nextInt(60,100));
-        novo.setMarking(ThreadLocalRandom.current().nextInt(60,100));
-        novo.setInterception(ThreadLocalRandom.current().nextInt(60,100));
-        novo.setOverall(novo.playerOverallValue());
-        return novo;
-    }
 
     /**
      * Compara um objeto com um Defender
@@ -185,8 +162,12 @@ public class Defender extends Player {
      * @return String
      * */
     public String playerTOSTRING(){
-        return super.playerTOSTRING() + "\t\t\t\t" + getTackle() + "\t\t" + getMarking()
-                + "\t\t\t" + getInterception() + "\t\t\t\t" + getOverall() + "\n" + "\t\t\t\t\t\tHistory:" + getHistory() + "\n";
+        String b = " ".repeat(3) + String.format("%03d", getTackle()) + " ".repeat(4) + "|" +
+                " ".repeat(4) + String.format("%03d", getMarking()) + " ".repeat(4) + "|" +
+                " ".repeat(6) + String.format("%03d", getInterception()) + " ".repeat(7) + "|" +
+                " ".repeat(4) + String.format("%03d", getOverall()) + " ".repeat(4) + "|" +
+                "\t\t\tHistory:" + getHistory() + "\n";
+        return super.playerTOSTRING() + b;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package FM.Main.Model;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Midfielder extends Player {
@@ -11,9 +11,21 @@ public class Midfielder extends Player {
      * Construtor Nulo
      */
     public Midfielder(){
-        super();
-        this.vision = 0;
-        this.ballRecovery = 0;
+        this.setName(this.namesOfPlayers[ThreadLocalRandom.current().nextInt(0,19)]);
+        this.setNumber(ThreadLocalRandom.current().nextInt(1,99));
+        this.setSprint(ThreadLocalRandom.current().nextInt(50,100));
+        this.setSpeed(ThreadLocalRandom.current().nextInt(70,100));
+        this.setStrength(ThreadLocalRandom.current().nextInt(40,85));
+        this.setAgression(ThreadLocalRandom.current().nextInt(35,60));
+        this.setResistance(ThreadLocalRandom.current().nextInt(55,100));
+        this.setDexterity(ThreadLocalRandom.current().nextInt(45,100));
+        this.setImpulsion(ThreadLocalRandom.current().nextInt(55,100));
+        this.setHeadGame(ThreadLocalRandom.current().nextInt(20,90));
+        this.setKick(ThreadLocalRandom.current().nextInt(45,100));
+        this.setPassCapacity(ThreadLocalRandom.current().nextInt(70,100));
+        this.setVision(ThreadLocalRandom.current().nextInt(65,100));
+        this.setBallRecovery(ThreadLocalRandom.current().nextInt(60,100));
+        this.setOverall(this.playerOverallValue());
     }
 
     /**
@@ -37,20 +49,10 @@ public class Midfielder extends Player {
      * */
     public Midfielder(String name, int number, int sprint, int speed, int strength, int agression,
                     int resistance, int dexterity, int impulsion, int headGame, int kick,
-                    int passCapacity, int vision, int ballRecovery,int goalsScored, int stamina, int overall, List<String> history){
+                    int passCapacity, int vision, int ballRecovery,int goalsScored, int stamina, int overall, ArrayList<String> history){
         super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,goalsScored,stamina,overall,history);
         this.vision = vision;
         this.ballRecovery = ballRecovery;
-    }
-
-    public Midfielder(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity, int ballRecovery){
-        super(name,number,speed,resistance,dexterity,impulsion,headGame,kick,passCapacity);
-        this.ballRecovery = ballRecovery;
-        this.setSprint(ThreadLocalRandom.current().nextInt(50,100));
-        this.setStrength(ThreadLocalRandom.current().nextInt(40,85));
-        this.setAgression(ThreadLocalRandom.current().nextInt(35,60));
-        this.setVision(ThreadLocalRandom.current().nextInt(65,100));
-        this.setOverall(this.playerOverallValue());
     }
 
     public Midfielder (String input){
@@ -122,30 +124,6 @@ public class Midfielder extends Player {
                 + 0.15*getVision() + 0.15*getBallRecovery());
     }
 
-    /**
-     * Metodo que gera um Midfielder aleatório
-     * @return Objeto da Classe Midfielder
-     */
-    @Override
-    public Midfielder generateNewPlayer() {
-        Midfielder novo = new Midfielder();
-        novo.setName(novo.namesOfPlayers[ThreadLocalRandom.current().nextInt(0,19)]);
-        novo.setNumber(ThreadLocalRandom.current().nextInt(1,99));
-        novo.setSprint(ThreadLocalRandom.current().nextInt(50,100));
-        novo.setSpeed(ThreadLocalRandom.current().nextInt(70,100));
-        novo.setStrength(ThreadLocalRandom.current().nextInt(40,85));
-        novo.setAgression(ThreadLocalRandom.current().nextInt(35,60));
-        novo.setResistance(ThreadLocalRandom.current().nextInt(55,100));
-        novo.setDexterity(ThreadLocalRandom.current().nextInt(45,100));
-        novo.setImpulsion(ThreadLocalRandom.current().nextInt(55,100));
-        novo.setHeadGame(ThreadLocalRandom.current().nextInt(20,90));
-        novo.setKick(ThreadLocalRandom.current().nextInt(45,100));
-        novo.setPassCapacity(ThreadLocalRandom.current().nextInt(70,100));
-        novo.setVision(ThreadLocalRandom.current().nextInt(65,100));
-        novo.setBallRecovery(ThreadLocalRandom.current().nextInt(60,100));
-        novo.setOverall(novo.playerOverallValue());
-        return novo;
-    }
 
     /**
      * Compara um objeto com um Midfielder
@@ -164,13 +142,16 @@ public class Midfielder extends Player {
      * @return String
      * */
     public String playerTOSTRING(){
-        return super.playerTOSTRING() + "\t\t\t\t" + getBallRecovery() + "\t\t\t\t" + getVision()
-                + "\t\t" + getOverall() + "\n" + "\t\t\t\t\t\tHistory:" + getHistory() + "\n";
+        String b = " ".repeat(3) + String.format("%03d", getBallRecovery()) + " ".repeat(4) + "|" +
+                " ".repeat(3) + String.format("%03d", getVision()) + " ".repeat(4) + "|" +
+                " ".repeat(4) + String.format("%03d", getOverall()) + " ".repeat(4) + "|" +
+                "\t\t\tHistory:" + getHistory() + "\n";
+        return super.playerTOSTRING() + b;
     }
 
     @Override
     public String header() {
-        return super.header() + " ".repeat(2) + "Vision" + " ".repeat(2) + "|" + " ".repeat(2) + "Overall" + " ".repeat(2) + "|\n";
+        return super.header() + " ".repeat(2) + "Ball Recovery" +  " ".repeat(2) + "|" +  " ".repeat(2) + "Vision" + " ".repeat(2) + "|" + " ".repeat(2) + "Overall" + " ".repeat(2) + "|\n";
     }
 
     /**

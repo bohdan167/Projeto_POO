@@ -18,7 +18,7 @@ public abstract class Player{
     private int goalsScored;
     private int stamina;
     private int overall;
-    private List<String> history;
+    private ArrayList<String> history;
 
     /**
      * Construtor Nulo
@@ -26,6 +26,25 @@ public abstract class Player{
     public Player(){
         this.name = "";
         this.number = 0;
+        this.sprint = 0;
+        this.speed = 0;
+        this.strength = 0;
+        this.agression = 0;
+        this.resistance = 0;
+        this.dexterity = 0;
+        this.impulsion = 0;
+        this.headGame = 0;
+        this.kick = 0;
+        this.passCapacity = 0;
+        this.overall = 0;
+        this.goalsScored = 0;
+        this.stamina = 100;
+        this.history = new ArrayList<>();
+    }
+
+    public Player(int number){
+        this.name = "Unknown";
+        this.number = number;
         this.sprint = 0;
         this.speed = 0;
         this.strength = 0;
@@ -61,7 +80,7 @@ public abstract class Player{
      * */
     public Player(String name, int number, int sprint, int speed, int strength, int agression,
                   int resistance, int dexterity, int impulsion, int headGame, int kick,
-                  int passCapacity, int goalsScored, int stamina,int overall, List<String> history){
+                  int passCapacity, int goalsScored, int stamina,int overall, ArrayList<String> history){
         this.name = name;
         this.number = number;
         this.sprint = sprint;
@@ -77,7 +96,7 @@ public abstract class Player{
         this.goalsScored = goalsScored;
         this.stamina = stamina;
         this.overall = overall;
-        this.history = history;
+        this.history = new ArrayList<>(history);
     }
     public Player(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity) {
         this.setName(name);
@@ -89,6 +108,13 @@ public abstract class Player{
         this.setHeadGame(headGame);
         this.setKick(kick);
         this.setPassCapacity(passCapacity);
+        this.sprint = 0;
+        this.strength = 0;
+        this.agression = 0;
+        this.overall = 0;
+        this.goalsScored = 0;
+        this.stamina = 100;
+        this.history = new ArrayList<>();
     }
 
     /**
@@ -272,13 +298,13 @@ public abstract class Player{
      * Getter do atributo History
      * @return Histórico do Player
      * */
-    public List<String> getHistory() { return new ArrayList<>(history); }
+    public ArrayList<String> getHistory() { return new ArrayList<>(history); }
 
     /**
      * Setter do atributo History
      * @param history Histórico novo do Player
      * */
-    public void setHistory(List<String> history) { this.history = new ArrayList<>(history); }
+    public void setHistory(ArrayList<String> history) { this.history = history; }
 
     public int getGoalsScored() { return goalsScored; }
 
@@ -293,12 +319,6 @@ public abstract class Player{
      * @return Valor Geral do Player
      * */
     public abstract int playerOverallValue();
-
-    /**
-     * Método abstrato para gerar um Player com atributos aleatórios
-     * @return Class Plauer
-     * */
-    public abstract Player generateNewPlayer();
 
     /**
      * Compara um objeto com um Player
@@ -328,17 +348,19 @@ public abstract class Player{
         b.append("|").append(" ".repeat(space / 2)).append(getClass().getSimpleName()).append(" ".repeat(space / 2 + space % 2)).append("|");
         space = 20 - Math.min(15,getName().length());
         b.append(" ".repeat(space / 2)).append(getName(),0,Math.min(15,getName().length())).append(" ".repeat(space / 2 + space % 2)).append("|");
-        b.append(" ".repeat(4)).append(String.format("%02d", this.getNumber())).append(" ".repeat(4)).append("|");
-        b.append(" ".repeat(4)).append(String.format("%02d", this.getSprint())).append(" ".repeat(4)).append("|");
-        b.append(" ".repeat(3)).append(String.format("%02d", this.getSpeed())).append(" ".repeat(4)).append("|");
-        b.append(" ".repeat(5)).append(String.format("%02d", this.getStrength())).append(" ".repeat(5)).append("|");
-        b.append(" ".repeat(5)).append(String.format("%02d", this.getAgression())).append(" ".repeat(6)).append("|");
-        b.append(" ".repeat(6)).append(String.format("%02d", this.getResistance())).append(" ".repeat(6)).append("|");
-        b.append(" ".repeat(5)).append(String.format("%02d", this.getDexterity())).append(" ".repeat(6)).append("|");
-        b.append(" ".repeat(5)).append(String.format("%02d", this.getImpulsion())).append(" ".repeat(6)).append("|");
-        b.append(" ".repeat(5)).append(String.format("%02d", this.getHeadGame())).append(" ".repeat(6)).append("|");
-        b.append(" ".repeat(3)).append(String.format("%02d", this.getKick())).append(" ".repeat(3)).append("|");
-        b.append(" ".repeat(7)).append(String.format("%02d", this.getPassCapacity())).append(" ".repeat(8)).append("|");
+        b.append(" ".repeat(3)).append(String.format("%03d", this.getNumber())).append(" ".repeat(4)).append("|");
+        b.append(" ".repeat(3)).append(String.format("%03d", this.getSprint())).append(" ".repeat(4)).append("|");
+        b.append(" ".repeat(3)).append(String.format("%03d", this.getSpeed())).append(" ".repeat(3)).append("|");
+        b.append(" ".repeat(4)).append(String.format("%03d", this.getStrength())).append(" ".repeat(5)).append("|");
+        b.append(" ".repeat(5)).append(String.format("%03d", this.getAgression())).append(" ".repeat(5)).append("|");
+        b.append(" ".repeat(5)).append(String.format("%03d", this.getResistance())).append(" ".repeat(6)).append("|");
+        b.append(" ".repeat(5)).append(String.format("%03d", this.getDexterity())).append(" ".repeat(5)).append("|");
+        b.append(" ".repeat(5)).append(String.format("%03d", this.getImpulsion())).append(" ".repeat(5)).append("|");
+        b.append(" ".repeat(5)).append(String.format("%03d", this.getHeadGame())).append(" ".repeat(5)).append("|");
+        b.append(" ".repeat(2)).append(String.format("%03d", this.getKick())).append(" ".repeat(3)).append("|");
+        b.append(" ".repeat(7)).append(String.format("%03d", this.getPassCapacity())).append(" ".repeat(7)).append("|");
+        b.append(" ".repeat(6)).append(String.format("%03d", this.getGoalsScored())).append(" ".repeat(7)).append("|");
+
         return b.toString();
     }
 
@@ -346,8 +368,8 @@ public abstract class Player{
         return "\n|" + " ".repeat(2) + "Position" + " ".repeat(2) + "|" +" ".repeat(8) + "Name" + " ".repeat(8) + "|" + " ".repeat(2) + "Number" + " ".repeat(2) + "|" + " ".repeat(2) + "Sprint" + " ".repeat(2) + "|" +
                 " ".repeat(2) + "Speed" + " ".repeat(2) + "|" + " ".repeat(2) + "Strength" + " ".repeat(2) + "|"  + " ".repeat(2) + "Agression" + " ".repeat(2) + "|" +
                 " ".repeat(2) + "Resistance" + " ".repeat(2) + "|" + " ".repeat(2) + "Dexterity" + " ".repeat(2) + "|" + " ".repeat(2) + "Impulsion" + " ".repeat(2) + "|" +
-                " ".repeat(2) + "Head Game" + " ".repeat(2) + "|" + " ".repeat(2) + "Kick" + " ".repeat(2) + "|" + " ".repeat(2) + "Pass Capacity" + " ".repeat(2) + "|" +
-                " ".repeat(2) + "Ball Recovery" + " ".repeat(2) + "|";
+                " ".repeat(2) + "Head Game" + " ".repeat(2) + "|" + " ".repeat(2) + "Kick" + " ".repeat(2) + "|" + " ".repeat(2) + "Pass Capacity" + " ".repeat(2)
+                + "|" + " ".repeat(2) + "Goals Scored" + " ".repeat(2) + "|";
     }
 
     public abstract String toString();

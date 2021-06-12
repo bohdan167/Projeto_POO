@@ -37,10 +37,15 @@ public class Menu {
         System.out.println(generic);
     }
 
+    public void myGamesMenu(){
+        header("Meus Jogos");
+        optionsMENU(new String[]{"1 - Liga","2 - Amigaveis","0 - Sair"});
+        line("Pretende: ");
+    }
 
     public void myTeamMENU(){
         header("Minha Equipa");
-        optionsMENU(new String[]{"1 - Plantel","2 - 11 inicial", "3 - Estatisticas","0 - Sair"});
+        optionsMENU(new String[]{"1 - Plantel","2 - 11 inicial", "3 - Estatisticas","4 - Meus Jogos","0 - Sair"});
         line("Pretende: ");
     }
 

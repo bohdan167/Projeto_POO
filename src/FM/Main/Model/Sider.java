@@ -1,6 +1,6 @@
 package FM.Main.Model;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Sider extends Player {
@@ -10,9 +10,21 @@ public class Sider extends Player {
      * Construtor Nulo
      */
     public Sider(){
-        super();
-        this.crossing = 0;
-        this.vision = 0;
+        this.setName(this.namesOfPlayers[ThreadLocalRandom.current().nextInt(0,19)]);
+        this.setNumber(ThreadLocalRandom.current().nextInt(1,99));
+        this.setSprint(ThreadLocalRandom.current().nextInt(50,100));
+        this.setSpeed(ThreadLocalRandom.current().nextInt(75,100));
+        this.setStrength(ThreadLocalRandom.current().nextInt(40,85));
+        this.setAgression(ThreadLocalRandom.current().nextInt(40,60));
+        this.setResistance(ThreadLocalRandom.current().nextInt(60,100));
+        this.setDexterity(ThreadLocalRandom.current().nextInt(45,100));
+        this.setImpulsion(ThreadLocalRandom.current().nextInt(60,100));
+        this.setHeadGame(ThreadLocalRandom.current().nextInt(20,90));
+        this.setKick(ThreadLocalRandom.current().nextInt(50,100));
+        this.setPassCapacity(ThreadLocalRandom.current().nextInt(70,100));
+        this.setCrossing(ThreadLocalRandom.current().nextInt(70,100));
+        this.setVision(ThreadLocalRandom.current().nextInt(65,100));
+        this.setOverall(this.playerOverallValue());
     }
 
     /**
@@ -35,21 +47,11 @@ public class Sider extends Player {
      * @param history Histórico do Sider, ou seja, lista de clubes por onde passou
      * */
     public Sider(String name, int number, int sprint, int speed, int strength, int agression,
-                      int resistance, int dexterity, int impulsion, int headGame, int kick,
-                      int passCapacity, int crossing,int vision, int goalsScored, int stamina, int overall, List<String> history){
+                 int resistance, int dexterity, int impulsion, int headGame, int kick,
+                 int passCapacity, int crossing, int vision, int goalsScored, int stamina, int overall, ArrayList<String> history){
         super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,goalsScored,stamina,overall,history);
         this.vision = vision;
         this.crossing = crossing;
-    }
-
-    public Sider(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity, int crossing){
-        super(name,number,speed,resistance,dexterity,impulsion,headGame,kick,passCapacity);
-        this.crossing = crossing;
-        this.setSprint(ThreadLocalRandom.current().nextInt(50,100));
-        this.setStrength(ThreadLocalRandom.current().nextInt(40,85));
-        this.setAgression(ThreadLocalRandom.current().nextInt(40,60));
-        this.setVision(ThreadLocalRandom.current().nextInt(65,100));
-        this.setOverall(this.playerOverallValue());
     }
 
     public Sider (String input){
@@ -119,31 +121,6 @@ public class Sider extends Player {
     }
 
     /**
-     * Metodo que gera um Sider aleatoriamente
-     * @return Objeto da Classe Sider
-     */
-    @Override
-    public Sider generateNewPlayer() {
-        Sider novo = new Sider();
-        novo.setName(novo.namesOfPlayers[ThreadLocalRandom.current().nextInt(0,19)]);
-        novo.setNumber(ThreadLocalRandom.current().nextInt(1,99));
-        novo.setSprint(ThreadLocalRandom.current().nextInt(50,100));
-        novo.setSpeed(ThreadLocalRandom.current().nextInt(75,100));
-        novo.setStrength(ThreadLocalRandom.current().nextInt(40,85));
-        novo.setAgression(ThreadLocalRandom.current().nextInt(40,60));
-        novo.setResistance(ThreadLocalRandom.current().nextInt(60,100));
-        novo.setDexterity(ThreadLocalRandom.current().nextInt(45,100));
-        novo.setImpulsion(ThreadLocalRandom.current().nextInt(60,100));
-        novo.setHeadGame(ThreadLocalRandom.current().nextInt(20,90));
-        novo.setKick(ThreadLocalRandom.current().nextInt(50,100));
-        novo.setPassCapacity(ThreadLocalRandom.current().nextInt(70,100));
-        novo.setCrossing(ThreadLocalRandom.current().nextInt(70,100));
-        novo.setVision(ThreadLocalRandom.current().nextInt(65,100));
-        novo.setOverall(novo.playerOverallValue());
-        return novo;
-    }
-
-    /**
      * Compara um objeto com um Sider
      * @param obj Objeto para comparar
      * @return Um booleano se o objeto é equivalente ao Sider
@@ -160,13 +137,16 @@ public class Sider extends Player {
      * @return String
      * */
     public String playerTOSTRING(){
-        return super.playerTOSTRING() + "\t\t\t\t" + getCrossing() + "\t\t\t" + getVision()
-                + "\t\t" + getOverall() + "\n" + "\t\t\t\t\t\tHistory:" + getHistory() + "\n";
+        String b = " ".repeat(3) + String.format("%03d", getVision()) + " ".repeat(4) + "|" +
+                " ".repeat(4) + String.format("%03d", getCrossing()) + " ".repeat(5) + "|" +
+                " ".repeat(4) + String.format("%03d", getOverall()) + " ".repeat(4) + "|" +
+                "\t\t\tHistory:" + getHistory() + "\n";
+        return super.playerTOSTRING() + b;
     }
 
     @Override
     public String header() {
-        return super.header() + " ".repeat(2) + "Crossing" + " ".repeat(2) + "|" + " ".repeat(2) + "Vision" + " ".repeat(2) + "|" + " ".repeat(2)+ "Overall" + " ".repeat(2) + "|\n";
+        return super.header() + " ".repeat(2) + "Vision" + " ".repeat(2) + "|" + " ".repeat(2) + "Crossing" + " ".repeat(2)  + "|" + " ".repeat(2)+ "Overall" + " ".repeat(2) + "|\n";
     }
     /**
      * Transforma a informação do Sider numa String

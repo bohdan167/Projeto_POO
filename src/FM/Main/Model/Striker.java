@@ -1,6 +1,6 @@
 package FM.Main.Model;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Striker extends Player {
@@ -11,9 +11,21 @@ public class Striker extends Player {
      * Construtor Nulo
      */
     public Striker() {
-        super();
-        this.positioning = 0;
-        this.ballControl = 0;
+        this.setName(this.namesOfPlayers[ThreadLocalRandom.current().nextInt(0,19)]);
+        this.setNumber(ThreadLocalRandom.current().nextInt(1,99));
+        this.setSprint(ThreadLocalRandom.current().nextInt(70,100));
+        this.setSpeed(ThreadLocalRandom.current().nextInt(70,100));
+        this.setStrength(ThreadLocalRandom.current().nextInt(35,85));
+        this.setAgression(ThreadLocalRandom.current().nextInt(35,60));
+        this.setResistance(ThreadLocalRandom.current().nextInt(70,100));
+        this.setDexterity(ThreadLocalRandom.current().nextInt(50,100));
+        this.setImpulsion(ThreadLocalRandom.current().nextInt(55,100));
+        this.setHeadGame(ThreadLocalRandom.current().nextInt(50,90));
+        this.setKick(ThreadLocalRandom.current().nextInt(50,100));
+        this.setPassCapacity(ThreadLocalRandom.current().nextInt(50,100));
+        this.setPositioning(ThreadLocalRandom.current().nextInt(75,100));
+        this.setBallControl(ThreadLocalRandom.current().nextInt(70,100));
+        this.setOverall(this.playerOverallValue());
     }
 
     /**
@@ -36,21 +48,11 @@ public class Striker extends Player {
      * @param history Histórico do Striker, ou seja, lista de clubes por onde passou
      * */
     public Striker(String name, int number, int sprint, int speed, int strength, int agression,
-                 int resistance, int dexterity, int impulsion, int headGame, int kick,
-                 int passCapacity, int positioning,int ballControl, int goalsScored, int stamina ,int overall, List<String> history){
+                   int resistance, int dexterity, int impulsion, int headGame, int kick,
+                   int passCapacity, int positioning, int ballControl, int goalsScored, int stamina , int overall, ArrayList<String> history){
         super(name,number,sprint,speed,strength,agression,resistance,dexterity,impulsion,headGame,kick,passCapacity,goalsScored,stamina,overall,history);
         this.positioning = positioning;
         this.ballControl = ballControl;
-    }
-
-    public Striker(String name, int number, int speed, int resistance, int dexterity, int impulsion, int headGame, int kick, int passCapacity){
-        super(name,number,speed,resistance,dexterity,impulsion,headGame,kick, passCapacity);
-        this.setSprint(ThreadLocalRandom.current().nextInt(20,75));
-        this.setStrength(ThreadLocalRandom.current().nextInt(40,95));
-        this.setAgression(ThreadLocalRandom.current().nextInt(40,60));
-        this.setPositioning(ThreadLocalRandom.current().nextInt(75,100));
-        this.setBallControl(ThreadLocalRandom.current().nextInt(70,100));
-        this.setOverall(this.playerOverallValue());
     }
 
     public Striker(String input){
@@ -120,30 +122,6 @@ public class Striker extends Player {
                 + 0.1*getBallControl() + 0.1*getPositioning());
     }
 
-    /**
-     * Metodo que gera um Striker aleatoriamente
-     * @return Objeto da Classe Striker
-     */
-    @Override
-    public Striker generateNewPlayer() {
-        Striker novo = new Striker();
-        novo.setName(novo.namesOfPlayers[ThreadLocalRandom.current().nextInt(0,19)]);
-        novo.setNumber(ThreadLocalRandom.current().nextInt(1,99));
-        novo.setSprint(ThreadLocalRandom.current().nextInt(70,100));
-        novo.setSpeed(ThreadLocalRandom.current().nextInt(70,100));
-        novo.setStrength(ThreadLocalRandom.current().nextInt(35,85));
-        novo.setAgression(ThreadLocalRandom.current().nextInt(35,60));
-        novo.setResistance(ThreadLocalRandom.current().nextInt(70,100));
-        novo.setDexterity(ThreadLocalRandom.current().nextInt(50,100));
-        novo.setImpulsion(ThreadLocalRandom.current().nextInt(55,100));
-        novo.setHeadGame(ThreadLocalRandom.current().nextInt(50,90));
-        novo.setKick(ThreadLocalRandom.current().nextInt(50,100));
-        novo.setPassCapacity(ThreadLocalRandom.current().nextInt(50,100));
-        novo.setPositioning(ThreadLocalRandom.current().nextInt(75,100));
-        novo.setBallControl(ThreadLocalRandom.current().nextInt(70,100));
-        novo.setOverall(novo.playerOverallValue());
-        return novo;
-    }
 
     /**
      * Compara um objeto com um Striker
@@ -163,8 +141,11 @@ public class Striker extends Player {
     }
 
     public String playerTOSTRING(){
-        return super.playerTOSTRING() + "\t\t\t\t" + getPositioning() + "\t\t\t\t" + getBallControl() + "\t\t\t\t" + getOverall()
-                + "\n" + "\t\t\t\t\t\tHistory:" + getHistory() + "\n";
+        String b = " ".repeat(6) + String.format("%03d", getPositioning()) + " ".repeat(6) + "|" +
+                " ".repeat(7) + String.format("%03d", getBallControl()) + " ".repeat(8) + "|" +
+                " ".repeat(4) + String.format("%03d", getOverall()) + " ".repeat(4) + "|" +
+                "\t\t\tHistory:" + getHistory() + "\n";
+        return super.playerTOSTRING() + b;
     }
 
 
