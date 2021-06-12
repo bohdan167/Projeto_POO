@@ -225,21 +225,17 @@ public class Interpreter {
         }
         else {
             m.line("Insira o número do jogador do 11 inicial que quer trocar: ");
-            String p = scan.nextLine();
-            Player p1;
-            Player p2;
-            try {
-                int number = Integer.parseInt(p);
-                p1 = myTeam.findPLAYER(number,new Goalkeeper());
+            int p1 = readOnlyIntegers(scan, 0, 100);
+            Player initial = myTeam.findPLAYER(p1,null);
+            if (initial != null) {
                 m.line("Insira o número do jogador dos suplentes que quer trocar: ");
-                number = Integer.parseInt(p);
-                p2 = myTeam.findPLAYER(number,new Goalkeeper());
-                if (p1 != null && p2 != null && myTeam.tradePlayer(p1, p2, 0))
-                    m.line("Feito.\n");
-                else m.line("Impossivel.\n");
-            } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
-                m.line("Introduza um jogador. Exemplo: Ronaldo 7\n");
+                int p2 = readOnlyIntegers(scan, 0, 100);
+                Player sub = myTeam.findPLAYER(p2, null);
+                if( sub != null)
+                    myTeam.tradePlayer(initial,sub,0);
+                else m.line("Erro");
             }
+            else m.line("Erro");
         }
         return true;
     }

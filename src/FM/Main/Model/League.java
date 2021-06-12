@@ -126,7 +126,7 @@ public class League {
                         subsAWAY.put(away.findPLAYER(Integer.parseInt(sub[0]), new Goalkeeper(Integer.parseInt(sub[0]))), away.findPLAYER(Integer.parseInt(sub[1]), new Goalkeeper(Integer.parseInt(sub[1]))));
                     }
                     ArrayList<Player> substitutesAWAY = new ArrayList<>();
-                    for (Map.Entry<Player, Player> e : subsHOME.entrySet()) {
+                    for (Map.Entry<Player, Player> e : subsAWAY.entrySet()) {
                         substitutesAWAY.add(e.getValue());
                     }
 

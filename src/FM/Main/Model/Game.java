@@ -137,7 +137,6 @@ public class Game {
                 .append(" ".repeat(30)).append("Fora").append(" ".repeat(30)).append("|");
         s.append("\n|").append("*".repeat(61)).append(" ".repeat(10)).append("*".repeat(129)).append("|\n");
 
-        int lengthline;
         for (int i = 0; i < homeGOALS.size() || i < subsHOME.size() || i < awayGOALS.size() || i < subsAWAY.size(); i++) {
             if (i < homeGOALS.size()) {
                 GoalsToString(s, 31, i, homeGOALS);
