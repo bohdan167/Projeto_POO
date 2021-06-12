@@ -454,6 +454,8 @@ public class Team {
         initial11.addAll(bestSIDER(2));
         initial11.addAll(bestMID(formation[1]));
         initial11.addAll(bestSTRK(formation[2]));
+        setOverall();
+        setSubstitutes();
     }
 
     public Player pickPLAYER(String simpleName) {
