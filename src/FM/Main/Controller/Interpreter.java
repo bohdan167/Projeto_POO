@@ -32,7 +32,7 @@ public class Interpreter implements Serializable{
      * @param in Scaner para ler o input
      * @param min Valor min do intervalo
      * @param max Valo max do intervalo
-     * @return O
+     * @return O inteiro lido
      */
     private int readOnlyIntegers(Scanner in, int min, int max) {
         String integer = in.nextLine();
@@ -52,6 +52,11 @@ public class Interpreter implements Serializable{
         return i;
     }
 
+    /**
+     *
+     * @param scan
+     * @return
+     */
     public boolean genericInterpreter(Scanner scan) {
         return (readOnlyIntegers(scan,0,0)!= 0);
     }
