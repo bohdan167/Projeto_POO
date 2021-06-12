@@ -142,7 +142,7 @@ public class Midfielder extends Player {
      * @return String
      * */
     public String playerTOSTRING(){
-        String b = " ".repeat(3) + String.format("%03d", getBallRecovery()) + " ".repeat(4) + "|" +
+        String b = " ".repeat(7) + String.format("%03d", getBallRecovery()) + " ".repeat(7) + "|" +
                 " ".repeat(3) + String.format("%03d", getVision()) + " ".repeat(4) + "|" +
                 " ".repeat(4) + String.format("%03d", getOverall()) + " ".repeat(4) + "|" +
                 "\t\t\tHistory:" + getHistory() + "\n";

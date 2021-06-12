@@ -47,69 +47,47 @@ public class Interpreter {
 //////////////////transfers
     public boolean transferInterpreter(Scanner scan) {
         m.header("Transferencias");
-        m.optionsMENU(new String[]{"1 - Remover Jogador","2 - Adicionar Jogador", "3 - Trocar Jogador","0 - Sair"});
+        m.optionsMENU(new String[]{"1 - Remover Jogador", "2 - Adicionar Jogador", "3 - Trocar Jogador", "0 - Sair"});
         m.line("Pretende: ");
         int ans = readOnlyIntegers(scan, 0, 3);
         if (ans == 0) return false;
         if (ans == 1) {
             m.genericMENU(myTeam.squadTOSTRING());
             m.line("Insira o número do jogador que pretende remover da sua equipa: ");
-
-            String[] p = scan.nextLine().split(" ", 2);
-
-            try {
-                int number = Integer.parseInt(p[1]);
-                m.line(myTeam.removePLAYER(number) + "\n");
-            } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
-                m.line("Insira o número de um jogador.\n");
-            }
-        }
-        else if (ans == 2) {
+            ans = readOnlyIntegers(scan, 0, 100);
+            m.line(myTeam.removePLAYER(ans) + "\n");
+        } else if (ans == 2) {
             m.genericMENU(l.standingsTOSTRING());
 
             m.line("Equipa do jogador pretendido (inserir o lugar de classificacao da equipa): ");
-            int t = readOnlyIntegers(scan,1,l.getTeams().size());
-            Team team = l.getTeams().get(t-1);
+            int t = readOnlyIntegers(scan, 1, l.getTeams().size());
+            Team team = l.getTeams().get(t - 1);
 
-            if(team.equals(myTeam)) m.line("Equipa tem de ser diferente da tua equipa.\n");
+            if (team.equals(myTeam)) m.line("Equipa tem de ser diferente da tua equipa.\n");
             else {
                 m.genericMENU(team.squadTOSTRING());
                 m.line("Insira o número do jogador que pretende adicionar à sua equipa: ");
-                String[] p = scan.nextLine().split(" ", 2);
-                try {
-                    int number = Integer.parseInt(p[1]);
-                    m.line(team.addPLAYER(number,team) + "\n");
-                } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
-                    m.line("Introduza o número de um jogador.\n");
-                }
+                ans = readOnlyIntegers(scan, 0, 100);
+                m.line(myTeam.addPLAYER(ans, team) + "\n");
             }
-        }
-        else {
+        } else {
             m.genericMENU(l.standingsTOSTRING());
             m.line("Equipa do jogador pretendido (inserir o lugar de classificacao da equipa): ");
-            int t = readOnlyIntegers(scan,1,l.getTeams().size());
-            Team team = l.getTeams().get(t-1);
+            int t = readOnlyIntegers(scan, 1, l.getTeams().size());
+            Team team = l.getTeams().get(t - 1);
 
-            if(team.equals(myTeam)) m.line("Equipa tem de ser diferente da tua equipa.\n");
+            if (team.equals(myTeam)) m.line("Equipa tem de ser diferente da tua equipa.\n");
             else {
                 m.genericMENU(team.squadTOSTRING());
                 m.line("Insira o número do jogador que pretende adicionar à sua equipa: ");
-                String[] p1 = scan.nextLine().split(" ", 2);
+                int p1 = readOnlyIntegers(scan, 0, 100);
                 m.whiteline(1);
                 m.genericMENU(myTeam.squadTOSTRING());
                 m.line("Insira o número do jogador que pretende remover da sua equipa: ");
-                String[] p2 = scan.nextLine().split(" ", 2);
-
-                try {
-                    int n1 = Integer.parseInt(p1[1]);
-                    int n2 = Integer.parseInt(p2[1]);
-                    m.line(myTeam.addPLAYER(n1,team));
-                    m.line(team.addPLAYER(n2,myTeam) + "\n");
-                } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
-                    m.line("Introduza o número de um jogador.\n");
-                }
+                int p2 = readOnlyIntegers(scan, 0, 100);
+                m.line(myTeam.addPLAYER(p1, team));
+                m.line(team.addPLAYER(p2, myTeam) + "\n");
             }
-
         }
         return true;
     }

@@ -27,7 +27,7 @@ public class Game {
         this.awaySUBS = awaySUBS;
     }
 
-    public Game(Game g){
+    public Game(Game g) {
         this.setHomeTEAM(g.getHomeTEAM());
         this.setAwayTEAM(g.getAwayTEAM());
         this.setHomeGOALS(g.getHomeGOALS());
@@ -37,7 +37,7 @@ public class Game {
         this.setAwaySUBS(g.getAwaySUBS());
     }
 
-    public int manyDIGITS(int ii){
+    public int manyDIGITS(int ii) {
         int stand = 0;
         while (ii != 0) {
             ii /= 10;
@@ -47,7 +47,7 @@ public class Game {
     }
 
     public Team getHomeTEAM() {
-        return new Team(this.getHomeTEAM());
+        return new Team(this.homeTEAM);
     }
 
     public void setHomeTEAM(Team homeTEAM) {
@@ -55,7 +55,7 @@ public class Game {
     }
 
     public Team getAwayTEAM() {
-        return new Team(this.getAwayTEAM());
+        return new Team(this.awayTEAM);
     }
 
     public void setAwayTEAM(Team awayTEAM) {
@@ -114,15 +114,14 @@ public class Game {
         this.awaySUBS = awaySUBS;
     }
 
-    public Game clone(){
+    public Game clone() {
         return new Game(this);
     }
 
-    public String subsNgoals(){
+    public String subsNgoals() {
         StringBuilder s = new StringBuilder();
-        ArrayList<String>subsHOME = new ArrayList<>();
-        ArrayList<String>subsAWAY = new ArrayList<>();
-
+        ArrayList<String> subsHOME = new ArrayList<>();
+        ArrayList<String> subsAWAY = new ArrayList<>();
 
         maptoArrayList(subsHOME, homeSUBS);
         maptoArrayList(subsAWAY, awaySUBS);
@@ -139,28 +138,24 @@ public class Game {
         s.append("\n|").append("*".repeat(61)).append(" ".repeat(10)).append("*".repeat(129)).append("|\n");
 
         int lengthline;
-        for(int i = 0; i<homeGOALS.size() || i < subsHOME.size() || i<awayGOALS.size() || i < subsAWAY.size(); i++){
-            if (i<homeGOALS.size()) {
+        for (int i = 0; i < homeGOALS.size() || i < subsHOME.size() || i < awayGOALS.size() || i < subsAWAY.size(); i++) {
+            if (i < homeGOALS.size()) {
                 GoalsToString(s, 31, i, homeGOALS);
-            }
-            else s.append("|").append(" ".repeat(30));
+            } else s.append("|").append(" ".repeat(30));
 
-            if (i<awayGOALS.size()) {
+            if (i < awayGOALS.size()) {
                 GoalsToString(s, 30, i, awayGOALS);
-            }
-            else s.append("|").append(" ".repeat(29));
+            } else s.append("|").append(" ".repeat(29));
 
             s.append("|").append(" ".repeat(10));
-            if (i<subsHOME.size()) {
+            if (i < subsHOME.size()) {
                 SubsToString(s, subsHOME, i, 63);
-            }
-            else s.append("|").append(" ".repeat(63));
+            } else s.append("|").append(" ".repeat(63));
 
-            if (i<subsAWAY.size()) {
+            if (i < subsAWAY.size()) {
                 SubsToString(s, subsAWAY, i, 64);
                 s.append("|\n");
-            }
-            else s.append("|").append(" ".repeat(64)).append("\n");
+            } else s.append("|").append(" ".repeat(64)).append("\n");
         }
         s.append("\n");
 
@@ -176,20 +171,20 @@ public class Game {
 
     private void GoalsToString(StringBuilder s, int spaces, int i, ArrayList<Player> homeGOALS) {
         int lengthline;
-        lengthline = Math.min(homeGOALS.get(i).getName().length(),15) + 6;
+        lengthline = Math.min(homeGOALS.get(i).getName().length(), 15) + 6;
         s.append("|").append(" ".repeat(Math.max((spaces - lengthline) / 2, 0))).append(homeGOALS.get(i).getName(), 0, Math.min(homeGOALS.get(i).getName().length(), 15))
-                .append(" - ").append(String.format("%02d",homeGOALS.get(i).getNumber())).append(" ".repeat(Math.max(((spaces - lengthline) / 2) + ((spaces - lengthline) % 2), 0))).append("");
+                .append(" - ").append(String.format("%02d", homeGOALS.get(i).getNumber())).append(" ".repeat(Math.max(((spaces - lengthline) / 2) + ((spaces - lengthline) % 2), 0))).append("");
     }
 
     private void maptoArrayList(ArrayList<String> subsAWAY, Map<Player, Player> awaySUBS) {
-        for(Map.Entry<Player, Player> m : awaySUBS.entrySet()){
-            subsAWAY.add(m.getKey().getName().substring(0,Math.min(m.getKey().getName().length(),15)) + " - "
-                    + String.format("%02d",m.getKey().getNumber()) + "     -------->     " + m.getValue().getName().substring(0,Math.min(m.getValue().getName().length(),15))
-                    + " - " + String.format("%02d",m.getValue().getNumber()));
+        for (Map.Entry<Player, Player> m : awaySUBS.entrySet()) {
+            subsAWAY.add(m.getKey().getName().substring(0, Math.min(m.getKey().getName().length(), 15)) + " - "
+                    + String.format("%02d", m.getKey().getNumber()) + "     -------->     " + m.getValue().getName().substring(0, Math.min(m.getValue().getName().length(), 15))
+                    + " - " + String.format("%02d", m.getValue().getNumber()));
         }
     }
 
-    public String header(){
+    public String header() {
         StringBuilder g = new StringBuilder();
         g.append("|").append("*".repeat(200)).append("|\n|");
         int lengthline = homeTEAM.getNameTEAM().length() + awayTEAM.getNameTEAM().length() + manyDIGITS(homeGOALS.size()) + manyDIGITS(awayGOALS.size()) + 25 + date.toString().length();
@@ -202,12 +197,9 @@ public class Game {
 
     @Override
     public String toString() {
-        StringBuilder g = new StringBuilder();
-        g.append(header());
-        g.append("|-> ").append(homeTEAM.getNameTEAM()).append("\n").append(homeTEAM.initial11toString()).append("\n");
-        g.append("|-> ").append(awayTEAM.getNameTEAM()).append("\n").append(awayTEAM.initial11toString()).append("\n");
-        g.append(subsNgoals());
-
-        return g.toString();
+        return header() +
+                "|-> " + homeTEAM.getNameTEAM() + "\n" + homeTEAM.initial11toString() + "\n" +
+                "|-> " + awayTEAM.getNameTEAM() + "\n" + awayTEAM.initial11toString() + "\n" +
+                subsNgoals();
     }
 }

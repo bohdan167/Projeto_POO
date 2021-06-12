@@ -154,6 +154,7 @@ public class Team {
     }
 
     public void setSubstitutes() {
+        substitutes.clear();
         substitutes.addAll(squad.stream().filter(player -> !(initial11.contains(player))).collect(Collectors.toList()));
     }
 
@@ -340,10 +341,9 @@ public class Team {
             if (squad.stream().filter(player -> player instanceof Striker).count() == getFormation()[2] + 2)
                 return "Numero de jogadores insuficiente.";
         }
-
-        ans.getHistory().add(getNameTEAM());
         squad.remove(ans);
-
+        initial11.remove(ans);
+        substitutes.remove(ans);
         squad.sort(PlayerComparator);
         rectifyINITIAL11();
 
@@ -356,7 +356,8 @@ public class Team {
      * -> Caso não encontrem, devolvem null
      */
     public Player findPLAYER(int numberPLAYER, Player orElse) {
-        return squad.stream().filter(player -> (player.getNumber() == numberPLAYER)).findFirst().orElse(orElse).clone();
+        Player p = squad.stream().filter(player -> (player.getNumber() == numberPLAYER)).findFirst().orElse(orElse);
+        return (p == null) ? null : p.clone();
     }
 
 
@@ -369,8 +370,12 @@ public class Team {
         if (player == null) return "Jogador nao existe";
         String ans = t.removePLAYER(numberPLAYER);
         if (!ans.equals("Numero de jogadores insuficiente.") && !ans.equals("Jogador nao existe.")) {
-            player.getHistory().add(t.getNameTEAM());
+            ArrayList<String> history = player.getHistory();
+            history.add(t.getNameTEAM());
+            player.setHistory(history);
             addPLAYER(player);
+            squad.sort(PlayerComparator);
+            setSubstitutes();
             return player.getName() + " " + numberPLAYER + " adicionado a " + nameTEAM + "\n";
         }
         return ans;

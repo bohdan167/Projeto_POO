@@ -142,7 +142,7 @@ public class Striker extends Player {
 
     public String playerTOSTRING(){
         String b = " ".repeat(6) + String.format("%03d", getPositioning()) + " ".repeat(6) + "|" +
-                " ".repeat(7) + String.format("%03d", getBallControl()) + " ".repeat(8) + "|" +
+                " ".repeat(6) + String.format("%03d", getBallControl()) + " ".repeat(7) + "|" +
                 " ".repeat(4) + String.format("%03d", getOverall()) + " ".repeat(4) + "|" +
                 "\t\t\tHistory:" + getHistory() + "\n";
         return super.playerTOSTRING() + b;
