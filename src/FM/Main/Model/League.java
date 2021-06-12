@@ -118,7 +118,7 @@ public class League {
                     }
 
                     for (int i = 19; i < 30; i++) {
-                        initial11AWAY.add(home.findPLAYER(Integer.parseInt(campos[i]), new Goalkeeper(Integer.parseInt(campos[i]))));
+                        initial11AWAY.add(away.findPLAYER(Integer.parseInt(campos[i]), new Goalkeeper(Integer.parseInt(campos[i]))));
                     }
 
                     for (int i = 30; i < 33; i++) {

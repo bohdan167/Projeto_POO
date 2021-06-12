@@ -118,6 +118,8 @@ public class Game {
         return new Game(this);
     }
 
+
+
     public String subsNgoals() {
         StringBuilder s = new StringBuilder();
         ArrayList<String> subsHOME = new ArrayList<>();
