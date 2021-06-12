@@ -56,6 +56,10 @@ public class Midfielder extends Player implements Serializable {
         this.ballRecovery = ballRecovery;
     }
 
+    /**
+     * Recebe um ficheiro e faz o seu parsing, criando o respetivo MidFielder, seguindo os mesmos critérios das outras posições
+     * @param input String com nome do ficheiro
+     */
     public Midfielder (String input){
         String[] campos = input.split(",");
         this.setName(campos[0]);
@@ -150,6 +154,10 @@ public class Midfielder extends Player implements Serializable {
         return super.playerTOSTRING() + b;
     }
 
+    /**
+     * Obtém uma string com o cabeçalho e atributos de um MidFielder
+     * @return String
+     */
     @Override
     public String header() {
         return super.header() + " ".repeat(2) + "Ball Recovery" +  " ".repeat(2) + "|" +  " ".repeat(2) + "Vision" + " ".repeat(2) + "|" + " ".repeat(2) + "Overall" + " ".repeat(2) + "|\n";

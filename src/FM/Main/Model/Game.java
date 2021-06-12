@@ -17,6 +17,9 @@ public class Game implements Serializable {
     private Map<Player, Player> homeSUBS;
     private Map<Player, Player> awaySUBS;
 
+    /**
+     * Construtor vazio
+     */
     public Game(){
         this.homeTEAM = new Team(0);
         this.awayTEAM = new Team(0);
@@ -27,6 +30,16 @@ public class Game implements Serializable {
         this.awaySUBS = new HashMap<>();
     }
 
+    /**
+     * Construtor parametrizado de um Game
+     * @param homeTEAM Equipa da Casa
+     * @param awayTEAM Equipa de Fora
+     * @param homeGOALS Golos da equipa da casa
+     * @param awayGOALS Golos da equipa de fora
+     * @param date data de realização
+     * @param homeSUBS Suplentes da equipa da casa
+     * @param awaySUBS SUplentes da equipa de fora
+     */
     public Game(Team homeTEAM, Team awayTEAM, ArrayList<Player> homeGOALS, ArrayList<Player> awayGOALS, LocalDate date, Map<Player, Player> homeSUBS, Map<Player, Player> awaySUBS) {
         this.homeTEAM = homeTEAM;
         this.awayTEAM = awayTEAM;
@@ -37,6 +50,10 @@ public class Game implements Serializable {
         this.awaySUBS = awaySUBS;
     }
 
+    /**
+     * Construtor de cópia
+     * @param g Jogo
+     */
     public Game(Game g) {
         this.setHomeTEAM(g.getHomeTEAM());
         this.setAwayTEAM(g.getAwayTEAM());
@@ -47,6 +64,11 @@ public class Game implements Serializable {
         this.setAwaySUBS(g.getAwaySUBS());
     }
 
+    /**
+     * Obtém número de dígitos.
+     * @param ii Número em décimal
+     * @return Número de dígitos
+     */
     public int manyDIGITS(int ii) {
         int stand = 0;
         while (ii != 0) {
@@ -56,50 +78,94 @@ public class Game implements Serializable {
         return stand;
     }
 
+    /**
+     * Getter da equipa da casa.
+     * @return equipa da casa
+     */
     public Team getHomeTEAM() {
         return new Team(this.homeTEAM);
     }
 
+    /**
+     * Setter da equipa da casa.
+     * @param homeTEAM Nova equipa da casa
+     */
     public void setHomeTEAM(Team homeTEAM) {
         this.homeTEAM = homeTEAM;
     }
 
+    /**
+     * Getter da equipa de fora
+     * @return equipa de fora
+     */
     public Team getAwayTEAM() {
         return new Team(this.awayTEAM);
     }
 
+    /**
+     * Setter da equipa de fora
+     * @param awayTEAM Nova equipa de fora
+     */
     public void setAwayTEAM(Team awayTEAM) {
         this.awayTEAM = awayTEAM;
     }
 
+    /**
+     * Getter dos golos da equipa da casa
+     * @return Lista com esses mesmos golos
+     */
     public ArrayList<Player> getHomeGOALS() {
         ArrayList<Player> clone = new ArrayList<>(homeGOALS.size());
         for (Player item : homeGOALS) clone.add(item.clone());
         return clone;
     }
 
+    /**
+     * Setter dos golos da equipa da casa
+     * @param homeGOALS Novos Golos da casa
+     */
     public void setHomeGOALS(ArrayList<Player> homeGOALS) {
         this.homeGOALS = homeGOALS;
     }
 
+    /**
+     * Getter do número de golos da equipa de fora
+     * @return Lista de golos da equipa de fora
+     */
     public ArrayList<Player> getAwayGOALS() {
         ArrayList<Player> clone = new ArrayList<>(awayGOALS.size());
         for (Player item : awayGOALS) clone.add(item.clone());
         return clone;
     }
 
+    /**
+     * Setter dos golos da equipa de fora
+     * @param awayGOALS golos da equipa de fora
+     */
     public void setAwayGOALS(ArrayList<Player> awayGOALS) {
         this.awayGOALS = awayGOALS;
     }
 
+    /**
+     * Getter da data
+     * @return data
+     */
     public LocalDate getDate() {
         return date;
     }
 
+    /**
+     * Setter da data
+     * @param date Nova data
+     */
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
+    /**
+     * Getter dos suplentes da equipa da casa
+     * @return Suplentes da respetiva equipa
+     */
     public Map<Player, Player> getHomeSUBS() {
         Map<Player, Player> new_map = new HashMap<>();
         for (Map.Entry<Player, Player> entry : homeSUBS.entrySet()) {
@@ -108,10 +174,18 @@ public class Game implements Serializable {
         return new_map;
     }
 
+    /**
+     * Setter dos suplentes da equipa da casa
+     * @param homeSUBS Novos jogadores suplentes da equipa
+     */
     public void setHomeSUBS(Map<Player, Player> homeSUBS) {
         this.homeSUBS = homeSUBS;
     }
 
+    /**
+     * Getter dos suplentes da equipa de fora
+     * @return suplentes da equipa de fora
+     */
     public Map<Player, Player> getAwaySUBS() {
         Map<Player, Player> new_map = new HashMap<>();
         for (Map.Entry<Player, Player> entry : awaySUBS.entrySet()) {
@@ -120,14 +194,28 @@ public class Game implements Serializable {
         return new_map;
     }
 
+    /**
+     * Setter dos suplentes da equipa de fora
+     * @param awaySUBS Novos suplentes dessa equipa
+     */
     public void setAwaySUBS(Map<Player, Player> awaySUBS) {
         this.awaySUBS = awaySUBS;
     }
 
+    /**
+     * Copia um objeto da classe Game
+     * @return Jogo
+     */
     public Game clone() {
         return new Game(this);
     }
 
+
+    /**
+     * Cria o jogo
+     * @param a Equipa a
+     * @param b Equipa b
+     */
     public void makeCOMPLEXgame(Team a, Team b) {
         this.setHomeTEAM(a.clone());
         this.setAwayTEAM(b.clone());
@@ -162,6 +250,13 @@ public class Game implements Serializable {
         }
     }
 
+    /**
+     * Atualiza o estado jogo
+     * @param a Equipa a
+     * @param b Equipa b
+     * @param rand número aleatório
+     * @param goals Lista de jogadores
+     */
     public void isItGoal (Team a, Team b,Random rand, ArrayList<Player> goals){
             int pos = rand.nextInt((int) a.getInitial11().stream().filter(player -> player.getClass().getSimpleName().equals("Striker")).count());
             a.addGoalScored(pos);
@@ -171,6 +266,12 @@ public class Game implements Serializable {
 
     }
 
+    /**
+     * Verifica existência de oportunidade de golo
+     * @param a Equipa a
+     * @param b Equipa b
+     * @return Boolean
+     */
     public Boolean opportunityToGoal(Team a, Team b){
         Random r = new Random();
         return (a.getOverall() - b.getOverall()) * 0.4 +
@@ -179,6 +280,10 @@ public class Game implements Serializable {
                                 + b.calculateOverallPosition("Goalkeeper")) * 0.4) * 0.4 * r.nextGaussian() > 0.8;
     }
 
+    /**
+     * Obtém o número de golos dos jogadores suplentes
+     * @return Número de golos
+     */
     public String subsNgoals() {
         StringBuilder s = new StringBuilder();
         ArrayList<String> subsHOME = new ArrayList<>();
@@ -223,12 +328,26 @@ public class Game implements Serializable {
         return s.toString();
     }
 
+    /**
+     * Obtém String com suplentes
+     * @param s String Builder
+     * @param subsHOME suplentes da casa
+     * @param i índice
+     * @param space Número de espaços a dar
+     */
     private void SubsToString(StringBuilder s, ArrayList<String> subsHOME, int i, int space) {
         int lengthline;
         lengthline = subsHOME.get(i).length();
         s.append("|").append(" ".repeat(Math.max((space - lengthline) / 2, 0))).append(subsHOME.get(i)).append(" ".repeat(Math.max(((space - lengthline) / 2) + ((space - lengthline) % 2), 0)));
     }
 
+    /**
+     * Obtém a string com o número de golos
+     * @param s String Builder
+     * @param spaces Número de espaços a dar
+     * @param i índice
+     * @param homeGOALS Número de golos da equipa da casa
+     */
     private void GoalsToString(StringBuilder s, int spaces, int i, ArrayList<Player> homeGOALS) {
         int lengthline;
         lengthline = Math.min(homeGOALS.get(i).getName().length(), 15) + 6;
@@ -236,6 +355,11 @@ public class Game implements Serializable {
                 .append(" - ").append(String.format("%02d", homeGOALS.get(i).getNumber())).append(" ".repeat(Math.max(((spaces - lengthline) / 2) + ((spaces - lengthline) % 2), 0))).append("");
     }
 
+    /**
+     * Obtém um Map com os jogadores da equipa de fora
+     * @param subsAWAY jogadores da equipa de fora (ArrayList)
+     * @param awaySUBS jogadores da equipa de fora (Map)
+     */
     private void maptoArrayList(ArrayList<String> subsAWAY, Map<Player, Player> awaySUBS) {
         for (Map.Entry<Player, Player> m : awaySUBS.entrySet()) {
             subsAWAY.add(m.getKey().getName().substring(0, Math.min(m.getKey().getName().length(), 15)) + " - "
@@ -244,6 +368,10 @@ public class Game implements Serializable {
         }
     }
 
+    /**
+     * Obtém o cabeçalho com as informações sobre os jogadores e golos de ambas as equipas
+     * @return String respetiva
+     */
     public String header() {
         StringBuilder g = new StringBuilder();
         g.append("|").append("*".repeat(200)).append("|\n|");
@@ -255,6 +383,10 @@ public class Game implements Serializable {
         return g.toString();
     }
 
+    /**
+     * Obtém uma string com o cabeçalho da equipa de fora e da casa e o número de golos da equipa
+     * @return Respetiva String
+     */
     @Override
     public String toString() {
         return header() +

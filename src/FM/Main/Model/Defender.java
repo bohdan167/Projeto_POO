@@ -61,7 +61,12 @@ public class Defender extends Player implements Serializable {
         this.interception = interception;
     }
 
-
+    /**
+     * Construtor que recebe uma linha de texto de um ficheiro, faz o seu parcing e cria um Defender.
+     * Note-se que, como o Defender tem alguns atributos que não são especificados no ficheiro fornecido
+     * pelo corpo docente, então esse atributo é dado aleatoriamente.
+     * @param input
+     */
     public Defender (String input){
         String[] campos = input.split(",");
         this.setName(campos[0]);
@@ -83,10 +88,9 @@ public class Defender extends Player implements Serializable {
         this.setOverall(this.playerOverallValue());
     }
 
-
     /**
      * Construtor de Clone
-     * @param d Classe Defender
+     * @param d Objeto da Classe Defender
      */
     public Defender(Defender d) {
         super(d);
@@ -127,13 +131,13 @@ public class Defender extends Player implements Serializable {
 
     /**
      * Setter do atributo Interception
-     * @param interception Nova capacidade de interceptar passes do adversário do Defender
+     * @param interception Nova capacidade de intercetar passes do adversário do Defender
      * */
     public void setInterception(int interception) { this.interception = interception; }
 
     /**
-     * Método que calcula a habiledade geral do Defender,
-     * valorizando mais os atributos mais necessários na sua posição
+     * Método que calcula a habilidade geral do Defender,
+     * valorizando mais os atributos indispensáveis na sua posição
      * @return Valor inteiro de 0 a 99
      */
     @Override
@@ -143,11 +147,10 @@ public class Defender extends Player implements Serializable {
                 + 0.1*getTackle() + 0.1*getMarking() + 0.1*getInterception());
     }
 
-
     /**
      * Compara um objeto com um Defender
      * @param o Objeto para comparar
-     * @return Um booleano se o objeto é equivalente ao Defender
+     * @return Booleano true se o objeto é equivalente ao Defender ou false, caso contrário
      */
     @Override
     public boolean equals(Object o) {
@@ -160,7 +163,7 @@ public class Defender extends Player implements Serializable {
 
     /**
      * Coloca todas os atributos do Defender numa String
-     * @return String
+     * @return String com os respetivos atributos
      * */
     public String playerTOSTRING(){
         String b = " ".repeat(3) + String.format("%03d", getTackle()) + " ".repeat(4) + "|" +
@@ -171,6 +174,10 @@ public class Defender extends Player implements Serializable {
         return super.playerTOSTRING() + b;
     }
 
+    /**
+     * Retorna um cabeçalho com os atributos de um Defender
+     * @return String com atributos de um Defender
+     */
     @Override
     public String header() {
         return super.header() + " ".repeat(2) + "Tackle" + " ".repeat(2) + "|" + " ".repeat(2) + "Marking" + " ".repeat(2) + "|" + " ".repeat(2) + "Interception" + " ".repeat(2) + "|" + " ".repeat(2) + "Overall" + " ".repeat(2) + "|\n";

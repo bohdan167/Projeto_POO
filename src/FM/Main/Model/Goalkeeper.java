@@ -34,6 +34,10 @@ public class Goalkeeper extends Player implements Serializable {
         this.setOverall(this.playerOverallValue());
     }
 
+    /**
+     * Construtor parametrizado com o número de um jogador
+     * @param number Número do jogador
+     */
     public Goalkeeper(int number) {
         super(number);
         this.elasticity = 0;
@@ -78,6 +82,11 @@ public class Goalkeeper extends Player implements Serializable {
     }
 
 
+    /**
+     * Recebe uma linha do ficheiro e faz o seu parsing, do mesmo modo que os jogadores de outras posições (aleatoriedade
+     * de atributos que não estão no ficheiro).
+     * @param input String
+     */
     public Goalkeeper(String input) {
         String[] campos = input.split(",");
         this.setName(campos[0]);
@@ -102,7 +111,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Construtor de Clone
-     *
      * @param gk Classe Goalkeeper
      */
     public Goalkeeper(Goalkeeper gk) {
@@ -116,7 +124,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Getter do atributo Elasticity
-     *
      * @return Elasticidade do Goalkeeper
      */
     public int getElasticity() {
@@ -125,7 +132,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Setter do atributo Elasticity
-     *
      * @param elasticity Novo nível de elasticidade do Goalkeeper
      */
     public void setElasticity(int elasticity) {
@@ -134,7 +140,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Getter do atributo Handling
-     *
      * @return Handling do Goalkeeper
      */
     public int getHandling() {
@@ -143,7 +148,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Setter do atributo Handling
-     *
      * @param handling Novo nível de Handling do Goalkeeper
      */
     public void setHandling(int handling) {
@@ -152,7 +156,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Getter do atributo Reflexes
-     *
      * @return Capacidade de reflexos do Goalkeeper
      */
     public int getReflexes() {
@@ -161,7 +164,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Setter do atributo Reflexes
-     *
      * @param reflexes Novo nível de reflexos do Goalkeeper
      */
     public void setReflexes(int reflexes) {
@@ -170,7 +172,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Getter do atributo Diving
-     *
      * @return Capacidade de "mergulhar" para a defesa do Goalkeeper
      */
     public int getDiving() {
@@ -179,17 +180,24 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Setter do atributo Diving
-     *
      * @param diving Novo nível de Diving do Goalkeeper
      */
     public void setDiving(int diving) {
         this.diving = diving;
     }
 
+    /**
+     * Getter do número de golos sofridos
+     * @return golos sofridos
+     */
     public int getGoalsSuffered() {
         return goalsSuffered;
     }
 
+    /**
+     * Setter do número de golos sofridos
+     * @param goalsSuffered golos sofridos
+     */
     public void setGoalsSuffered(int goalsSuffered) {
         this.goalsSuffered = goalsSuffered;
     }
@@ -197,7 +205,6 @@ public class Goalkeeper extends Player implements Serializable {
     /**
      * Método que calcula a habiledade geral do Goalkeeper,
      * valorizando mais os atributos mais necessários na sua posição
-     *
      * @return Valor inteiro de 0 a 99
      */
     @Override
@@ -211,7 +218,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Compara um objeto com um Goalkeeper,
-     *
      * @param o Objeto para comparar
      * @return Um booleano se o objeto é equivalente ao Goalkeeper
      */
@@ -227,7 +233,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Coloca todas os atributos de um Goalkeeper numa String
-     *
      * @return String
      */
     public String playerTOSTRING() {
@@ -241,6 +246,10 @@ public class Goalkeeper extends Player implements Serializable {
         return super.playerTOSTRING() + b;
     }
 
+    /**
+     * Obtém uma string com o respetivo cabeçalho com atributos de um GoalKeeper
+     * @return String
+     */
     @Override
     public String header() {
         return super.header() + " ".repeat(2) + "Elasticity" + " ".repeat(2) + "|" + " ".repeat(2) + "Handling" + " ".repeat(2) + "|"
@@ -250,7 +259,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Transforma a informação do Goalkeeper numa String
-     *
      * @return String com a informação do Goalkeeper
      */
     public String toString() {
@@ -259,7 +267,6 @@ public class Goalkeeper extends Player implements Serializable {
 
     /**
      * Clona um Goalkeeper
-     *
      * @return Copia do Goalkeeper
      */
     public Goalkeeper clone() {

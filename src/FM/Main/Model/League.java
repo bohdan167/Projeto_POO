@@ -11,6 +11,10 @@ public class League implements Serializable {
     private ArrayList<Player> top10Scorers;
     private ArrayList<Game> friendly;
 
+    /**
+     * Construtor
+     * @param option Se for 1 (gera aleatório)
+     */
     public League(int option) {
         teams = new ArrayList<>();
         top10Scorers = new ArrayList<>();
@@ -31,6 +35,11 @@ public class League implements Serializable {
         friendly = l.getFriendly();
     }
 
+    /**
+     * Recebe uma lista com linhas de um ficheiro e efetua a sua leitura, fazendo o respetivo parsing
+     * @param lines Lista de linhas
+     * @throws LinhaIncorretaException Exceção de erro na linha do ficheiro
+     */
     public League(List<String> lines) throws LinhaIncorretaException {
         teams = new ArrayList<>();
         top10Scorers = new ArrayList<>();
@@ -154,47 +163,85 @@ public class League implements Serializable {
     }
 
 
+    /**
+     * Getter das equipas da Liga
+     * @return Lista de Equipas
+     */
     public ArrayList<Team> getTeams() {
         ArrayList<Team> clone = new ArrayList<>(teams.size());
         for (Team item : teams) clone.add(item.clone());
         return clone;
     }
 
+    /**
+     * Setter da Lista de equipas
+     * @param teams Nova Lista de Equipas
+     */
     public void setTeams(ArrayList<Team> teams) {
         this.teams = teams;
     }
 
+    /**
+     * Obtém os 10 melhores marcadores
+     * @return Lista com os 10 melhores marcadores
+     */
     public ArrayList<Player> getTop10Scorers() {
         ArrayList<Player> clone = new ArrayList<>(top10Scorers.size());
         for (Player item : top10Scorers) clone.add(item.clone());
         return clone;
     }
 
+    /**
+     * Setter dos 10 melhores marcadores
+     * @param top10Scorers Novos melhores marcadores
+     */
     public void setTop10Scorers(ArrayList<Player> top10Scorers) {
         this.top10Scorers = top10Scorers;
     }
 
+    /**
+     * Getter da lista com as rondas
+     * @return Lista de jogos
+     */
     public ArrayList<Game> getFriendly() {
         ArrayList<Game> clone = new ArrayList<>(friendly.size());
         for (Game item : friendly) clone.add(item.clone());
         return clone;
     }
 
+    /**
+     * Setter do jogo amigável
+     * @param friendly Novo jogo amigável
+     */
     public void setFriendly(ArrayList<Game> friendly) {
         this.friendly = friendly;
     }
 
 
+    /**
+     * Adiciona uma equipa
+     * @param t equipa
+     */
     public void addTeam(Team t) {
         teams.add(t);
         teams.sort(TeamComparator);
     }
 
+    /**
+     * Encontra um determinada equipa na respetiva liga
+     * @param team equipa
+     * @return equipa
+     */
     public Team findTeam(String team) {
         return teams.stream().filter(t -> (t.getNameTEAM().equals(team))).findFirst().orElse(new Team("Unknown")).clone();
     }
 
 
+    /**
+     * Obtém o número de dígitos de um número em decimal
+     * @param ii número em decimal
+     * @return número de dígitos
+     */
     public int manyDIGITS(int ii) {
         int stand = 0;
         while (ii != 0) {
@@ -204,6 +251,10 @@ public class League implements Serializable {
         return stand;
     }
 
+    /**
+     * Classificação em String
+     * @return String
+     */
     public String standingsTOSTRING(){
         int i = 0;
         StringBuilder b = new StringBuilder();
@@ -216,6 +267,10 @@ public class League implements Serializable {
     public static Comparator<Team> TeamComparator = (p1, p2) -> p2.getOverall() - p1.getOverall();
 
 
+    /**
+     * Obtém String com informação da liga
+     * @return String
+     */
     @Override
     public String toString() {
         StringBuilder ans = new StringBuilder();
@@ -224,6 +279,10 @@ public class League implements Serializable {
         return ans.toString();
     }
 
+    /**
+     * Cópia de um objeto da classe League
+     * @return Clone
+     */
     public League clone(){
         return new League(this);
     }

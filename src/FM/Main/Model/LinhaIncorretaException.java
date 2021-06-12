@@ -5,6 +5,10 @@ public class LinhaIncorretaException extends Exception {
         super();
     }
 
+    /**
+     * Contrutor da exceção
+     * @param s String de menssagem
+     */
     public LinhaIncorretaException(String s){
         super(s);
     }
