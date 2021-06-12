@@ -8,13 +8,11 @@ import java.util.stream.Collectors;
 public class League {
     private ArrayList<Team> teams;
     private ArrayList<Player> top10Scorers;
-    private ArrayList<ArrayList<Game>> rounds;
     private ArrayList<Game> friendly;
 
     public League(int option) {
         teams = new ArrayList<>();
         top10Scorers = new ArrayList<>();
-        rounds = new ArrayList<>();
         friendly = new ArrayList<>();
         if (option == 1) {
             for (int i = 0; i < 18; i++) {
@@ -26,10 +24,15 @@ public class League {
         }
     }
 
+    public League(League l){
+        teams = l.getTeams();
+        top10Scorers = l.getTop10Scorers();
+        friendly = l.getFriendly();
+    }
+
     public League(List<String> lines) throws LinhaIncorretaException {
         teams = new ArrayList<>();
         top10Scorers = new ArrayList<>();
-        rounds = new ArrayList<>();
         friendly = new ArrayList<>();
         Team ultima = null;
         Player j;
@@ -170,22 +173,6 @@ public class League {
         this.top10Scorers = top10Scorers;
     }
 
-    public ArrayList<ArrayList<Game>> getRounds() {
-        ArrayList<ArrayList<Game>> clone = new ArrayList<>(rounds.size());
-        for (ArrayList<Game> round : rounds) {
-            ArrayList<Game> cl = new ArrayList<>(round.size());
-            for (int j = 0; j < round.size(); j++) {
-                cl.add(round.get(j).clone());
-            }
-            clone.add(cl);
-        }
-        return clone;
-    }
-
-    public void setRounds(ArrayList<ArrayList<Game>> rounds) {
-        this.rounds = rounds;
-    }
-
     public ArrayList<Game> getFriendly() {
         ArrayList<Game> clone = new ArrayList<>(friendly.size());
         for (Game item : friendly) clone.add(item.clone());
@@ -216,100 +203,16 @@ public class League {
         return stand;
     }
 
-    public String[] statisticsTOSTRING(Team t) {
-        String[] s = new String[6];
-        s[0] = "Posicao na tabela: " + (teams.indexOf(t) + 1) + "   ";
-        s[1] = "Pontos: " + t.getPoints() + "   ";
-        s[2] = "Golos marcados: " + t.getGoalsScored() + "   ";
-        s[3] = "Golos sofridos " + t.getGoalsSuffered() + "   ";
-        int dg = (t.getGoalsScored() - t.getGoalsSuffered());
-        s[4] = "Diferenca de golos " + dg + "   ";
-        List<Player> topScorers = top10Scorers.stream().filter(player -> t.findPLAYER(player.getNumber(), null) != null).collect(Collectors.toList());
-        if (topScorers.size() > 0) {
-            s[5] += ("Top Marcadores que estao na equipa:\n");
-            for (Player p : topScorers) {
-                s[5] += ("\n\t") + (p.getName()) + (" ") + (p.getNumber()) + ("\n");
-            }
-        } else s[5] = "Nenhum jogador da equipa esta nos top 10 marcadores\n";
-        return s;
+    public String standingsTOSTRING(){
+        int i = 0;
+        StringBuilder b = new StringBuilder();
+        for(; i < teams.size(); i++){
+            b.append(" ").append(String.format("%02d",i+1)).append(" - ").append(teams.get(i).getNameTEAM()).append("\n");
+        }
+        return b.toString();
     }
 
-    public String standingsTOSTRING() {
-        StringBuilder s = new StringBuilder();
-        int maxstand, maxname = 0, maxpoints = 0, maxscored = 0, maxsuffered = 0;
-
-        for (Team team : teams) {
-            if (team.getNameTEAM().length() > maxname)
-                maxname = team.getNameTEAM().length();
-            int aux = manyDIGITS(team.getPoints());
-            if (aux > maxpoints) maxpoints = aux;
-            aux = manyDIGITS(team.getGoalsScored());
-            if (aux > maxscored) maxscored = aux;
-            aux = manyDIGITS(team.getGoalsSuffered());
-            if (aux > maxsuffered) maxsuffered = aux;
-        }
-
-        maxstand = manyDIGITS(teams.size());
-
-        s.append("\n| I").append(" ".repeat(Math.max(0, maxstand))).append("Classificacao").append(" ".repeat(Math.max(0, maxname - "Classificacao".length() + 5)))
-                .append("Pontos").append(" ".repeat(Math.max(0, maxpoints + 5))).append("Golos Marcados").append(" ".repeat(Math.max(0, maxscored + 2)))
-                .append("Golos Sofridos").append(" ".repeat(Math.max(0, maxsuffered - 1))).append(" |\n");
-
-        for (int i = 0; i < teams.size(); i++) {
-            int spaces = maxstand - manyDIGITS(i + 1);
-            s.append("| ").append(i + 1).append(" ".repeat(Math.max(0, spaces + 1))).append(teams.get(i).getNameTEAM());
-
-            spaces = (maxname - teams.get(i).getNameTEAM().length() + 5);
-            s.append(" ".repeat(Math.max(0, spaces))).append(teams.get(i).getPoints());
-
-            spaces = (maxpoints - manyDIGITS(teams.get(i).getPoints()) + 10);
-            s.append(" ".repeat(Math.max(0, spaces))).append(teams.get(i).getGoalsScored());
-
-            spaces = (maxpoints - manyDIGITS(teams.get(i).getGoalsScored()) + 15);
-            s.append(" ".repeat(Math.max(0, spaces))).append(teams.get(i).getGoalsSuffered());
-
-            spaces = (maxpoints - manyDIGITS(teams.get(i).getGoalsSuffered()) + 14);
-            s.append(" ".repeat(Math.max(0, spaces))).append("|\n");
-        }
-        return s.toString();
-    }
-
-    //nao testada
-    public String top10ScorersTOSTRING() {
-        StringBuilder s = new StringBuilder();
-        if (top10Scorers.size() > 0) {
-            int maxname = 0, maxscored;
-
-            for (Player p : top10Scorers) {
-                if (p.getName().length() > maxname) maxname = p.getName().length();
-            }
-            maxscored = manyDIGITS(top10Scorers.get(0).getGoalsScored());
-
-            s.append("| " + "I" + "  " + "Nome").append(" ".repeat(Math.max(0, maxname - 1))).append("Golos").append(" ".repeat(Math.max(0, maxscored - 1)));
-
-            for (int i = 0; i < top10Scorers.size(); i++) {
-                s.append("| ").append(i).append(3 - manyDIGITS(i)).append(top10Scorers.get(i).getName()).append(" ".repeat(Math.max(0, maxname - top10Scorers.get(i).getName().length() + 1)))
-                        .append(top10Scorers.get(i).getGoalsScored()).append(" ".repeat(Math.max(0, maxname - manyDIGITS(top10Scorers.get(i).getGoalsScored() + 1))))
-                        .append("|\n");
-            }
-        } else s.append("Inexistente");
-        return s.toString();
-
-    }
-
-    public static Comparator<Team> TeamComparator = (p1, p2) -> {
-        if (p1.getClass().equals(p2.getClass()))
-            return p2.getOverall() - p1.getOverall();
-        else {
-            if (p1.getPoints() > p2.getPoints()) return -1;
-            if (p1.getPoints() < p2.getPoints()) return 1;
-            if (p1.getGoalsScored() > p2.getGoalsScored()) return -1;
-            if (p1.getGoalsScored() < p2.getGoalsScored()) return 1;
-            if (p1.getGoalsSuffered() < p2.getGoalsSuffered()) return 1;
-            if (p1.getGoalsSuffered() > p2.getGoalsSuffered()) return -1;
-            return 1;
-        }
-    };
+    public static Comparator<Team> TeamComparator = (p1, p2) -> p2.getOverall() - p1.getOverall();
 
 
     @Override
@@ -318,5 +221,9 @@ public class League {
         for (int i = 0; i < teams.size(); i++)
             ans.append(i + 1).append(" ").append(teams.get(i).getNameTEAM()).append("\n");
         return ans.toString();
+    }
+
+    public League clone(){
+        return new League(this);
     }
 }

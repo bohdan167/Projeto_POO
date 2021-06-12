@@ -13,9 +13,18 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class Interpreter {
+public class Interpreter implements Serializable{
+    /**
+     * Liga de equipas da temporada
+     */
     private League l;
-    private final Menu m;
+    /**
+     * Menu que corresponde a View do projeto
+     */
+    private Menu m;
+    /**
+     * Equipa de jogadores que o Utilizador está a gerir
+     */
     private Team myTeam;
 
     private int readOnlyIntegers(Scanner in, int min, int max) {
@@ -93,46 +102,12 @@ public class Interpreter {
     }
 
 
-
-
-    ///League stats
-    public boolean leagueStatsInterpreter(Scanner scan) {
-        m.leagueStatsMENU();
-        int ans = readOnlyIntegers(scan, 0, 3);
-        if (ans == 0) return false;
-        if (ans == 1 || ans == 2) {
-            if(ans == 1) m.genericMENU(l.standingsTOSTRING());
-            else m.genericMENU(l.top10ScorersTOSTRING());
-            m.optionsMENU(new String[]{"0 - Sair"});
-            m.line("Pretende: ");
-
-            while(genericInterpreter(scan));
-        }
-        else {
-            m.line("Qual jornada?");
-            ans = readOnlyIntegers(scan,0,l.getRounds().size());
-
-        }
-        return true;
-    }
-
     public boolean myGamesInterpreter(Scanner scan){
         m.myGamesMenu();
-        int ans = readOnlyIntegers(scan,0,2);
+        int ans = readOnlyIntegers(scan,0,1);
         if(ans == 0) return false;
+
         StringBuilder s = new StringBuilder();
-        if(ans == 1) {
-            for(ArrayList<Game> journey : l.getRounds()){
-                for(int i = 0; i < journey.size(); i++){
-                    s.append("\n|->").append(i + 1).append("\n").append(journey.get(i).header()).append("\n");
-                }
-            }
-            m.genericMENU(s.toString());
-            m.optionsMENU(new String[]{"0 - Sair"});
-            genericInterpreter(scan);
-            m.line("Pretende:");
-        }
-        else {
             ArrayList<Game> myfriendly = new ArrayList<>();
             for(Game g : l.getFriendly()){
                 if((g.getHomeTEAM().getNameTEAM().equals(myTeam.getNameTEAM()) || g.getAwayTEAM().getNameTEAM().equals(myTeam.getNameTEAM()))){
@@ -149,7 +124,6 @@ public class Interpreter {
             if(ans == 1) while(myFriendlyGameInterpreter(scan,myfriendly));
             else return false;
 
-        }
         return true;
     }
 
@@ -168,14 +142,10 @@ public class Interpreter {
         m.myTeamMENU();
         int ans = readOnlyIntegers(scan,0,4);
         if (ans == 0) return false;
-        if  (ans == 1 || ans == 3) {
+        if (ans == 1) {
             m.header("Minha Equipa");
             m.whiteline(1);
-            if(ans == 1) m.genericMENU(myTeam.squadTOSTRING());
-            else {
-                String [] s = l.statisticsTOSTRING(myTeam);
-                for(String ss : s) m.line(ss);
-            }
+            m.genericMENU(myTeam.squadTOSTRING());
             m.whiteline(1);
             m.optionsMENU(new String[]{"0 - Sair"});
             m.line("Pretende: ");
@@ -278,17 +248,30 @@ public class Interpreter {
         return true;
     }
 
+    public void gameInterpreter(Scanner scan){
+        m.genericMENU(l.standingsTOSTRING());
+        m.line("Contra quem deseja jogar? ");
+        int ans = readOnlyIntegers(scan,1,l.getTeams().size());
+        Game g = new Game();
+        g.makeCOMPLEXgame(this.myTeam,l.getTeams().get(ans-1));
+        m.genericMENU(g.toString());
+    }
 
+    public void scanInterpreter(Scanner scan) throws IOException{
+        m.line("Nome do ficheiro: ");
+        String where = scan.nextLine();
+        this.saveObject(where);
+    }
 
-    public boolean mainInterpreter(Scanner scan){
+    public boolean mainInterpreter(Scanner scan) throws IOException {
         int ans;
         m.mainMENU();
         ans = readOnlyIntegers(scan,0,4);
         if (ans == 0) return false;
-        else if (ans == 1) ans = 3; //modo jogo
+        else if (ans == 1) gameInterpreter(scan); //modo jogo
         else if (ans == 2) while(transferInterpreter(scan));
-        else if (ans == 3) while(leagueStatsInterpreter(scan));
-        else if (ans == 4) while(myTeamInterpreter(scan));
+        else if (ans == 3) while(myTeamInterpreter(scan));
+        else if (ans == 4) scanInterpreter(scan);
         return true;
     }
 

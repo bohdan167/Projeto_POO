@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Game {
     private Team homeTEAM;
@@ -16,6 +17,16 @@ public class Game {
     private LocalDate date;
     private Map<Player, Player> homeSUBS;
     private Map<Player, Player> awaySUBS;
+
+    public Game(){
+        this.homeTEAM = new Team(0);
+        this.awayTEAM = new Team(0);
+        this.homeGOALS = new ArrayList<>();
+        this.awayGOALS = new ArrayList<>();
+        this.date = LocalDate.now();
+        this.homeSUBS = new HashMap<>();
+        this.awaySUBS = new HashMap<>();
+    }
 
     public Game(Team homeTEAM, Team awayTEAM, ArrayList<Player> homeGOALS, ArrayList<Player> awayGOALS, LocalDate date, Map<Player, Player> homeSUBS, Map<Player, Player> awaySUBS) {
         this.homeTEAM = homeTEAM;
@@ -118,7 +129,56 @@ public class Game {
         return new Game(this);
     }
 
+    public void makeCOMPLEXgame(Team a, Team b) {
+        this.setHomeTEAM(a.clone());
+        this.setAwayTEAM(b.clone());
+        boolean[] opportunityA = new boolean[8 + ((a.getOverall() - b.getOverall()) / 8)];
+        boolean[] opportunityB = new boolean[8 + ((b.getOverall() - a.getOverall()) / 8)];
 
+        for (int i = 0; i < opportunityA.length || i < opportunityB.length; i++) {
+            if (i < opportunityA.length) {
+                opportunityA[i] = opportunityToGoal(a,b);
+            }
+            if (i < opportunityB.length) {
+                opportunityB[i] = opportunityToGoal(b,a);
+            }
+        }
+
+        int i = 0, j = 0;
+        Random rand = new Random();
+        while ( i < opportunityA.length || j < opportunityB.length){
+            int random = rand.nextInt(2);
+            if(random == 0  &&  i < opportunityA.length){
+                if(opportunityA[i]) {
+                    isItGoal(a,b,rand,homeGOALS);
+                }
+                i++;
+            }
+            else if (random == 1  &&  j < opportunityB.length){
+                if(opportunityB[j]){
+                    isItGoal(b,a,rand,awayGOALS);
+                }
+                j++;
+            }
+        }
+    }
+
+    public void isItGoal (Team a, Team b,Random rand, ArrayList<Player> goals){
+            int pos = rand.nextInt((int) a.getInitial11().stream().filter(player -> player.getClass().getSimpleName().equals("Striker")).count());
+            a.addGoalScored(pos);
+            b.addGoalSuffered();
+            Player p = a.getInitial11().get(pos).clone();
+            goals.add(p);
+
+    }
+
+    public Boolean opportunityToGoal(Team a, Team b){
+        Random r = new Random();
+        return (a.getOverall() - b.getOverall()) * 0.4 +
+                (a.calculateOverallPosition("Striker") -
+                        (b.calculateOverallPosition("Defender") * 0.3
+                                + b.calculateOverallPosition("Goalkeeper")) * 0.4) * 0.4 * r.nextGaussian() > 0.8;
+    }
 
     public String subsNgoals() {
         StringBuilder s = new StringBuilder();

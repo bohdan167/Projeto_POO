@@ -8,6 +8,18 @@ public class Menu {
         teamName = "";
     }
 
+    /**
+     * Construtor de cópia
+     * @param m Objeto da classe Menu a ser copiado
+     */
+    public Menu(Menu m){
+        this.setTeamName(m.getTeamName());
+    }
+
+    public Menu clone(Menu m){
+        return new Menu(m);
+    }
+
     public String getTeamName() { return teamName; }
 
     public void setTeamName(String teamName) { this.teamName = teamName; }
@@ -39,13 +51,13 @@ public class Menu {
 
     public void myGamesMenu(){
         header("Meus Jogos");
-        optionsMENU(new String[]{"1 - Liga","2 - Amigaveis","0 - Sair"});
+        optionsMENU(new String[]{"1 - Amigaveis","0 - Sair"});
         line("Pretende: ");
     }
 
     public void myTeamMENU(){
         header("Minha Equipa");
-        optionsMENU(new String[]{"1 - Plantel","2 - 11 inicial", "3 - Estatisticas","4 - Meus Jogos","0 - Sair"});
+        optionsMENU(new String[]{"1 - Plantel","2 - 11 inicial", "3 - Meus Jogos","0 - Sair"});
         line("Pretende: ");
     }
 
@@ -73,14 +85,13 @@ public class Menu {
         line("Pretende: ");
     }
 
-    public void playMENU() {
 
-    }
-
-    public void leagueStatsMENU(){
-        header("Estatisticas da liga");
-        optionsMENU(new String[]{"1 - Classificacao geral","2 - Melhores marcadores","3 - Jornadas","0 - Sair"});
-        line("Pretende: ");
+    /**
+     * Metodo clone da classe Menu
+     * @return Cópia do Menu
+     */
+    public Menu clone(){
+        return new Menu(this);
     }
 
 }

@@ -3,6 +3,7 @@ package FM.Main.Model;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -13,17 +14,17 @@ public class Team {
     private ArrayList<Player> squad;
     private int[] formation;
     private int overall;
-    private int points;
-    private int goalsScored;
-    private int goalsSuffered;
 
     /**
      * Construtor nulo
      */
     public Team(int option) {
-        squad = new ArrayList<>();
-        initial11 = new ArrayList<>();
-        substitutes = new ArrayList<>();
+        this.nameTEAM = "";
+        this.initial11 = new ArrayList<>();
+        this.substitutes = new ArrayList<>();
+        this.squad = new ArrayList<>();
+        this.formation = new int[3];
+        this.overall = 0;
 
         if (option == 1) {
             for (int i = 0; i < 3; i++) {
@@ -78,9 +79,6 @@ public class Team {
         this.squad = new ArrayList<>();
         this.formation = new int[3];
         this.overall = 0;
-        this.points = 0;
-        this.goalsScored = 0;
-        this.goalsSuffered = 0;
     }
 
     /**
@@ -98,9 +96,6 @@ public class Team {
         setSubstitutes(substitutes);
         setFormation(formation);
         setOverall(overall);
-        this.points = points;
-        this.goalsScored = goalsScored;
-        this.goalsSuffered = goalsSuffered;
     }
 
     /**
@@ -115,9 +110,6 @@ public class Team {
         setSubstitutes(t.getSubstitutes());
         setFormation(t.getFormation());
         setOverall(t.getOverall());
-        setPoints(t.getPoints());
-        setGoalsScored(t.getGoalsScored());
-        setGoalsSuffered(t.getGoalsSuffered());
     }
 
     /**
@@ -168,30 +160,6 @@ public class Team {
         this.squad = squad;
     }
 
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public int getGoalsScored() {
-        return goalsScored;
-    }
-
-    public void setGoalsScored(int goalsScored) {
-        this.goalsScored = goalsScored;
-    }
-
-    public int getGoalsSuffered() {
-        return goalsSuffered;
-    }
-
-    public void setGoalsSuffered(int goalsSuffered) {
-        this.goalsSuffered = goalsSuffered;
-    }
-
     /**
      * Getter do overall
      *
@@ -210,6 +178,16 @@ public class Team {
         float result = sum / 11;
         result += overOVERALL(result);
         this.overall = (int) result;
+    }
+
+    public int calculateOverallPosition(String simplename){
+        List<Player> l = initial11.stream().filter(player -> player.getClass().getSimpleName().equals(simplename)).collect(Collectors.toList());
+
+        int r = 0;
+        for(Player p : l){
+            r += p.getOverall();
+        }
+        return r/l.size();
     }
 
     /**
@@ -386,6 +364,17 @@ public class Team {
         changeNUMBER(p);
         squad.add(p);
         squad.sort(PlayerComparator);
+    }
+
+
+    public void addGoalScored(int pos){
+        initial11.get(pos).setGoalsScored(initial11.get(pos).getGoalsScored() + 1);
+    }
+
+
+    public void addGoalSuffered(){
+        Goalkeeper g = (Goalkeeper) initial11.get(0);
+        g.setGoalsSuffered(g.getGoalsSuffered() +1);
     }
 
 
