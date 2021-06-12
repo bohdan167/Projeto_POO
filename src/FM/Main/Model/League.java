@@ -37,7 +37,7 @@ public class League {
         for (String linha : lines) {
             linhaPartida = linha.split(":", 2);
             switch (linhaPartida[0]) {
-                case "Equipa":
+                case "Equipa" -> {
                     if (ultima != null) {
                         ultima.randomFormation();
                         if (!Arrays.equals(ultima.getFormation(), new int[]{0, 0, 0})) {
@@ -49,33 +49,33 @@ public class League {
                         }
                     }
                     ultima = new Team(linhaPartida[1]);
-                    break;
-                case "Guarda-Redes":
+                }
+                case "Guarda-Redes" -> {
                     j = new Goalkeeper(linhaPartida[1]);
                     if (ultima == null) throw new LinhaIncorretaException();
                     ultima.addPLAYER(j.clone());
-                    break;
-                case "Defesa":
+                }
+                case "Defesa" -> {
                     j = new Defender(linhaPartida[1]);
                     if (ultima == null) throw new LinhaIncorretaException();
                     ultima.addPLAYER(j.clone());
-                    break;
-                case "Medio":
+                }
+                case "Medio" -> {
                     j = new Midfielder(linhaPartida[1]);
                     if (ultima == null) throw new LinhaIncorretaException();
                     ultima.addPLAYER(j.clone());
-                    break;
-                case "Lateral":
+                }
+                case "Lateral" -> {
                     j = new Sider(linhaPartida[1]);
                     if (ultima == null) throw new LinhaIncorretaException();
                     ultima.addPLAYER(j.clone());
-                    break;
-                case "Avancado":
+                }
+                case "Avancado" -> {
                     j = new Striker(linhaPartida[1]);
                     if (ultima == null) throw new LinhaIncorretaException();
                     ultima.addPLAYER(j.clone());
-                    break;
-                case "Jogo":
+                }
+                case "Jogo" -> {
                     if (ultima != null) {
                         ultima.randomFormation();
                         if (!Arrays.equals(ultima.getFormation(), new int[]{0, 0, 0})) {
@@ -87,10 +87,8 @@ public class League {
                         }
                         ultima = null;
                     }
-
                     String[] campos = linhaPartida[1].split(",");
                     String[] date = campos[4].split("-");
-
                     Team home = findTeam(campos[0]);
                     Team away = findTeam(campos[1]);
                     ArrayList<Player> initial11HOME = new ArrayList<>();
@@ -106,12 +104,9 @@ public class League {
                     for (int i = 0; i < Integer.parseInt(campos[3]); i++) {
                         goalsAWAY.add(new Goalkeeper(0));
                     }
-
                     for (int i = 5; i < 16; i++) {
                         initial11HOME.add(home.findPLAYER(Integer.parseInt(campos[i]), new Goalkeeper(Integer.parseInt(campos[i]))));
                     }
-                    home.setInitial11(initial11HOME);
-
                     for (int i = 16; i < 19; i++) {
                         String[] sub = campos[i].split("->");
                         subsHOME.put(home.findPLAYER(Integer.parseInt(sub[0]), new Goalkeeper(Integer.parseInt(sub[0]))), home.findPLAYER(Integer.parseInt(sub[1]), new Goalkeeper(Integer.parseInt(sub[1]))));
@@ -121,29 +116,35 @@ public class League {
                     for (Map.Entry<Player, Player> e : subsHOME.entrySet()) {
                         substitutesHOME.add(e.getValue());
                     }
-                    home.setSubstitutes(substitutesHOME);
 
                     for (int i = 19; i < 30; i++) {
                         initial11AWAY.add(home.findPLAYER(Integer.parseInt(campos[i]), new Goalkeeper(Integer.parseInt(campos[i]))));
                     }
-                    away.setInitial11(initial11AWAY);
 
                     for (int i = 30; i < 33; i++) {
                         String[] sub = campos[i].split("->");
-                        subsAWAY.put(home.findPLAYER(Integer.parseInt(sub[0]), new Goalkeeper(Integer.parseInt(sub[0]))), home.findPLAYER(Integer.parseInt(sub[1]), new Goalkeeper(Integer.parseInt(sub[1]))));
+                        subsAWAY.put(away.findPLAYER(Integer.parseInt(sub[0]), new Goalkeeper(Integer.parseInt(sub[0]))), away.findPLAYER(Integer.parseInt(sub[1]), new Goalkeeper(Integer.parseInt(sub[1]))));
                     }
-
                     ArrayList<Player> substitutesAWAY = new ArrayList<>();
                     for (Map.Entry<Player, Player> e : subsHOME.entrySet()) {
                         substitutesAWAY.add(e.getValue());
                     }
+
+                    home.setInitial11(initial11HOME);
+                    home.setSubstitutes(substitutesHOME);
+                    ArrayList <Player> squadHOME = new ArrayList<>(initial11HOME);
+                    squadHOME.addAll(substitutesHOME);
+                    home.setSquad(squadHOME);
+
+                    away.setInitial11(initial11AWAY);
                     away.setSubstitutes(substitutesAWAY);
+                    ArrayList <Player> squadAWAY = new ArrayList<>(initial11AWAY);
+                    squadAWAY.addAll(substitutesAWAY);
+                    away.setSquad(squadAWAY);
 
                     friendly.add(new Game(home, away, goalsHOME, goalsAWAY, LocalDate.of(Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2])), subsHOME, subsAWAY));
-                    break;
-                default:
-                    throw new LinhaIncorretaException();
-
+                }
+                default -> throw new LinhaIncorretaException();
             }
         }
     }
@@ -206,8 +207,6 @@ public class League {
     }
 
 
-
-
     public int manyDIGITS(int ii) {
         int stand = 0;
         while (ii != 0) {
@@ -225,7 +224,7 @@ public class League {
         s[3] = "Golos sofridos " + t.getGoalsSuffered() + "   ";
         int dg = (t.getGoalsScored() - t.getGoalsSuffered());
         s[4] = "Diferenca de golos " + dg + "   ";
-        List<Player> topScorers = top10Scorers.stream().filter(player -> t.findPLAYER(player.getNumber(), new Goalkeeper()) != null).collect(Collectors.toList());
+        List<Player> topScorers = top10Scorers.stream().filter(player -> t.findPLAYER(player.getNumber(), null) != null).collect(Collectors.toList());
         if (topScorers.size() > 0) {
             s[5] += ("Top Marcadores que estao na equipa:\n");
             for (Player p : topScorers) {

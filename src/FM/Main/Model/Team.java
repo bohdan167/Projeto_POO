@@ -225,7 +225,7 @@ public class Team {
         if (formation.length == 3 && formation[0] + formation[1] + formation[2] == 10 && formation[0] *
                 formation[1] * formation[2] != 0) {
             this.formation = formation.clone();
-            if (initial11.size() != 0) rectifyINITIAL11();
+            if (initial11.size() != 11 && initial11.size() != 0) rectifyINITIAL11();
             return true;
         }
         return false;
@@ -297,6 +297,7 @@ public class Team {
                 }
             }
         }
+        bestINITIAL11();
     }
 
     /*                                  Number

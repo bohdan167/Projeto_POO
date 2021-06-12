@@ -133,7 +133,12 @@ public class Interpreter {
             m.line("Pretende:");
         }
         else {
-            List<Game> myfriendly = l.getFriendly().stream().filter(g -> (g.getHomeTEAM().getNameTEAM().equals(myTeam.getNameTEAM()) || g.getAwayTEAM().getNameTEAM().equals(myTeam.getNameTEAM()))).collect(Collectors.toList());
+            ArrayList<Game> myfriendly = new ArrayList<>();
+            for(Game g : l.getFriendly()){
+                if((g.getHomeTEAM().getNameTEAM().equals(myTeam.getNameTEAM()) || g.getAwayTEAM().getNameTEAM().equals(myTeam.getNameTEAM()))){
+                    myfriendly.add(g);
+                }
+            }
 
             for(int i = 0; i < myfriendly.size(); i++){
                 s.append("\n|->").append(i + 1).append("\n").append(myfriendly.get(i).header()).append("\n");
@@ -255,7 +260,7 @@ public class Interpreter {
     }
 
 
-    public void initialInterpreter(Scanner scan) throws LinhaIncorretaException {
+    public boolean initialInterpreter(Scanner scan) throws LinhaIncorretaException {
         int ans;
 
         m.line("Deseja carregar algum ficheiro? 1 - Sim  0 - Nao : ");
@@ -266,11 +271,15 @@ public class Interpreter {
             String where = scan.nextLine();
             l = new League(lerFicheiro(where));
         } else l = new League(1);
-        m.genericMENU(l.standingsTOSTRING());
-        m.line("Escolha uma equipa, digitando o numero correspondente: ");
-        ans = readOnlyIntegers(scan, 1, l.getTeams().size());
-        myTeam = l.getTeams().get(ans - 1);
-        m.setTeamName(myTeam.getNameTEAM());
+        if(l.getTeams().size() != 0) {
+            m.genericMENU(l.standingsTOSTRING());
+            m.line("Escolha uma equipa, digitando o numero correspondente: ");
+            ans = readOnlyIntegers(scan, 1, l.getTeams().size());
+            myTeam = l.getTeams().get(ans - 1);
+            m.setTeamName(myTeam.getNameTEAM());
+        }
+        else return false;
+        return true;
     }
 
 
@@ -293,8 +302,9 @@ public class Interpreter {
         l = new League(0);
         myTeam = new Team(0);
 
-        initialInterpreter(scan);
+        if(initialInterpreter(scan)){
         while(mainInterpreter(scan));
+        }
 
         scan.close();
     }
