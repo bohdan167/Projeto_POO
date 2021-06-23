@@ -238,7 +238,7 @@ public class Interpreter implements Serializable{
     }
 
 
-    public boolean initialInterpreter(Scanner scan) throws LinhaIncorretaException, IOException, ClassNotFoundException {
+    public boolean initialInterpreter(Scanner scan) throws LinhaIncorretaException, IOException, ClassNotFoundException, FileNotFoundException{
         int ans;
 
         m.line("Deseja carregar algum ficheiro? 1 - Sim  0 - Nao : ");
@@ -251,6 +251,7 @@ public class Interpreter implements Serializable{
                 m.line("Localizacao do ficheiro: ");
                 String where = scan.nextLine();
                 this.readObject(where);
+                return true;
             }else {
                 m.line("Localizacao do ficheiro: ");
                 String where = scan.nextLine();
@@ -275,6 +276,9 @@ public class Interpreter implements Serializable{
         Game g = new Game();
         g.makeCOMPLEXgame(this.myTeam,l.getTeams().get(ans-1));
         m.genericMENU(g.toString());
+        ArrayList<Game> p = l.getFriendly();
+        p.add(g);
+        l.setFriendly(p);
     }
 
     public void scanInterpreter(Scanner scan) throws IOException{

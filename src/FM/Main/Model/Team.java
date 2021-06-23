@@ -74,6 +74,10 @@ public class Team implements Serializable {
 
     }
 
+    /**
+     * Construtor de Cópia de uma Equipa
+     * @param nameTEAM Nome da equipa
+     */
     public Team(String nameTEAM) {
         this.nameTEAM = nameTEAM;
         this.initial11 = new ArrayList<>();
@@ -84,12 +88,16 @@ public class Team implements Serializable {
     }
 
     /**
-     * COMENTÁRIOS ERRADOS
-     * Construtor parametrizado
-     *
-     * @param nameTEAM  Nome da equipa
-     * @param formation Formação tática
-     * @param overall   Overall da equipa
+     * Construtor Parametrizado
+     * @param nameTEAM Nome da Equipa
+     * @param initial11 Jogadores do 11-inicial
+     * @param substitutes Jogadores de substituição
+     * @param squad Plantel de Jogadores (suplentes & titulares)
+     * @param formation Formação Tática
+     * @param overall Valor global da equipa
+     * @param points Pontos alusivos a uma equipa
+     * @param goalsScored Golos marcados
+     * @param goalsSuffered Golos sofridos
      */
     public Team(String nameTEAM, ArrayList<Player> initial11, ArrayList<Player> substitutes, ArrayList<Player> squad, int[] formation, int overall, int points, int goalsScored, int goalsSuffered) {
         this.nameTEAM = nameTEAM;
@@ -102,7 +110,6 @@ public class Team implements Serializable {
 
     /**
      * Construtor Parametrizado
-     *
      * @param t Equipa
      */
     public Team(Team t) {
@@ -116,65 +123,101 @@ public class Team implements Serializable {
 
     /**
      * Getter do nome da equipa
-     *
      * @return Nome da equipa
      */
     public String getNameTEAM() {
         return nameTEAM;
     }
 
+    /**
+     * Setter do nome de uma equipa
+     * @param nameTEAM Novo nome para a respetiva equipa
+     */
     public void setNameTEAM(String nameTEAM) {
         this.nameTEAM = nameTEAM;
     }
 
+    /**
+     * Getter do atributo 11-inicial
+     * @return Lista com os jogadores titulares do 11-inicial
+     */
     public ArrayList<Player> getInitial11() {
         ArrayList<Player> clone = new ArrayList<>(initial11.size());
         for (Player item : initial11) clone.add(item.clone());
         return clone;
     }
 
+    /**
+     * Setter do atributo 11-inicial
+     * @param initial11 Nova lista do 11-inicial
+     */
     public void setInitial11(ArrayList<Player> initial11) {
         this.initial11 = initial11;
     }
 
+    /**
+     * Getter dos jogadores substituos
+     * @return Lista de suplentes
+     */
     public ArrayList<Player> getSubstitutes() {
         ArrayList<Player> clone = new ArrayList<>(substitutes.size());
         for (Player item : substitutes) clone.add(item.clone());
         return clone;
     }
 
+    /**
+     * Setter dos jogadores substitutos
+     * @param substitutes Lista de substitutos
+     */
     public void setSubstitutes(ArrayList<Player> substitutes) {
         this.substitutes = substitutes;
     }
 
+    /**
+     * Setter dos jogadores substitutos
+     */
     public void setSubstitutes() {
         substitutes.clear();
         substitutes.addAll(squad.stream().filter(player -> !(initial11.contains(player))).collect(Collectors.toList()));
     }
 
+    /**
+     * Getter do Plantel de jogadores
+     * @return Lista com o respetivo Plantel
+     */
     public ArrayList<Player> getSquad() {
         ArrayList<Player> clone = new ArrayList<>(squad.size());
         for (Player item : squad) clone.add(item.clone());
         return clone;
     }
 
+    /**
+     * Setter do Plantel de jogadores
+     * @param squad Novo Plantel de jogadores
+     */
     public void setSquad(ArrayList<Player> squad) {
         this.squad = squad;
     }
 
     /**
      * Getter do overall
-     *
      * @return Overall da equipa
      */
     public int getOverall() {
         return overall;
     }
 
+    /**
+     * Setter do overall
+     * @param overall Overall da equipa
+     */
     public void setOverall(int overall) {
         this.overall = overall;
     }
 
+    /**
+     * Setter do overall sem parâmetro recebido
+     */
     public void setOverall() {
         float sum = sumOVERALL();
         float result = sum / 11;
@@ -182,6 +225,11 @@ public class Team implements Serializable {
         this.overall = (int) result;
     }
 
+    /**
+     * Calcula o Overall por posição
+     * @param simplename Nome da classe
+     * @return Overall
+     */
     public int calculateOverallPosition(String simplename){
         List<Player> l = initial11.stream().filter(player -> player.getClass().getSimpleName().equals(simplename)).collect(Collectors.toList());
 
@@ -194,13 +242,17 @@ public class Team implements Serializable {
 
     /**
      * Getter da formação tática
-     *
      * @return Formação tática
      */
     public int[] getFormation() {
         return formation;
     }
 
+    /**
+     * Setter da Formação Tática de uma equipa
+     * @param formation Formação Tática da equipa
+     * @return Nova Formação Tática da equipa
+     */
     public boolean setFormation(int[] formation) {
         if (formation.length == 3 && formation[0] + formation[1] + formation[2] == 10 && formation[0] *
                 formation[1] * formation[2] != 0) {
@@ -211,6 +263,11 @@ public class Team implements Serializable {
         return false;
     }
 
+    /**
+     * Getter do índice de menor valor
+     * @param inputArray array
+     * @return índice do valor mínimo
+     */
     public static int getIndexMin(long @NotNull [] inputArray) {
         long minValue = inputArray[0];
         int index = 0;
@@ -223,6 +280,9 @@ public class Team implements Serializable {
         return index;
     }
 
+    /**
+     * Atribui uma formação tática aleatória a uma equipa a partir do número de jogador
+     */
     public void randomFormation() {
         long[] ans = countPlayers(squad);
         long[] form = new long[]{ans[1], ans[3], ans[4]};
@@ -280,9 +340,15 @@ public class Team implements Serializable {
         bestINITIAL11();
     }
 
-    /*                                  Number
+    /*
      * Funções relacionadas com os números dos jogadores, comparam os números
      * entre todos os jogadores e, se for necessário, altera-os.
+     */
+
+    /**
+     * Verifica se dois elementos da mesma equipa têm número iguais
+     * @param numberPLAYER Número do jogador
+     * @return Booleano true se sim, ou false caso contrário
      */
     public boolean equalNUMBERS(int numberPLAYER) {
         for (Player p : getSquad())
@@ -290,17 +356,26 @@ public class Team implements Serializable {
         return false;
     }
 
+    /**
+     * Altera o número de um jogador
+     * @param ans Número do jogador
+     */
     public void changeNUMBER(Player ans) {
         for (int i = 0; equalNUMBERS(ans.getNumber()); i++)
             ans.setNumber(99 - i);
     }
 
 
-    /*                          REMOVE
-     * -> Conjunto de funções que removem um jogador de uma equipa
-     * -> Ou encontram esse jogador, é removido e devolvem true
-     * -> ou devolvem false
-     * */
+    /*
+     * Conjunto de funções que removem um jogador de uma equipa, ou seja,
+     * encontram esse jogador, o qual é removido e devolvem true ou devolvem false
+     */
+
+    /**
+     * Remove o jogador do jogo
+     * @param numberPLAYER Número do jogador a remover
+     * @return Status do processo de remoção
+     */
     public String removePLAYER(int numberPLAYER) {
         Player ans = findPLAYER(numberPLAYER, null);
 
@@ -332,9 +407,16 @@ public class Team implements Serializable {
     }
 
 
-    /*                          FIND
-     * -> Conjunto de funções que devolvem o jogador que pretendem encontrar
-     * -> Caso não encontrem, devolvem null
+    /*
+     * Conjunto de funções que devolvem o jogador que pretendem encontrar.
+     * Caso não encontrem, é devolvido "null".
+     */
+
+    /**
+     * Encontra um jogador dado o seu número
+     * @param numberPLAYER Número do jogador
+     * @param orElse Retorna nulo ou um jogador com um número específico
+     * @return Jogador
      */
     public Player findPLAYER(int numberPLAYER, Player orElse) {
         Player p = squad.stream().filter(player -> (player.getNumber() == numberPLAYER)).findFirst().orElse(orElse);
@@ -342,10 +424,17 @@ public class Team implements Serializable {
     }
 
 
-    /*                          ADD
-     * -> Conjunto de funções que adicionam um jogador a uma equipa e removem na outra equipa
-     * -> Tem em atenção se existe algum jogador com o mesmo número
-     * */
+    /*
+     * Conjunto de funções que adicionam um jogador a uma equipa e o removem na outra equipa.
+     * Tem em atenção se existe algum jogador com o mesmo número.
+     */
+
+    /**
+     * Adiciona um jogador à equipa.
+     * @param numberPLAYER Número do jogador a adicionar
+     * @param t Equipa atual do jogador
+     * @return Status do processo de adição
+     */
     public String addPLAYER(int numberPLAYER, Team t) {
         Player player = t.findPLAYER(numberPLAYER, null);
         if (player == null) return "Jogador nao existe";
@@ -362,6 +451,10 @@ public class Team implements Serializable {
         return ans;
     }
 
+    /**
+     * Adiciona o jogador à equipa a partir da sua informação
+     * @param p Jogador
+     */
     public void addPLAYER(Player p) {
         changeNUMBER(p);
         squad.add(p);
@@ -379,7 +472,13 @@ public class Team implements Serializable {
         g.setGoalsSuffered(g.getGoalsSuffered() +1);
     }
 
-
+    /**
+     * Efetua a transferência do jogador
+     * @param p1 Jogador 1
+     * @param p2 Jogador 2
+     * @param option transferência do 11-inicial para os substitutos ou vice-versa
+     * @return Boolean true ou falso consoante se possa ou não efetuar a troca
+     */
     public Boolean tradePlayer(Player p1, Player p2, int option) {
         if (option == 0) {
             if (initial11.contains(p1) && substitutes.contains(p2) && p1.getClass().getSimpleName().equals(p2.getClass().getSimpleName())) {
@@ -396,11 +495,18 @@ public class Team implements Serializable {
         return true;
     }
 
-
+    /**
+     * Retorna o guarda-redes com melhor overall
+     * @return guarda-redes
+     */
     public Goalkeeper bestGOALKEEPER() {
         return (Goalkeeper) squad.get(0);
     }
-
+    /**
+     * Obtém uma lista com os melhores Defenders
+     * @param howMANY Número de jogadores pretendidos
+     * @return Lista com esses jogadores dessa posição
+     */
     public ArrayList<Defender> bestDEFENDER(int howMANY) {
         int i = 0;
         ArrayList<Defender> novo = new ArrayList<>();
@@ -410,6 +516,11 @@ public class Team implements Serializable {
         return novo;
     }
 
+    /**
+     * Obtém uma lista com os melhores laterais
+     * @param howMANY Número de laterais pretendidos
+     * @return Lista com os melhores jogadores dessa posição
+     */
     public ArrayList<Sider> bestSIDER(int howMANY) {
         int i = 0;
         ArrayList<Sider> novo = new ArrayList<>();
@@ -419,6 +530,11 @@ public class Team implements Serializable {
         return novo;
     }
 
+    /**
+     * Obtém lista com os melhores centrais
+     * @param howMANY Número de jogadores a obter
+     * @return Lista de melhores centrais
+     */
     public ArrayList<Midfielder> bestMID(int howMANY) {
         int i = 0;
         ArrayList<Midfielder> novo = new ArrayList<>();
@@ -428,6 +544,11 @@ public class Team implements Serializable {
         return novo;
     }
 
+    /**
+     * Obtém lista com os melhores avançados
+     * @param howMANY Número de jogadores a obter
+     * @return Lista com os melhores jogadores dessa posição
+     */
     public ArrayList<Striker> bestSTRK(int howMANY) {
         int i = 0;
         ArrayList<Striker> novo = new ArrayList<>();
@@ -437,6 +558,9 @@ public class Team implements Serializable {
         return novo;
     }
 
+    /**
+     * Obtém o melhor 11-inicial
+     */
     public void bestINITIAL11() {
         if (initial11.size() != 0)
             initial11.clear();
@@ -449,6 +573,11 @@ public class Team implements Serializable {
         setSubstitutes();
     }
 
+    /**
+     * Obtém um jogador pelo nome e remove-o dos substitutos
+     * @param simpleName nome da classe
+     * @return Jogador
+     */
     public Player pickPLAYER(String simpleName) {
         Player p = null;
         for (int i = 0; p == null && i < substitutes.size(); i++) {
@@ -460,6 +589,10 @@ public class Team implements Serializable {
         return p;
     }
 
+    /**
+     * Retira um jogador do 11-initial
+     * @param simpleName Nome da classe
+     */
     public void retirePLAYER(String simpleName) {
         for (int i = 0, j = 0; j == 0 && i < substitutes.size(); i++) {
             if (initial11.get(i).getClass().getSimpleName().equals(simpleName)) {
@@ -469,6 +602,11 @@ public class Team implements Serializable {
         }
     }
 
+    /**
+     * Conta o número de jogadores
+     * @param arrayList Lista de jogadores
+     * @return Número total de jogadores de uma equipa
+     */
     public long[] countPlayers(ArrayList<Player> arrayList) {
         long[] ans = new long[5];
         ans[0] = arrayList.stream().filter(player -> player.getClass().getSimpleName().equals("Goalkeeper")).count();
@@ -479,7 +617,9 @@ public class Team implements Serializable {
         return ans;
     }
 
-
+    /**
+     * Retifica uma formação do 11-inicial
+     */
     public void rectifyINITIAL11() {
 
         long[] ans = countPlayers(initial11);
@@ -529,7 +669,10 @@ public class Team implements Serializable {
         setOverall();
     }
 
-
+    /**
+     * Obtém o overall total de um 11-initial
+     * @return valor do overall
+     */
     public int sumOVERALL() {
         int result = 0;
         for (int i = 0; i < 11; i++)
@@ -537,6 +680,11 @@ public class Team implements Serializable {
         return result;
     }
 
+    /**
+     * Obtém o número de jogadores com um overall superior ao fornecido
+     * @param sum overall
+     * @return número de jogadores
+     */
     public int overOVERALL(float sum) {
         int result = 0;
         for (int i = 0; i < 11; i++)
@@ -544,11 +692,18 @@ public class Team implements Serializable {
         return result;
     }
 
+    /**
+     * Clone do objeto de uma Team
+     * @return Objeto clonado
+     */
     public Team clone() {
         return new Team(this);
     }
 
-
+    /**
+     * Obtém uma String com o 11-inicial
+     * @return String
+     */
     public String initial11toString() {
         StringBuilder a = new StringBuilder();
         int space11 = 124;
@@ -628,6 +783,10 @@ public class Team implements Serializable {
         return a.toString();
     }
 
+    /**
+     * Obtém uma String com o Plantel
+     * @return Plantel de jogadores
+     */
     public String squadTOSTRING() {
         StringBuilder s = new StringBuilder();
         String simpleName = "";
@@ -641,22 +800,36 @@ public class Team implements Serializable {
         return s.toString();
     }
 
+    /**
+     * Obtém uma String com o nome da equipa, plantel e 11-inicial
+     * @return
+     */
     @Override
     public String toString() {
         return nameTEAM + "\n" + squadTOSTRING() + initial11toString();
     }
 
+    /**
+     * Método equals
+     * @param o objeto a testar
+     * @return Boolean true se igual, false se não
+     */
     public boolean equals(Team o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         return squad.equals(o.getSquad());
     }
 
-
+    /**
+     * String com nomes de equipas
+     */
     protected String[] namesOfTeams = {"FC Porto", "SL Benfica", "Sporting CP", "SC Braga", "Vitória SC", "FC Famalicão",
             "Boavista FC", "FC Paços de Ferreira", "FC Vizela", "FC Arouca", "Estoril Praia", "CS Marítimo", "Portimonense",
             "CD Santa Clara", "Moreirense FC", "Belenenses SAD", "Gil Vicente FC", "CD Tondela"};
 
+    /**
+     * Comparator que ordena os jogadores de acordo a overall e posição.
+     */
     public static Comparator<Player> PlayerComparator = (p1, p2) -> {
         if (p1.getClass().equals(p2.getClass()))
             return p2.getOverall() - p1.getOverall();

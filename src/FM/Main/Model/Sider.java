@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Sider extends Player implements Serializable {
     private int crossing;
     private int vision;
+
     /**
      * Construtor Nulo
      */
