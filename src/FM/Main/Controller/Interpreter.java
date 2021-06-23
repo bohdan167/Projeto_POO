@@ -317,26 +317,51 @@ public class Interpreter implements Serializable{
         scan.close();
     }
 
-    public List<String> lerFicheiro(String nomeFich) {
+    /**
+     * Função que lê um estado de um ficheiro .txt ou .csv
+     * @param nomeFich Caminho para onde está o ficheiro
+     * @return Lista de Linhas do ficheiro
+     * @throws FileNotFoundException
+     */
+    public List<String> lerFicheiro(String nomeFich) throws FileNotFoundException{
         List<String> lines;
         try { lines = Files.readAllLines(Paths.get(nomeFich), StandardCharsets.UTF_8); }
         catch(IOException exc) { lines = new ArrayList<>(); }
         return lines;
     }
 
+    /**
+     * Setter do atributo l (League)
+     * @param l League
+     */
     public void setLeague(League l){
         this.l = l.clone();
     }
 
+    /**
+     * Setter do atributo myTeam (Team);
+     * @param t Team
+     */
     public void setMyTeam(Team t){
         this.myTeam = t.clone();
     }
 
+    /**
+     * Setter do atributo m(Menu)
+     * @param m Menu
+     */
     public void setMenu(Menu m){
         this.m = m.clone();
     }
 
-    public void readObject(String fileName) throws IOException, ClassNotFoundException {
+    /**
+     * Função que carrega um estado de um ficheiro binário
+     * @param fileName Nome da ficheiro
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws FileNotFoundException
+     */
+    public void readObject(String fileName) throws IOException, ClassNotFoundException, FileNotFoundException {
         ObjectInputStream o = new ObjectInputStream((new FileInputStream(fileName)));
         Interpreter t = (Interpreter) o.readObject();
         o.close();
@@ -345,6 +370,11 @@ public class Interpreter implements Serializable{
         setMenu(t.m);
     }
 
+    /**
+     * Função que guarda o estado num ficheiro em binário
+     * @param fileName Nome do ficheiro
+     * @throws IOException
+     */
     public void saveObject(String fileName) throws IOException {
         FileOutputStream fos = new FileOutputStream(fileName);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
